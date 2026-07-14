@@ -1,6 +1,7 @@
-const CACHE = 'kaizen-v1';
+const CACHE = 'kaizen-v2';
 const FONT_CSS = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap';
-const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
+const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png',
+  './content-body.js', './content-voice.js', './content-mind.js', './content-craft.js'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil((async () => {

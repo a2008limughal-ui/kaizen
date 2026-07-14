@@ -189,12 +189,21 @@ header{display:flex;align-items:flex-start;justify-content:space-between;gap:12p
 .ovtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
 .ovtitle{font-weight:700;color:var(--text);font-size:15px}
 .sessionHero{
-  border-radius:32px;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end;
+  border-radius:32px;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end;
   padding:24px;color:#FFFFFF;box-shadow:var(--shadow-lg);
 }
 .heroSide{font-size:14px;font-weight:700;opacity:0.9;text-shadow:0 1px 8px rgba(20,22,28,0.35)}
 .heroName{font-size:32px;font-weight:800;letter-spacing:-0.03em;line-height:1.15;text-shadow:0 1px 10px rgba(20,22,28,0.4)}
 .cueline{margin:14px 6px 0;font-size:14px;color:var(--text-2);min-height:44px}
+/* body player with figure */
+.pvFig{margin:6px auto 0;max-width:300px}
+.pvFig .figure{max-width:300px}
+.pvSide{text-align:center;font-size:14px;font-weight:700;color:var(--text-3);min-height:20px;margin-top:4px}
+.pvMoveName{text-align:center;font-size:26px;font-weight:800;letter-spacing:-0.03em;color:var(--text);margin:2px 0 8px;line-height:1.2}
+.pvReady{display:flex;align-items:center;gap:16px;text-align:left;width:100%}
+.pvReadyLabel{font-size:13px;font-weight:500;color:var(--text-3)}
+.pvReadyCue{font-size:14.5px;color:var(--text-2);line-height:1.5;margin-top:3px}
+.pvReadyCue b{color:var(--text)}
 .bigcount{font-size:70px;text-align:center;margin:10px 0 6px;line-height:1}
 .track{height:4px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin:8px 2px}
 .track i{display:block;height:100%;border-radius:999px;width:0%}
@@ -235,13 +244,29 @@ header{display:flex;align-items:flex-start;justify-content:space-between;gap:12p
 .msg.me{background:var(--surface-2);color:var(--text);align-self:flex-end;border-bottom-right-radius:8px}
 .liveStatus{text-align:center;font-size:13px;color:var(--text-3);margin-top:12px;min-height:20px}
 
-/* mind */
-.mindbar{height:6px;border-radius:999px;margin-bottom:18px}
-.mindNav{display:flex;align-items:center;justify-content:space-between;margin-top:16px;gap:10px}
-.readbody{font-size:16px;line-height:1.7;max-width:62ch}
-.readbody p{margin-top:12px}
-.readbox{background:var(--surface-2);border-radius:18px;padding:16px;margin-top:14px;font-size:15px;line-height:1.6}
-.readbox b{color:var(--text)}
+/* mind: reading app */
+#mindProgress{position:fixed;top:0;left:0;right:0;height:4px;z-index:55;background:var(--surface-2)}
+#mindProgressBar{height:100%;width:0;border-radius:0 999px 999px 0}
+.mindTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:6px 2px 12px}
+.pill-mini{border-radius:999px;padding:8px 16px;font-size:13px;font-weight:700;background:var(--surface);color:var(--text-2);box-shadow:var(--shadow), var(--card-extra)}
+.mindbar{height:6px;border-radius:999px;margin-bottom:16px}
+.reading{padding:22px 22px 20px}
+.mindNav{display:flex;align-items:center;justify-content:space-between;margin-top:20px;gap:10px}
+.readbody{font-size:17px;line-height:1.75;max-width:64ch;color:var(--text-2)}
+.readbody p{margin-top:14px}
+.readSec{margin-top:22px}
+.readSec:first-child{margin-top:8px}
+.readH{font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:2px}
+.qlist{margin:8px 0 0 18px}
+.qlist li{margin-top:8px;color:var(--text)}
+.attrib{font-size:13px;color:var(--text-3);line-height:1.5;margin-top:22px;padding-top:16px;border-top:1px solid var(--hairline)}
+.bookGrid{display:flex;flex-direction:column;gap:14px}
+.bookCard{position:relative;display:flex;gap:16px;align-items:center;text-align:left;background:var(--surface);border-radius:22px;padding:16px;box-shadow:var(--shadow), var(--card-extra);width:100%}
+.bookMesh{width:58px;height:58px;border-radius:18px;flex:none}
+.bookInfo{flex:1;min-width:0}
+.bookTitle{font-weight:800;color:var(--text);font-size:16px;letter-spacing:-0.02em}
+.bookProg{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin-top:8px}
+.bookProg i{display:block;height:100%;border-radius:999px}
 
 /* craft */
 .craftbarWrap{height:12px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin-top:12px}
@@ -291,6 +316,11 @@ select.input{
 .btnrow{display:flex;gap:10px;margin-top:16px}
 .btnrow .pill{padding:13px 10px;font-size:14px}
 .hint{font-size:12.5px;color:var(--text-3);margin-top:8px;line-height:1.5}
+.tradeList{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.trade{font-size:12.5px;color:var(--text-3);line-height:1.45}
+.trade b{color:var(--text-2);font-weight:700}
+.costMeter{font-size:15px;color:var(--text);font-weight:500;line-height:1.5}
+.linkBtn{display:block;margin:18px auto 0;font-size:13.5px;color:var(--text-3);text-decoration:underline;text-underline-offset:3px}
 
 /* nav */
 #nav{
@@ -324,6 +354,43 @@ select.input{
   font-size:13.5px;font-weight:500;box-shadow:var(--shadow-lg);max-width:85vw;text-align:center;
 }
 
+/* exercise figures */
+.figure{position:relative;width:100%;aspect-ratio:1/1;max-width:260px;margin:0 auto}
+.figBlob{position:absolute;inset:12%;border-radius:46% 54% 52% 48%/50% 46% 54% 50%;filter:blur(22px);opacity:0.3}
+.figSvg{position:relative;width:100%;height:100%;display:block;color:var(--text);overflow:visible}
+.figPose path{fill:none;stroke:currentColor;stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.figProp{fill:none;stroke:var(--text-3);stroke-width:4;stroke-linecap:round;opacity:0.4}
+.figProp rect{fill:var(--text-3);stroke:none;opacity:0.4}
+.figArc{fill:none;stroke:var(--text-3);stroke-width:3;stroke-dasharray:2 8;stroke-linecap:round;opacity:0.8}
+.figSvg #kzArrow path{fill:none;stroke:var(--text-3)}
+.figA{animation:kzFadeA var(--fade,3s) ease-in-out infinite alternate}
+.figB{animation:kzFadeB var(--fade,3s) ease-in-out infinite alternate}
+@keyframes kzFadeA{from{opacity:1}to{opacity:0}}
+@keyframes kzFadeB{from{opacity:0}to{opacity:1}}
+.figStrip{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 8px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.figStripItem{flex:0 0 128px;scroll-snap-align:start;text-align:center}
+.figStripItem .figure{max-width:128px}
+.figStripItem .cap{margin-top:4px;font-size:12px}
+.readyRing{position:relative;width:54px;height:54px;margin:0 auto}
+.readyRing svg{width:100%;height:100%;transform:rotate(-90deg)}
+.readyRing .rr-num{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-variant-numeric:tabular-nums;color:var(--text)}
+
+/* welcome letter */
+.welcome{position:fixed;inset:0;z-index:100;background:var(--bg);overflow-y:auto;display:flex;align-items:center;justify-content:center;padding:24px}
+.welcomeBg{position:fixed;inset:0;overflow:hidden;pointer-events:none}
+.wBlob{position:absolute;width:62vw;max-width:360px;aspect-ratio:1/1;border-radius:50%;filter:blur(64px);opacity:0.3}
+.wBlob:nth-child(1){top:-8%;left:-10%}
+.wBlob:nth-child(2){top:-6%;right:-12%}
+.wBlob:nth-child(3){bottom:-10%;left:-8%}
+.wBlob:nth-child(4){bottom:-8%;right:-10%}
+.welcomeCard{position:relative;z-index:1;max-width:460px;width:100%;padding:30px 26px;margin:auto}
+.letterFor{font-size:30px;font-weight:800;letter-spacing:-0.03em;color:var(--text);line-height:1.15}
+.letter{font-size:17px;line-height:1.8;color:var(--text-2)}
+.letter p{margin-top:14px}
+.letterSig{font-size:20px;font-weight:800;color:var(--text);text-align:right;margin-top:22px}
+.letterNameLabel{display:block;font-size:13px;font-weight:500;color:var(--text-3);margin:26px 0 7px}
+.welcomeCard .pill{margin-top:14px}
+
 /* motion */
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .view > *{animation:rise 0.4s ease both}
@@ -336,6 +403,8 @@ select.input{
 @media (prefers-reduced-motion: reduce){
   *, *::before, *::after{animation:none !important;transition:none !important}
   button:active{transform:none}
+  .figA{opacity:0}
+  .figB{opacity:1}
 }
 @media (max-width:374px){
   .streakNum{font-size:42px}
@@ -347,6 +416,7 @@ select.input{
 </head>
 <body>
 <div id="haze" aria-hidden="true"></div>
+<div id="mindProgress" hidden aria-hidden="true"><div id="mindProgressBar" class="mesh mesh-mind"></div></div>
 <div class="wrap">
   <header>
     <div>
@@ -375,18 +445,26 @@ select.input{
       <div class="ovtitle" id="pvRoutine"></div>
       <span style="width:42px" aria-hidden="true"></span>
     </div>
-    <div id="pvHero" class="sessionHero mesh mesh-body">
-      <div id="pvSide" class="heroSide"></div>
-      <div id="pvMove" class="heroName"></div>
-    </div>
-    <div id="pvCue" class="cueline"></div>
-    <div id="pvCount" class="bigcount num">0:00</div>
-    <div class="track"><i id="pvBar" class="mesh mesh-body"></i></div>
-    <div id="pvNext" class="nextup"></div>
-    <div class="ctls">
-      <button class="ctl" id="pvPrev" aria-label="Previous move"></button>
-      <button class="ctl big" id="pvPause" aria-label="Pause"></button>
-      <button class="ctl" id="pvSkip" aria-label="Skip move"></button>
+    <div id="pvFig" class="pvFig"></div>
+    <div id="pvSide" class="pvSide"></div>
+    <div id="pvMove" class="pvMoveName"></div>
+    <button id="pvReady" class="card pvReady" aria-label="Start this move now">
+      <div class="pvReadyRing readyRing" id="pvReadyRing"></div>
+      <div class="pvReadyText">
+        <div class="pvReadyLabel">Get ready</div>
+        <div id="pvReadyCue" class="pvReadyCue"></div>
+      </div>
+    </button>
+    <div id="pvHold">
+      <div id="pvCount" class="bigcount num">0:00</div>
+      <div id="pvCueLine" class="cueline"></div>
+      <div class="track"><i id="pvBar" class="mesh mesh-body"></i></div>
+      <div id="pvNext" class="nextup"></div>
+      <div class="ctls">
+        <button class="ctl" id="pvPrev" aria-label="Previous move"></button>
+        <button class="ctl big" id="pvPause" aria-label="Pause"></button>
+        <button class="ctl" id="pvSkip" aria-label="Skip move"></button>
+      </div>
     </div>
   </div>
 </div>
@@ -397,16 +475,43 @@ select.input{
   <button class="pill mesh mesh-body" id="pvFinish" style="max-width:260px">Finish</button>
 </div>
 <div id="vv" class="ov" hidden><div class="ovin" id="vvIn"></div></div>
+<div id="welcome" class="welcome" hidden>
+  <div class="welcomeBg" aria-hidden="true">
+    <div class="wBlob mesh mesh-body"></div>
+    <div class="wBlob mesh mesh-voice"></div>
+    <div class="wBlob mesh mesh-mind"></div>
+    <div class="wBlob mesh mesh-craft"></div>
+  </div>
+  <div class="welcomeCard card card-lg" role="dialog" aria-modal="true" aria-label="A welcome letter">
+    <div class="letterFor">For Mahrukh</div>
+    <div class="letter">
+      <p>I made you an app.</p>
+      <p>Not because anything about you needs fixing. Because you keep saying there is no time, and I wanted to see if I could carve some out and hand it to you.</p>
+      <p>It is forty minutes. Twelve to unknot your back. Twelve to talk, out loud, in English, until it stops feeling like a test. Ten to read something worth reading. And a little every day toward Power BI, so that in a month you will know it.</p>
+      <p>Some days you will do all four. Most days you will not. The squares below fill in either way, and a half filled square is still a day you showed up.</p>
+      <p>Start whenever you want. I am proud of you already.</p>
+    </div>
+    <div class="letterSig">Asfer</div>
+    <label for="welcomeName" class="letterNameLabel">Your name</label>
+    <input class="input" id="welcomeName" placeholder="Your name" value="Mahrukh" autocomplete="given-name">
+    <button class="pill mesh mesh-mind" id="welcomeStart">Start</button>
+  </div>
+</div>
 <div id="modal" class="modalwrap" hidden><div class="modal card card-lg" id="modalCard" role="dialog" aria-modal="true" tabindex="-1"></div></div>
 <div id="popover" hidden></div>
 <div id="toast" role="status" hidden></div>
+<script src="./content-body.js"></script>
+<script src="./content-voice.js"></script>
+<script src="./content-mind.js"></script>
+<script src="./content-craft.js"></script>
 <script>
 'use strict';
-/* ---------- content banks (spliced in at build time) ---------- */
-const BODY_ROUTINES = [{"name":"Desk Reset","focus":"Neck, shoulders, upper back","moves":[{"name":"Breathing reset","secs":60,"perSide":false,"cue":"Sit tall, inhale through your nose into your belly, exhale slowly through your mouth.","mistake":"Breathing into the upper chest and shrugging the shoulders with every inhale."},{"name":"Chin tucks","secs":45,"perSide":false,"cue":"Glide your chin straight back to make a gentle double chin, eyes staying level.","mistake":"Nodding the head down instead of sliding it straight back."},{"name":"Upper trap stretch","secs":45,"perSide":true,"cue":"Drop one ear toward your shoulder and let the opposite arm hang heavy toward the floor.","mistake":"Yanking the head down with the hand instead of letting its own weight stretch you."},{"name":"Levator scapulae stretch","secs":45,"perSide":true,"cue":"Turn your nose toward your armpit, then gently draw your head down and forward.","mistake":"Keeping the nose pointed forward, which turns this into a plain side bend."},{"name":"Doorway pec stretch","secs":45,"perSide":true,"cue":"Forearm on the frame, elbow at shoulder height, step through until your chest opens.","mistake":"Arching the lower back and flaring the ribs as you lean through."},{"name":"Wall angels","secs":60,"perSide":false,"cue":"Back and arms against the wall, slide your arms up and down slowly, ribs down.","mistake":"Arching the lower back off the wall to fake extra arm range."},{"name":"Thoracic extension over a chair","secs":60,"perSide":false,"cue":"Hands behind your head, arch your upper back over the backrest, exhale as you extend.","mistake":"Hinging at the lower back instead of extending the upper back over the edge."},{"name":"Scapular squeezes","secs":45,"perSide":false,"cue":"Draw your shoulder blades back and down toward opposite pockets, hold each squeeze two seconds.","mistake":"Shrugging the shoulders up toward the ears while squeezing."},{"name":"Neck rotation and side bend","secs":60,"perSide":false,"cue":"Slowly turn your head to each side, then tilt ear to shoulder, stopping short of pain.","mistake":"Rushing through the range instead of pausing where it feels tight."},{"name":"Shoulder rolls","secs":45,"perSide":false,"cue":"Roll your shoulders up, back and down in big slow circles.","mistake":"Making fast tiny circles that never reach the full range."}]},{"name":"Spine and Chest","focus":"Thoracic spine and chest","moves":[{"name":"Breathing reset","secs":60,"perSide":false,"cue":"Breathe low into your belly and sides, long slow exhales, let your shoulders drop.","mistake":"Taking short shallow chest breaths that keep the neck muscles working."},{"name":"Cat cow","secs":90,"perSide":false,"cue":"On all fours, round your spine as you exhale, arch and look up as you inhale.","mistake":"Moving only the lower back while the upper back stays stiff."},{"name":"Thread the needle","secs":45,"perSide":true,"cue":"From all fours, slide one arm under your chest, palm up, shoulder and ear resting down.","mistake":"Letting the hips collapse sideways instead of keeping them stacked over the knees."},{"name":"Child's pose with side reach","secs":45,"perSide":true,"cue":"Sit back on your heels, walk both hands to one side, feel the opposite side lengthen.","mistake":"Lifting the hips off the heels, which loses the stretch along the side."},{"name":"Sphinx","secs":60,"perSide":false,"cue":"Lie on your front, prop onto forearms, elbows under shoulders, chest lifted, shoulders away from ears.","mistake":"Pushing up so high the lower back pinches instead of lifting the chest gently."},{"name":"Open book thoracic rotation","secs":45,"perSide":true,"cue":"Lie on your side, knees bent, open the top arm across to the other side, eyes following.","mistake":"Letting the knees separate, which turns the rotation into lower back movement."},{"name":"Towel thoracic extension","secs":90,"perSide":false,"cue":"Lie back with a rolled towel across your mid back, arms overhead, breathe and soften over it.","mistake":"Placing the roll under the lower back instead of the mid back."},{"name":"Doorway pec stretch high","secs":45,"perSide":false,"cue":"Forearms high on the frame, elbows above shoulder height, step through to open the lower chest.","mistake":"Shrugging into the ears and arching the back as you lean in."},{"name":"Doorway pec stretch low","secs":45,"perSide":false,"cue":"Forearms low on the frame, elbows below shoulder height, lean gently forward to reach the upper chest.","mistake":"Leaning so far that the front of the shoulder pinches instead of the chest stretching."},{"name":"Wall angels","secs":60,"perSide":false,"cue":"Press lower back, upper back and arms to the wall, slide the arms up slowly, keep contact.","mistake":"Letting the wrists and elbows drift off the wall as the arms rise."},{"name":"Standing tall reset","secs":45,"perSide":false,"cue":"Stand with feet grounded, grow tall through the crown of your head, shoulders soft, breathe slowly.","mistake":"Forcing the shoulders back into a stiff military posture instead of stacking up easily."}]},{"name":"Hips and Base","focus":"Hips, glutes and base","moves":[{"name":"Breathing reset","secs":60,"perSide":false,"cue":"Sit or stand tall, slow nose breaths into your belly, exhale twice as long as you inhale.","mistake":"Holding tension in the jaw and shoulders instead of letting the exhale release them."},{"name":"Hip flexor lunge stretch","secs":60,"perSide":true,"cue":"Half kneel, tuck your tailbone under, shift forward until the front of the back hip stretches.","mistake":"Arching the lower back and lunging far forward instead of tucking the pelvis first."},{"name":"Glute bridge","secs":60,"perSide":false,"cue":"Feet hip width, press through your heels, lift until knees, hips and shoulders form a line.","mistake":"Pushing so high the lower back arches and takes over from the glutes."},{"name":"Dead bug","secs":60,"perSide":false,"cue":"On your back, ribs down, lower opposite arm and leg slowly, lower back pressed into the floor.","mistake":"Letting the lower back arch off the floor as the leg lowers."},{"name":"Figure 4 glute stretch","secs":45,"perSide":true,"cue":"On your back, cross one ankle over the opposite knee, pull that thigh toward your chest.","mistake":"Letting the crossed knee collapse inward instead of keeping it gently pressed out."},{"name":"Hamstring stretch","secs":45,"perSide":true,"cue":"Hinge at the hips with a long spine, leg straight, until the back of the thigh pulls.","mistake":"Rounding the back to reach the toes, which stretches the spine, not the hamstring."},{"name":"Standing calf stretch","secs":30,"perSide":true,"cue":"Back leg straight, heel pressed into the floor, lean toward the wall until the calf stretches.","mistake":"Letting the back heel lift or the foot turn out."},{"name":"Bird dog","secs":60,"perSide":false,"cue":"From all fours, reach opposite arm and leg long, hips level, pause, then switch slowly.","mistake":"Rotating the hips and arching the back as the leg lifts."},{"name":"Deep squat hold","secs":60,"perSide":false,"cue":"Feet slightly turned out, sink hips between your heels, chest up, elbows nudging the knees out.","mistake":"Letting the heels lift and the weight tip forward onto the toes."},{"name":"Standing posture reset","secs":45,"perSide":false,"cue":"Stand tall, weight even through both feet, ribs stacked over pelvis, crown reaching up, breathe easy.","mistake":"Overcorrecting into a rigid arched stance instead of a relaxed tall one."}]}];
-const VOICE_TOPICS = [{"title":"First impressions","describe":"Describe the first five minutes of meeting someone important, a client or a boss. What do you pay attention to?","opinion":"Do you think first impressions are fair, or do they trick us? Defend your answer.","story":"Tell the story of a first impression you got completely wrong, and how you found out.","rapid":["What do you usually notice first about a person?","How do you introduce yourself in one sentence?","What small habit makes a bad first impression?"]},{"title":"Negotiating a price","describe":"Describe the last time you had to negotiate a price. What was at stake?","opinion":"Some people say the first person to name a number loses. Do you agree?","story":"Tell me about a negotiation where you walked away, and whether you regret it.","rapid":["What is your opening move in a negotiation?","When is a discount a bad idea?","How do you say no to a lowball offer?"]},{"title":"Explaining your work","describe":"Explain what you do for a living to a stranger who knows nothing about your field. Keep it simple.","opinion":"Is it your job to make your work understandable, or the listener's job to keep up? Take a side.","story":"Tell me about a time someone completely misunderstood what you do, and what happened next.","rapid":["What is the hardest part of your job to explain?","What question do strangers always ask about your work?","How would you describe your job to a taxi driver?"]},{"title":"Disagreeing politely","describe":"Describe how you push back when someone senior to you is wrong. Walk me through your approach.","opinion":"Is it ever better to stay quiet than to disagree? Explain when.","story":"Tell the story of a disagreement you handled badly, and what you would say differently now.","rapid":["What phrase do you use to soften a disagreement?","Who is the hardest person for you to contradict?","How do you end an argument without losing the relationship?"]},{"title":"Step by step","describe":"Pick a process you know well, making tea, backing up files, anything, and describe it step by step so I could follow it blind.","opinion":"Do detailed instructions help people, or do they stop people from thinking? Argue one side.","story":"Tell me about a time you skipped a step in a familiar process and paid for it.","rapid":["What is a process you could do with your eyes closed?","What instruction do people always ignore?","What is step one of your morning?"]},{"title":"Giving bad news","describe":"Describe how you deliver bad news to someone who is counting on you. What do you say first?","opinion":"Should bad news come fast and blunt, or slow and cushioned? Pick one and defend it.","story":"Tell the story of the hardest piece of bad news you ever had to deliver.","rapid":["Do you prefer to give bad news in writing or out loud?","What do you never say when delivering bad news?","How do you prepare yourself before a hard conversation?"]},{"title":"Small talk with a client","describe":"Describe how you fill the first awkward minutes of a client call before the real business starts.","opinion":"Is small talk a waste of time or the real work of building trust? Make your case.","story":"Tell me about a piece of casual conversation that unexpectedly won you a client or a friend.","rapid":["What is your safest small talk topic?","What topic do you avoid with clients?","How do you politely steer chat back to business?"]},{"title":"A failure","describe":"Describe a project or plan of yours that failed. What did it look like from the inside?","opinion":"People say failure is the best teacher. Honestly, do you believe that?","story":"Tell the full story of your most useful failure, from first mistake to what you did after.","rapid":["What is a small failure from this month?","What failure took you longest to admit?","What would you attempt again even after failing at it?"]},{"title":"Asking for more money","describe":"Describe how you would ask for a raise or raise your rates. What evidence would you bring?","opinion":"Should you ever tell a client or employer the real minimum you would accept? Why or why not?","story":"Tell me about a time you were underpaid and either fixed it or let it slide.","rapid":["How do you know what your work is worth?","What stops most people from asking for more?","What is the worst response you could get, and could you survive it?"]},{"title":"Saying no","describe":"Describe how you turn down a request from someone you actually like working with.","opinion":"Is a slow maybe more damaging than a fast no? Take a position.","story":"Tell the story of a time you said yes when you should have said no, and what it cost you.","rapid":["What is your go to sentence for declining work?","What request do you find hardest to refuse?","When did saying no actually improve a relationship for you?"]},{"title":"Difficult clients","describe":"Describe the most demanding client or customer you have dealt with. What made them hard?","opinion":"Is the customer always right? Give me a real answer, not the polite one.","story":"Tell me about a tense client situation you managed to turn around, or one you lost.","rapid":["What is an early warning sign of a difficult client?","How do you respond to an angry message?","When is it right to fire a client?"]},{"title":"Big purchases","describe":"Describe how you decide on a big purchase, a laptop, a car, a course. What is your process?","opinion":"Is it smarter to buy cheap and replace often, or buy quality once? Argue it.","story":"Tell me about the best or worst big purchase you ever made and how you decided on it.","rapid":["What was the last thing you researched before buying?","What purchase do you always regret rushing?","Reviews, recommendations, or gut feeling, which do you trust most?"]},{"title":"A busy day","describe":"Describe what a genuinely overloaded day looks like for you, from waking up to giving up.","opinion":"Is being busy a sign of success or a sign of bad planning? Choose one.","story":"Tell the story of a day when everything landed at once and how you triaged it.","rapid":["What do you drop first when time runs out?","What time of day is your brain sharpest?","What is one thing you refuse to skip no matter how busy you are?"]},{"title":"Giving feedback","describe":"Describe how you tell someone their work is not good enough without crushing them.","opinion":"Do compliment sandwiches work, or do people see straight through them?","story":"Tell me about the most useful piece of criticism you ever received and who gave it.","rapid":["How do you ask for feedback on your own work?","What kind of feedback do you ignore?","Is written or spoken feedback kinder?"]},{"title":"Apologizing well","describe":"Describe what a proper professional apology sounds like. What has to be in it?","opinion":"Can you apologize too much? Where is the line between accountable and weak?","story":"Tell the story of an apology you owed someone, whether or not you ever delivered it.","rapid":["What word ruins an apology instantly?","When should you apologize in person rather than in writing?","What do you do after apologizing to actually repair things?"]},{"title":"Chasing a payment","describe":"Describe how you remind someone they owe you money without burning the bridge.","opinion":"Should late payers get a grace period, or does softness just train them to pay late?","story":"Tell me about the longest you ever waited to get paid and what finally worked.","rapid":["What does your first payment reminder say?","How many reminders before you escalate?","Would you keep working for a client who pays late but pays well?"]},{"title":"Deadlines","describe":"Describe how you behave in the final hours before a deadline. Be honest.","opinion":"Do deadlines improve work quality or destroy it? Pick a side and defend it.","story":"Tell the story of a deadline you missed, what you told people, and what happened after.","rapid":["Do you finish early or at the last minute?","How do you ask for an extension?","What is your trick for estimating how long a task will take?"]},{"title":"Pitching an idea","describe":"Describe how you would pitch an idea you believe in to a skeptical room. What comes first?","opinion":"Does a great pitch matter more than a great idea? Convince me.","story":"Tell me about an idea you pitched that got rejected, and whether the rejection was right.","rapid":["How long should a pitch be?","What question do you dread hearing after a pitch?","What idea would you pitch if money were guaranteed?"]},{"title":"Clearing up confusion","describe":"Describe a misunderstanding that grew out of one unclear message. How did it unfold?","opinion":"When something goes wrong between two people, is it usually the sender's fault or the receiver's?","story":"Tell the story of a mix up that turned out to be funny, or one that turned out expensive.","rapid":["How do you check that someone truly understood you?","What word or phrase causes the most confusion in your work?","Phone call or long message to fix a misunderstanding, which one and why?"]},{"title":"Earning trust","describe":"Describe what you do in the first week with a new client or colleague to earn their trust.","opinion":"Is trust built by big promises kept, or by tiny things done on time? Choose.","story":"Tell me about a time you rebuilt trust after breaking it, or watched someone else fail to.","rapid":["What is the fastest way to lose someone's trust?","How do you show reliability without bragging about it?","Who do you trust professionally, and what earned it?"]},{"title":"Money habits","describe":"Describe how you keep track of your money in a normal month. What is your actual system?","opinion":"Is talking openly about salaries and rates good for everyone, or just awkward?","story":"Tell the story of a money habit you changed, what triggered the change, and whether it stuck.","rapid":["What do you spend on without guilt?","What expense surprised you most this year?","What money advice do you wish you had heard at twenty?"]},{"title":"A hard decision","describe":"Describe a decision you are facing right now, or one you faced recently, where both options cost you something.","opinion":"When logic and gut feeling point in different directions, which one should win?","story":"Tell me about the hardest decision of your adult life and how you finally made it.","rapid":["Do you decide quickly or slowly?","Whose advice do you seek before a big decision?","What decision are you glad you did not overthink?"]},{"title":"Call, message, or meeting","describe":"Describe how you choose between sending a message, making a call, or booking a meeting for a work matter.","opinion":"Are most meetings unnecessary? Say what you really think.","story":"Tell the story of a conversation that should have been a call but happened over endless messages instead.","rapid":["What news should never be delivered by text?","How fast do you expect a reply to a work message?","What makes a meeting worth attending?"]},{"title":"Learning on the job","describe":"Describe the last skill you had to learn for work and how you actually learned it.","opinion":"Is it better to be excellent at one thing or decent at five? Take a stand.","story":"Tell me about a moment you felt completely out of your depth at work and how you caught up.","rapid":["What skill are you learning right now?","Courses, videos, or just doing it, what works for you?","What skill do you fake better than you should admit?"]}];
-const MIND_PAGES = [{"day":1,"book":"Atomic Habits","author":"James Clear","idea":"Big change rarely comes from one big effort. It comes from small actions repeated until they are automatic, so the real work is designing your environment and routines rather than straining for motivation. Every small action is also a quiet vote for the kind of person you are becoming, which is why showing up matters more than the size of the session.","why":"A working adult has limited willpower left after a full day, and tiny habits do not ask for much. Small daily gains compound quietly into skills, savings, and health that one-off pushes never deliver.","action":"Pick one habit you want and write a single sentence in this form: after I do X, which I already do daily, I will do Y for two minutes."},{"day":2,"book":"Deep Work","author":"Cal Newport","idea":"Long stretches of undistracted focus on a hard task are where valuable work actually gets done. Constant email, chat, and phone checks chop attention into pieces too small for serious thinking. Focus is a trainable skill, and the people who protect blocks of it produce more, and better, than people who are always reachable.","why":"Most jobs now reward the person who can finish hard things, not the person who replies fastest. One protected hour of real focus often outproduces a whole scattered afternoon.","action":"Open tomorrow's calendar and block 45 minutes for your hardest task, then decide now where your phone will sit during it."},{"day":3,"book":"Essentialism","author":"Greg McKeown","idea":"Only a few things really matter, and almost everything else is noise. If you do not decide what your priorities are, other people will decide for you, one small request at a time. Choosing means trading, and a clear yes to what matters requires a calm no to nearly everything else.","why":"Working adults are buried in requests that all look urgent, and trying to do them all means doing none of them well. A short list done properly beats a long list done badly, at work and at home.","action":"Write down everything you have said yes to this month, circle the one that matters most, and pick one item to decline or shrink."},{"day":4,"book":"The War of Art","author":"Steven Pressfield","idea":"There is a force inside you that fights against doing meaningful work, and it shows up as procrastination, self-doubt, sudden chores, and clever excuses. It gets louder the more the work matters to you. The answer is not waiting for inspiration but working like a professional: at a set time, on a set task, whatever your mood.","why":"Every adult with a side project or an overdue hard task knows the strange pull toward doing anything else. Naming that pull as an opponent, rather than a verdict on your talent, makes it far easier to walk past.","action":"Open the project you have been avoiding and work on it for five minutes, with the only goal being to start."},{"day":5,"book":"Man's Search for Meaning","author":"Viktor E. Frankl","idea":"Frankl, a psychiatrist who survived the Nazi camps, saw that people can bear almost any hardship if they have a reason that matters to them. You cannot always control what happens to you, but you keep the freedom to choose how you answer it. Meaning is not found by chasing happiness directly, but through work worth doing, people worth loving, and courage in unavoidable difficulty.","why":"Hard weeks feel very different when you can point to who or what they serve. Purpose does not remove the strain, but it makes the strain make sense.","action":"Write one sentence naming who or what your hardest current responsibility actually serves, and keep it where you will see it."},{"day":6,"book":"Mindset","author":"Carol S. Dweck","idea":"People carry quiet beliefs about whether ability is fixed or can be grown. If you think talent is fixed, every setback feels like a verdict, so you avoid challenges and hide mistakes. If you treat ability as something built through effort and feedback, setbacks become information and hard things become practice.","why":"Careers stall more often from avoiding challenges than from failing them. Treating skill as buildable lets you take on stretch work without your identity being on the line.","action":"Take one thing you say you are bad at, and rewrite the sentence as: I have not learned this yet."},{"day":7,"book":"Thinking Fast and Slow","author":"Daniel Kahneman","idea":"The mind runs on two tracks: a fast one that produces instant impressions, and a slow one that can reason carefully but is lazy and easily tired. The fast track handles most of your day and is usually right, but it fails in predictable ways, jumping to conclusions from whatever information happens to be in front of it. Good judgment is less about being smart and more about noticing which moments deserve the slow track.","why":"Most costly mistakes at work, bad hires, bad estimates, bad purchases, are fast decisions that deserved slow thinking. Knowing when to pause is a skill you can use the same day you learn it.","action":"Before your next real decision today, ask yourself one question: what evidence would change my mind, and have I looked for it?"},{"day":8,"book":"Never Split the Difference","author":"Chris Voss","idea":"Voss, a former FBI hostage negotiator, argues that negotiation runs on emotion, not logic, so the strongest move is making the other side feel genuinely heard. That means listening hard, naming their feelings out loud, and asking open questions that start with how or what, which invite them to solve your problem with you. Hearing no is not failure; it is often the moment the other person finally feels safe enough to talk.","why":"Salary talks, client scope, and family logistics are all negotiations, and most people either cave or push. Calm listening plus one good question routinely gets better results than pressure.","action":"For one pending disagreement, write a single question starting with how or what that hands the other person the problem, such as: how could we make this deadline realistic?"},{"day":9,"book":"Influence","author":"Robert B. Cialdini","idea":"People cope with too many decisions by using mental shortcuts, and Cialdini maps the big ones: we return favors, we stay consistent with past commitments, we copy the crowd, we say yes to people we like, we defer to authority, and we want what is scarce. These levers work on us automatically, whether or not the person pulling them means well. Seeing them clearly is the difference between being persuaded and being played.","why":"Every ad, upsell, and urgent-sounding email you receive this week is built on one of these levers. Recognizing the lever mid-pitch gives you back the pause where a real choice lives.","action":"Think of the last time you said yes and later regretted it, and name which of the six levers was in play."},{"day":10,"book":"So Good They Can't Ignore You","author":"Cal Newport","idea":"Following your passion is poor career advice, because compelling careers are usually built the other way around. Rare and valuable skills come first; passion tends to grow as you get good, gain autonomy, and see your work matter. The useful question is not what job would I love, but what can I offer that people genuinely need.","why":"Adults who wait to discover a calling often drift, while those who deepen a skill find doors opening. Getting better at your craft is the most reliable route to work you actually enjoy.","action":"Write down one skill in your current job that people would pay more for, and one small way you could practice it this week."},{"day":11,"book":"The Almanack of Naval Ravikant","author":"Eric Jorgenson","idea":"This collection of Naval Ravikant's thinking argues that you get ahead by owning things that work without you: products, code, content, or a share of a business, rather than renting out hours. Aim to build specific knowledge, the skill that feels like play to you but looks like work to others, and take on accountability under your own name. It treats happiness the same way: less a stroke of luck, more a skill you train through daily choices.","why":"Trading hours for money has a hard ceiling that no raise removes. Building even one small asset that earns or teaches while you sleep changes the shape of your future.","action":"Write down one thing you could make once, a template, a tool, a guide, that would keep providing value without more of your hours."},{"day":12,"book":"Antifragile","author":"Nassim Nicholas Taleb","idea":"Some things break under stress, some resist it, and a third kind actually improves because of it, the way muscles grow from strain. Taleb argues you should build your work and life in that third shape: first cap your downside so no single event can ruin you, then make many small bets with large possible upside. Volatility then becomes something you harvest instead of something you fear.","why":"Industries and job markets shake without warning, and a fragile setup, one income, one skill, one client, turns any shake into a crisis. A capped-downside, many-small-bets setup turns the same shake into opportunity.","action":"Name one small experiment you could start this week where the most you can lose is a few hours."},{"day":13,"book":"Ego Is the Enemy","author":"Ryan Holiday","idea":"Ego quietly sabotages every stage of a working life. When you are starting out it makes you talk instead of learn, when you succeed it makes you coast and stop listening, and when you fail it turns a setback into a story about being wronged. The countermove is staying a student, doing the work instead of performing it, and judging yourself by your own standards rather than your press.","why":"Most career damage is self-inflicted: the feedback not heard, the unglamorous task not done, the grudge held too long. Less ego means faster learning and easier recoveries.","action":"Pick one useful task you have been avoiding because it feels beneath you, and do the first step now."},{"day":14,"book":"Meditations","author":"Marcus Aurelius","idea":"These are the private notes a Roman emperor wrote to steady himself, never meant for publication. Their core is simple: you control your judgments and actions, not events or other people, so spend yourself only on what is yours to control. Expect people to be difficult, meet them with patience anyway, and give the task in front of you your full and honest effort.","why":"Commutes, reorgs, and rude emails are outside your control, and resenting them burns energy you need. Focusing only on your own response is the most practical calm available to a busy adult.","action":"Write a two-line note to yourself about a current difficulty, in the tone of advice you would give a good friend."},{"day":15,"book":"Rework","author":"Jason Fried and David Heinemeier Hansson","idea":"Long plans are guesses dressed up as strategy, so the founders of Basecamp argue for starting now, starting small, and learning from something real. Ship the simplest useful version, because actual customers teach you more than any meeting. Working longer hours is not a badge of honor; it usually means the work itself needs fixing.","why":"Much workplace waste is planning, polishing, and meeting about things that could simply be tried. Shipping small versions early relieves pressure and replaces opinions with facts.","action":"Take something you are planning and write down the smallest version you could show a real person within one week."},{"day":16,"book":"The Mom Test","author":"Rob Fitzpatrick","idea":"If you ask people whether they like your idea, they will lie politely, even your mother. Useful answers come from asking about their life instead: what they currently do, what they last tried, what it cost them. Facts about past behavior are evidence; compliments and promises about the future are noise.","why":"People waste months building products, services, or internal proposals on the strength of polite encouragement. Five honest questions about what others already do can save you all of it.","action":"Rewrite one question of the form would you use this into: tell me about the last time you dealt with this problem."},{"day":17,"book":"$100M Offers","author":"Alex Hormozi","idea":"Instead of learning to sell harder, build an offer so valuable that saying no feels like a mistake. Value rises when the promised outcome gets bigger and more believable, and falls with every day of delay and every hour of effort left on the customer's plate. Price on the value delivered, then use guarantees and clear packaging to remove the risk of saying yes.","why":"Freelancers and employees alike undercharge because they price their time instead of the outcome. Framing your work as a clear outcome with less hassle changes what clients and bosses will pay for it.","action":"For one thing you sell or do, write a single line naming the outcome, how soon it arrives, and what work you take off the other person's plate."},{"day":18,"book":"Show Your Work","author":"Austin Kleon","idea":"You do not need to become a self-promoter, you need to be findable. Share the process behind your work in small, regular pieces: what you are learning, what went wrong, what you shipped. Teaching what you know costs you little and quietly builds the reputation that brings opportunities to your door.","why":"Good work hidden on a hard drive cannot help your career. A light habit of sharing turns years of quiet effort into a visible track record.","action":"Write and send one short note, a message, post, or email, about something you learned this week."},{"day":19,"book":"The Power of Habit","author":"Charles Duhigg","idea":"Habits run on a loop: a cue triggers a routine, and the routine delivers a reward your brain learns to expect. You rarely erase a habit, but you can rewire it by keeping the same cue and reward while swapping in a different routine. Some habits are keystones: changing one, like regular exercise, quietly reshapes many others around it.","why":"Much of a working day is habit, not decision, which is why willpower alone keeps failing. Redesigning one loop changes behavior without needing to feel motivated every day.","action":"Pick one habit you dislike and write down its cue and the reward it actually gives you, such as boredom relief, connection, or rest."},{"day":20,"book":"Grit","author":"Angela Duckworth","idea":"Sustained passion plus persistence toward a long-term goal predicts achievement better than raw talent does. Effort counts twice in her math: it turns ability into skill, and then turns skill into results. Grit is not gritting your teeth at everything; it comes from one clear top-level goal that makes daily persistence feel worth it.","why":"Adult life is long enough that steady beats brilliant in almost every field. Knowing your one top goal also makes it easier to quit the minor things that scatter you.","action":"Write your most important long-term goal in one sentence, then check whether anything on this week's list actually serves it."},{"day":21,"book":"Peak","author":"Anders Ericsson and Robert Pool","idea":"Experts are made mostly by a specific kind of practice, not by years served. Deliberate practice means working right at the edge of your ability, on a defined weakness, with quick feedback, which is effortful and rarely fun. Simply repeating what you are already good at, which is how most adults practice, improves almost nothing.","why":"Ten years of experience can be one year repeated ten times, and reward tends to follow skill, not tenure. A small amount of uncomfortable, targeted practice beats hours of comfortable routine.","action":"Name one specific weakness in a skill you care about, and write down how you could get feedback on it this week."},{"day":22,"book":"Made to Stick","author":"Chip Heath and Dan Heath","idea":"Ideas survive in other people's heads when they are simple, unexpected, concrete, credible, emotional, and carried by stories. The main obstacle is the curse of knowledge: once you understand something, you forget what it was like not to, so you explain in abstractions that mean nothing to your audience. The fix is finding the core of your message and putting it in concrete, human terms.","why":"Most workplace ideas die not because they are wrong but because nobody remembers them after the meeting. Making a message concrete is often the difference between approval and a polite nod.","action":"Take one thing you need to communicate and rewrite it as a single concrete sentence a newcomer would understand."},{"day":23,"book":"Getting Things Done","author":"David Allen","idea":"Your head is for having ideas, not for holding them, and every task you try to remember is an open loop quietly draining attention. The method is to capture everything into a trusted external system, decide the very next physical action for each item, and review the whole list regularly. Once your mind trusts the system, it stops nagging and frees up for actual thinking.","why":"The low-grade stress most adults carry is not the work itself but the untracked promises floating in their heads. Writing them all down in one place brings relief the same day.","action":"Spend five minutes writing down every task nagging at you, then mark the single next physical action for the most pressing one."},{"day":24,"book":"The 7 Habits of Highly Effective People","author":"Stephen R. Covey","idea":"Lasting effectiveness grows from character, not techniques. Covey's habits build outward: take responsibility for your responses instead of blaming circumstances, decide what you want your life to add up to, and give your true priorities calendar time before the trivial fills it. Only then turn to working with others: look for agreements where both sides win, and understand people thoroughly before asking them to understand you.","why":"Most time management fails because it organizes tasks without asking which ones matter. Anchoring your week to a few real priorities, and listening before persuading, improves both careers and marriages.","action":"Identify one important but not urgent thing you keep postponing, and give it a fixed slot in this week's calendar."},{"day":25,"book":"Range","author":"David Epstein","idea":"In messy, changing fields, which is most of them, people with broad experience often beat those who specialized early. Sampling widely first is not falling behind; it teaches you where you fit and builds a stock of analogies from other domains that narrow specialists lack. Early specialization wins in tidy, rule-bound domains like golf or chess, but modern work is rarely that tidy.","why":"Adults often regret the detours in their work history, yet those detours are usually where their unusual value comes from. Breadth is what lets you connect ideas your narrower colleagues cannot.","action":"Spend five minutes reading something well outside your field, and note one idea that maps onto a current problem."},{"day":26,"book":"Hell Yeah or No","author":"Derek Sivers","idea":"When deciding whether to commit to something optional, allow only two answers: an enthusiastic yes or a plain no. Anything that gets a lukewarm sure is a quiet drain on the time and energy your rare great opportunities will need. Saying no to almost everything feels costly in the moment and turns out to be the cheapest habit you own.","why":"A working adult's calendar fills itself with mild obligations unless something filters them. This one-line filter protects the space where your best work and best relationships happen.","action":"Look at this week's calendar, find one lukewarm commitment, and cancel it or cut it in half."},{"day":27,"book":"The Practice","author":"Seth Godin","idea":"Creative work is a practice, not a lightning strike: you commit to showing up and shipping on a schedule, without waiting for inspiration or a guarantee it will land. Outcomes are not fully yours to control, but the process is, so you judge yourself on whether you shipped generous work, not on the applause. Skill follows the shipping, not the other way around.","why":"Adults abandon good projects because early results are quiet, which is exactly when persistence matters. Committing to the process removes the daily debate about whether you feel ready.","action":"Ship one small, imperfect thing today: send the draft, publish the note, share the sketch."},{"day":28,"book":"Nonviolent Communication","author":"Marshall B. Rosenberg","idea":"Most conflict language mixes observation with judgment, so the other person defends themselves instead of hearing you. Rosenberg's alternative has four parts: state the plain observable fact, name the feeling it raises in you, connect that feeling to the need behind it, and make a specific request rather than a demand. The same frame works in reverse for hearing the need underneath someone else's harsh words.","why":"Tense conversations at work and home usually fail in the first sentence, when a judgment lands as an attack. This structure lets you say hard things while keeping the other person on your side.","action":"Take one complaint you have and rewrite it as: when X happens, I feel Y, because I need Z, would you be willing to W?"},{"day":29,"book":"Digital Minimalism","author":"Cal Newport","idea":"The constant pull of your phone was engineered by companies that profit from your attention; it is not a personal weakness. The answer is not scattered tips but a working philosophy: start from what you value, then let a tool in only if it strongly serves one of those values, under rules you set for when and how. What you reclaim should go to solitude, real hobbies, and face-to-face relationships, the things the scrolling replaced.","why":"Attention lost in fragments never shows up on any bill, yet it is where evenings and relationships quietly go. Deliberate technology use gives a working adult back hours that nothing else can.","action":"Delete one app that takes more from you than it gives, or move it off your home screen and log out."},{"day":30,"book":"Buy Back Your Time","author":"Dan Martell","idea":"Do not hire or delegate to grow the operation; do it to buy back your own hours, then reinvest those hours in the work only you can do. Work out roughly what an hour of your time is worth, and hand off anything below that line, starting with the tasks that drain you most. An honest audit of where your time goes, scored by value and energy, tells you exactly what to hand off first.","why":"Many capable adults stay stuck doing low-value chores out of habit and guilt while their real work waits. Trading money for time is often the cheapest upgrade available to them.","action":"List what you did today, and mark the one task that would be cheapest to hand off, automate, or drop."}];
-const CRAFT_LESSONS = [{"day":1,"week":1,"title":"Install and first chart","minutes":30,"goal":"You can install Power BI Desktop, find your way around its three views, and build a chart from a file.","steps":["Install Power BI Desktop from the Microsoft Store so it updates automatically.","Tour the left rail: Report view, Table view, Model view. Locate the Data pane, the Visualizations pane, and the Filters pane.","Use Home > Get data > Text/CSV or Excel workbook to load any table you have, then click Load.","Drag a text field and a number field onto the canvas and pick Clustered bar chart in the Visualizations pane.","Select the chart, open Format visual (the paintbrush icon), and change the title text."],"practice":"Load any spreadsheet you own, build one bar chart with a custom title, and save the file as day01.pbix."},{"day":2,"week":1,"title":"Get Data: Import vs DirectQuery","minutes":25,"goal":"You can explain when to use Import mode versus DirectQuery when connecting to a source.","steps":["Open Home > Get data > More and skim the connector categories: File, Database, Power Platform, Online Services.","Connect to a CSV with Import mode and note that the data is copied into a compressed in-memory model inside the pbix file.","Learn the contrast: DirectQuery leaves data at the source and sends a query for every visual, so it stays current but is slower and limits some features.","Note that database connectors like SQL Server show a Data Connectivity mode choice; files are always Import.","Rule of thumb: use Import unless the data is too big to copy or must be second-by-second fresh."],"practice":"Connect to two different files, then write a two line note in your own words on when you would pick DirectQuery."},{"day":3,"week":1,"title":"Power Query and Applied Steps","minutes":27,"goal":"You can open Power Query Editor, read the Applied Steps list, and safely edit or remove steps.","steps":["Click Transform data on the Home ribbon to open Power Query Editor in its own window.","Rename the query in the Query Settings pane on the right, then right-click a step under Applied Steps and rename it too.","Click the data type icon in a column header and change the type; watch a Changed Type step appear.","Click each step from top to bottom and watch the preview show the data as it was at that point.","Delete a step with the X next to it, undo nothing (there is no undo, re-add the step instead), then click Close & Apply."],"practice":"Load a CSV, make five deliberate steps, rename all of them so a stranger could read the list, and apply."},{"day":4,"week":1,"title":"Cleaning columns","minutes":28,"goal":"You can fix dirty text data with split, replace, trim, remove duplicates, and fill down.","steps":["Use Home > Split Column > By Delimiter to break a combined column such as \"Name; City\" into two columns.","Right-click a column and choose Replace Values to correct a recurring bad entry.","Select text columns and use Transform > Format > Trim (and Clean) to strip stray spaces and control characters.","Select the columns that define a unique row, then Home > Remove Rows > Remove Duplicates.","Where merged Excel cells left blanks, select the column and use Transform > Fill > Down."],"practice":"Take any exported CSV with messy text, apply all five operations, and confirm the row count change after Remove Duplicates makes sense."},{"day":5,"week":1,"title":"Shaping: unpivot and new columns","minutes":28,"goal":"You can reshape a wide table into a tall one and derive new columns without formulas in the source.","steps":["Load a wide table with one column per month, select the month columns, and click Transform > Unpivot Columns.","Rename the resulting Attribute and Value columns to Month and Amount.","Use Add Column > Conditional Column to bucket rows, for example Size is \"Large\" if Amount is greater than 1000, otherwise \"Small\".","Select two columns and use Transform > Merge Columns with a separator to build a single key column."],"practice":"Unpivot a 12 month wide sales sheet into Month and Amount, then add a High/Low conditional column and check totals did not change."},{"day":6,"week":1,"title":"Append vs Merge and join kinds","minutes":28,"goal":"You can stack tables with Append, look up columns with Merge, and pick the correct join kind.","steps":["Load two files with identical columns (for example Jan and Feb sales) and use Home > Append Queries to stack them into one table.","Load a product lookup table and use Home > Merge Queries, clicking the matching key column in each preview.","In the Merge dialog compare join kinds: Left Outer keeps all rows from the first table, Inner keeps only matches, Left Anti keeps rows with no match.","Expand the merged table column with the icon in its header and select only the fields you need."],"practice":"Use a Left Anti merge to list every order whose product code is missing from the product table, a real data quality check."},{"day":7,"week":1,"title":"Parameters and the M Advanced Editor","minutes":27,"goal":"You can create a query parameter and read the M code behind a query.","steps":["In Power Query, open Home > Manage Parameters > New Parameter and create a Number parameter named MinAmount.","Filter a numeric column, then edit the filter step to compare against the parameter instead of a hardcoded value.","Open Home > Advanced Editor and read the M: every Applied Step is a binding inside let, and the query returns the name after in.","Change one literal value directly in the M code, click Done, and confirm the preview updates.","Change the parameter value via Manage Parameters and watch the filtered result change."],"practice":"Create a FilePath text parameter, point your Source step at it, and prove you can retarget the query to a copy of the file by editing only the parameter."},{"day":8,"week":1,"title":"Week 1 project: messy sales CSV","minutes":30,"goal":"You can take a genuinely messy CSV to a clean, load-ready table in one Power Query pipeline.","steps":["Prepare or find a messy sales CSV: inconsistent capitalization, extra spaces, months as columns, duplicate rows, blank category cells.","In Power Query: Trim and Capitalize Each Word on names, Fill Down the category, Remove Duplicates on the key columns.","Unpivot the month columns, rename to Month and Amount, and set every column to the correct data type.","Add a conditional Size column and merge City and Country into a Location column.","Close & Apply and build one bar chart of Amount by Category to sanity check the totals."],"practice":"Complete the whole clean in 12 Applied Steps or fewer, each step clearly renamed."},{"day":9,"week":2,"title":"Star schema: facts and dimensions","minutes":26,"goal":"You can explain why a fact table with dimension tables beats one big flat table, and split a flat table yourself.","steps":["Learn the roles: a fact table holds events and numbers (one row per sale), dimensions hold the things you slice by (Product, Customer, Date).","In Power Query, right-click your flat sales query and choose Reference to start a Product query.","In the referenced query keep only the product columns, then Remove Duplicates to get one row per product.","In Model view drag the dimensions around the fact table so the star shape is visible.","Remember the rule: filters flow from the one side (dimension) to the many side (fact)."],"practice":"Split a flat sales table into a Sales fact and a Product dimension, relate them on the product key, and slice sales by a product attribute."},{"day":10,"week":2,"title":"Relationships and cardinality","minutes":27,"goal":"You can create relationships and read their cardinality, filter direction, and active status.","steps":["In Model view, drag the key from the dimension onto the matching column in the fact to create a relationship.","Double-click the relationship line: check Cardinality is One to many and leave Cross-filter direction on Single unless you have a proven need for Both.","Read the line markers: 1 on the dimension side, star on the fact side, and an arrow showing which way filters flow.","Create a second relationship from the fact's ship date to the Date table and note it appears dashed: inactive, because only one relationship between two tables can be active.","Open Modeling > Manage relationships to see and edit everything in one list."],"practice":"Deliberately create a wrong many-to-many relationship on a non-key column, observe the warning, then fix it back to one-to-many."},{"day":11,"week":2,"title":"Build and mark a Date table","minutes":28,"goal":"You can build a proper Date table in DAX and mark it so time intelligence works.","steps":["Use Modeling > New table and enter: Date = CALENDAR(DATE(2023,1,1), DATE(2026,12,31)).","Add columns: Year = YEAR('Date'[Date]), MonthNum = MONTH('Date'[Date]), Month = FORMAT('Date'[Date], \"MMM\").","Select the Month column and set Column tools > Sort by column to MonthNum so months order correctly.","Right-click the table in the Data pane, choose Mark as date table, and pick the Date column.","Relate 'Date'[Date] to the order date on your fact table."],"practice":"Build the table, mark it, and plot Amount by Month on a line chart to confirm Jan through Dec order, not alphabetical."},{"day":12,"week":2,"title":"Calculated columns vs measures","minutes":26,"goal":"You can decide correctly between a calculated column and a measure.","steps":["Add a calculated column: Line Total = Sales[Quantity] * Sales[Unit Price]; note it is computed once per row and stored, consuming memory.","Add a measure: Total Sales = SUM(Sales[Line Total]); note it is computed at query time inside whatever context the visual provides.","Put both in a table visual and see the column shows per-row values while the measure aggregates.","Adopt the rule: default to measures; use a column only when you need the value on each row, for a slicer, or for a relationship."],"practice":"Delete one calculated column you do not slice by and replace its use with a SUMX measure such as SUMX(Sales, Sales[Quantity] * Sales[Unit Price]); confirm every visual still shows the same numbers."},{"day":13,"week":2,"title":"Row context vs filter context","minutes":27,"goal":"You can predict what value a measure returns in any cell by reasoning about filter context.","steps":["Recall: a calculated column evaluates in row context, meaning the current row of its table.","A measure in a visual evaluates in filter context: the combined filters from rows, columns, slicers, and the Filters pane.","Build a matrix with Category on rows, Year on columns, and Total Sales in values; each cell is the measure under a different filter context.","Put the same measure in a card with no filters and compare it to the matrix grand total."],"practice":"Before clicking, write down what three specific matrix cells should equal, then verify all three."},{"day":14,"week":2,"title":"Core aggregations and DIVIDE","minutes":27,"goal":"You can write the everyday aggregation measures every report needs.","steps":["Create: Total Sales = SUM(Sales[Line Total]) and Avg Line = AVERAGE(Sales[Line Total]).","Create: Order Rows = COUNTROWS(Sales) and Customers = DISTINCTCOUNT(Sales[CustomerID]).","Create: Sales per Customer = DIVIDE([Total Sales], [Customers]); DIVIDE returns blank instead of an error when the denominator is zero.","Format each measure with Measure tools: currency, thousands separators, sensible decimals.","Show all five in one table visual sliced by Category."],"practice":"Add a slicer that can produce a zero-customer selection and confirm DIVIDE shows blank, not an error."},{"day":15,"week":2,"title":"CALCULATE, FILTER, ALL, REMOVEFILTERS","minutes":30,"goal":"You can change filter context with CALCULATE and clear it with ALL or REMOVEFILTERS.","steps":["Write: West Sales = CALCULATE([Total Sales], Sales[Region] = \"West\") and see it ignore the visual's own region.","Write: All Product Sales = CALCULATE([Total Sales], REMOVEFILTERS('Product')) to clear product filters only.","Write: Pct of Total = DIVIDE([Total Sales], CALCULATE([Total Sales], ALL('Product'))).","Use FILTER for row-by-row conditions: CALCULATE([Total Sales], FILTER('Product', 'Product'[Unit Price] > 100)).","Prefer simple column predicates when possible; reach for FILTER only when the condition needs more than one column or a measure."],"practice":"Build a bar chart of Pct of Total by category and verify the bars sum to 100 percent."},{"day":16,"week":2,"title":"Measure table and naming","minutes":25,"goal":"You can organize measures into a dedicated table with names a stakeholder can read.","steps":["Use Home > Enter data, name the table _Measures, and load it empty.","For each existing measure, select it in the Data pane and set Measure tools > Home table to _Measures.","Hide the leftover Column1; the table gets a calculator icon and jumps to the top of the Data pane.","Rename measures to business language: Total Sales, not SumOfLineTotal; check every measure has a number format set.","Spend the last ten minutes rebuilding one week 2 concept from memory: relationship, date table, or CALCULATE."],"practice":"Move every measure you have written so far into _Measures and rename any that a non-technical reader would not understand."},{"day":17,"week":3,"title":"Time intelligence","minutes":30,"goal":"You can write year-to-date, prior-year, and period-shift measures against your marked Date table.","steps":["Write: Sales YTD = TOTALYTD([Total Sales], 'Date'[Date]).","Write: Sales LY = CALCULATE([Total Sales], SAMEPERIODLASTYEAR('Date'[Date])).","Write: YoY % = DIVIDE([Total Sales] - [Sales LY], [Sales LY]) and format it as a percentage.","Write: Sales PM = CALCULATE([Total Sales], DATEADD('Date'[Date], -1, MONTH)) for a one month shift.","Remember: all of these need a marked Date table with contiguous dates, which you built on day 11."],"practice":"Plot Total Sales and Sales LY together on a line chart by month and confirm the LY line is the same shape shifted one year."},{"day":18,"week":3,"title":"Iterators: SUMX, AVERAGEX, RANKX","minutes":29,"goal":"You can compute row-by-row logic inside a measure instead of adding calculated columns.","steps":["Write: Revenue = SUMX(Sales, Sales[Quantity] * Sales[Unit Price]); the X iterates rows, multiplies, then sums.","Write: Avg Order Value = AVERAGEX(VALUES(Sales[OrderID]), [Total Sales]) to average per order, not per row.","Write: Product Rank = RANKX(ALL('Product'[Product Name]), [Total Sales]).","Note that iterators create a row context over the table you pass them, which is why Sales[Quantity] works inside SUMX."],"practice":"Put Product Rank in a table with a Year slicer and confirm the ranking recomputes when you change year."},{"day":19,"week":3,"title":"VAR and RETURN","minutes":26,"goal":"You can write readable, debuggable DAX using variables.","steps":["Rewrite YoY %: VAR ly = [Sales LY] RETURN DIVIDE([Total Sales] - ly, ly); the measure now reads top to bottom.","Learn the rule: a variable is evaluated once, in the context where it is defined, and is then a constant.","Debug with variables: temporarily change RETURN to output just one variable to inspect its value in a visual.","Refactor your longest existing measure into VAR steps with names like totalSales and priorYear."],"practice":"Take one measure with a repeated sub-expression, factor it into a VAR, and verify every visual shows identical numbers."},{"day":20,"week":3,"title":"RELATED, RELATEDTABLE, USERELATIONSHIP","minutes":29,"goal":"You can walk relationships in DAX in both directions and activate an inactive relationship on demand.","steps":["Add a calculated column on the fact: Category = RELATED('Product'[Category]); RELATED pulls from the one side into the many side.","Add a column on the dimension: Units Sold = SUMX(RELATEDTABLE(Sales), Sales[Quantity]); RELATEDTABLE goes the other way.","Write: Shipped Sales = CALCULATE([Total Sales], USERELATIONSHIP(Sales[ShipDate], 'Date'[Date])) to use the inactive ship date relationship for one measure only.","Confirm the day 10 inactive relationship exists first; USERELATIONSHIP fails without it."],"practice":"Chart ordered sales and shipped sales by month on one line chart and explain to yourself why the lines differ."},{"day":21,"week":3,"title":"Cards, KPI, matrix, small multiples","minutes":28,"goal":"You can pick the right visual for a question and use cards, KPI, matrix, and small multiples.","steps":["Adopt the defaults: bar for comparison, line for trend, matrix for lookup detail, card for a single headline number; avoid pies with more than a few slices.","Add a Card visual for Total Sales, then a KPI visual with Value Total Sales, Trend axis Month, Target Sales LY.","Build a matrix with Category then Product on Rows, Total Sales and YoY % in Values, and expand levels with the plus icons.","Make a line chart of Sales by Month, then drop Region into the Small multiples well to split it into aligned panels."],"practice":"Take one existing pie chart or cluttered visual and replace it with a better-suited visual, then note in one sentence why it reads faster."},{"day":22,"week":3,"title":"Slicers, interactions, drill through","minutes":29,"goal":"You can control how visuals filter each other and build a right-click drill through page.","steps":["Add a slicer for Year and use Format > Slicer settings to switch its style between Vertical list, Dropdown, and Tile.","Select a chart, open Format ribbon > Edit interactions, and set each other visual to Filter, Highlight, or None; click Edit interactions again to exit.","Create a new page named Product Detail and drag Product Name into the Drill through section of the Build pane.","Add detail visuals to that page; a back button appears automatically in the corner.","On any other page, right-click a product in a visual and choose Drill through > Product Detail."],"practice":"Set one summary chart so slicer clicks highlight it but do not filter it, and demo the drill through round trip."},{"day":23,"week":3,"title":"Tooltips and conditional formatting","minutes":28,"goal":"You can build a report page tooltip and apply rule-based conditional formatting.","steps":["Add a new page; in Format page set Page information > Allow use as tooltip to On and Canvas settings > Type to Tooltip.","Put two small visuals on the tooltip page, for example a card and a tiny trend line.","On a target chart, set Format > General > Tooltips > Type to Report page and pick your tooltip page, then hover to test.","In a matrix, open Format > Cell elements and turn on Background color or Data bars, then click fx to define rules.","Drive a rule from a measure, for example red background when YoY % is below zero."],"practice":"Ship one matrix where negative YoY cells are visibly flagged and one chart with a custom hover tooltip page."},{"day":24,"week":3,"title":"Field parameters, bookmarks, buttons","minutes":29,"goal":"You can let readers swap measures with a slicer and toggle page states with bookmarks and buttons.","steps":["Open Modeling > New parameter > Fields, add Total Sales, Order Rows, and Customers, and keep Add slicer to this page checked.","Drag the new field parameter into a bar chart's values well; clicking the slicer now swaps the measure live.","Open View > Bookmarks, arrange the page one way, click Add; change something visible and Add a second bookmark.","Insert > Buttons > Blank, then set Action to Bookmark and pick one; style the button label.","Test with Ctrl+click in Desktop; in the Service a plain click works."],"practice":"Build one chart whose measure is chosen by a slicer, plus two buttons that jump between two saved page states."},{"day":25,"week":4,"title":"Theme JSON and accessibility","minutes":27,"goal":"You can apply and edit a report theme JSON and pass a basic accessibility check.","steps":["Open the View ribbon theme gallery, try a built-in theme, then use Customize current theme to set data colors and fonts.","Use the theme dropdown's Save current theme to export the JSON, open it in a text editor, and read name, dataColors, and textClasses.","Edit a color in the JSON, save, and re-import it with Browse for themes.","Add alt text to key visuals under Format > General > Alt text, and set Tab order in the Selection pane (View > Selection).","Check color contrast and never encode meaning by color alone; add labels or icons too."],"practice":"Create a small theme JSON with three brand colors, apply it, and confirm new visuals pick the colors up automatically."},{"day":26,"week":4,"title":"Performance Analyzer","minutes":26,"goal":"You can measure which visuals are slow and apply the common model fixes.","steps":["Open the Optimize ribbon, click Performance analyzer, then Start recording and Refresh visuals.","Read each visual's breakdown: DAX query time versus visual display time; sort to find the worst offender.","Copy the slow visual's query with Copy query to inspect what DAX actually ran.","Apply the usual fixes: fewer visuals per page, measures instead of calculated columns, Single cross-filter direction, remove unused high-cardinality columns.","Record again after each change so you know the fix actually helped."],"practice":"Find your slowest visual, apply one fix, and write down the before and after milliseconds."},{"day":27,"week":4,"title":"Publish, workspaces, refresh","minutes":28,"goal":"You can publish a report to the Power BI Service and set up scheduled refresh.","steps":["Click Home > Publish, sign in, and pick a workspace; My workspace is fine when working solo.","Open app.powerbi.com and notice the report and its semantic model are listed as separate items.","Open the semantic model's Settings > Refresh, store source credentials, and configure a scheduled refresh time.","Know the gateway rule: cloud sources refresh directly, but on-premises files and databases need an On-premises data gateway installed on a machine that can reach them.","Learn the sharing model: a workspace is where a team builds; an app is the packaged read-only distribution of that workspace."],"practice":"Publish your day 8 project, open it in the browser, and either schedule a daily refresh or write down exactly why a gateway would be required."},{"day":28,"week":4,"title":"RLS, dashboards, mobile layout","minutes":30,"goal":"You can restrict data with Row Level Security and adapt a report for phones.","steps":["Open Modeling > Manage roles, create a role named WestOnly, and add a DAX filter on the region table: [Region] = \"West\".","Use Modeling > View as to impersonate the role in Desktop and confirm every visual filters down.","Know that in the Service you assign real users to roles on the semantic model's Security page; RLS does not apply to workspace admins and members.","Distinguish artifacts: reports are multi-page and interactive; dashboards exist only in the Service and are built by pinning visuals from one or more reports.","In Desktop use View > Mobile layout and drag your key visuals onto the phone canvas in priority order."],"practice":"Create one role, verify it with View as, and lay out your main page for mobile with the headline card on top."},{"day":29,"week":4,"title":"Capstone day 1: model and measures","minutes":30,"goal":"You can model a dataset you personally care about and write a working measure set for it.","steps":["Pick real personal data: freelance income, project hours, gym sessions, anything with dates and numbers.","Clean it in Power Query, split it into a fact table plus at least one dimension, add your Date table, and mark it.","Write 8 to 10 measures in a _Measures table: core totals and counts, at least one CALCULATE, one time intelligence measure, and one DIVIDE ratio.","Sanity check every measure in a throwaway matrix before building anything pretty."],"practice":"Finish with a matrix where all 8 to 10 measures show believable values against at least two slicers."},{"day":30,"week":4,"title":"Capstone day 2: publish and present","minutes":30,"goal":"You can design, publish, and verbally present one clean report page.","steps":["Design one page: a clear title, headline cards at the top, one trend visual, one comparison visual, one slicer; align everything and apply your day 25 theme.","Run Performance analyzer once and fix anything obviously slow.","Publish to the Service and open the report in the browser to confirm it looks right outside Desktop.","Record a 3 minute spoken walkthrough: what the data is, what the headline number says, and one insight you did not know before this course.","The spoken walkthrough doubles as Voice practice: one take, out loud, as if a client were listening."],"practice":"Save the recording next to the pbix and listen back once; if you hesitated on any number, you have found tomorrow's review topic."}];
+/* ---------- content banks (loaded from content-*.js) ---------- */
+const BODY_ROUTINES = window.KZ_BODY.routines;
+const VOICE_TOPICS = window.KZ_VOICE;
+const MIND = window.KZ_MIND;
+const MIND_BOOKS = [1, 2, 3, 4, 5, 6].map((n) => MIND.filter((r) => r.bookNumber === n));
+const CRAFT_LESSONS = window.KZ_CRAFT;
 
 /* ---------- constants ---------- */
 const PILLARS = ['body', 'voice', 'mind', 'craft'];
@@ -445,10 +550,11 @@ function defaults() {
   return {
     days: {},
     streak: { count: 0, best: 0, lastDay: null },
-    mind: { cursor: 0 },
+    mind: { cursor: 0, read: [], scroll: {} },
     craft: { done: [] },
-    settings: { name: '', theme: 'system', voiceURI: '', provider: 'none', apiKey: '', reminderTime: '' },
-    flags: { safetySeen: false, reminderFiredOn: '' },
+    settings: { name: '', theme: 'system', voiceURI: '', provider: 'anthropic', apiKey: '', reminderTime: '', spendCap: 5 },
+    usage: { month: '', inTok: 0, outTok: 0, cost: 0, sessions: 0 },
+    flags: { safetySeen: false, reminderFiredOn: '', welcomeSeen: false },
   };
 }
 function deepMerge(base, extra) {
@@ -579,40 +685,55 @@ function renderNav() {
   }).join('');
 }
 function setTab(t) {
+  if (currentTab === 'mind' && t !== 'mind') { mindSaveScroll(); save(); }
   currentTab = t;
   for (const v of ['today', 'body', 'voice', 'mind', 'craft', 'settings']) {
     $('view-' + v).hidden = v !== t;
   }
+  if (t !== 'mind') $('mindProgress').hidden = true;
   renderNav();
+  const keepScroll = (t === 'mind' && mindMode === 'read');
   RENDER[t]();
-  window.scrollTo({ top: 0 });
+  if (!keepScroll) window.scrollTo({ top: 0 });
 }
 
 /* ---------- header ---------- */
 function renderHeader() {
-  const h = new Date().getHours();
-  const part = h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening';
-  const name = S.settings.name.trim();
-  $('greet').textContent = 'Good ' + part + (name ? ', ' + name : '');
+  $('greet').textContent = greeting(S.settings.name.trim());
   $('hdate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
   $('gearBtn').innerHTML = ICONS.gear;
+}
+function greeting(name) {
+  const h = new Date().getHours();
+  const part = h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening';
+  const n = name ? ', ' + name : '';
+  const dayN = Object.keys(S.days).length;
+  const opts = [
+    'Good ' + part + n,
+    'Back again' + n,
+    'Good to see you' + n,
+    dayN > 0 ? 'Day ' + dayN + n : 'Good ' + part + n,
+    'Ready when you are' + n,
+    'Welcome back' + n,
+  ];
+  return opts[doy() % opts.length];
 }
 
 /* ---------- today's per pillar titles ---------- */
 function todaysRoutine() { return BODY_ROUTINES[doy() % BODY_ROUTINES.length]; }
 function todaysTopic() { return VOICE_TOPICS[doy() % VOICE_TOPICS.length]; }
-function mindPage() { return MIND_PAGES[Math.min(S.mind.cursor, MIND_PAGES.length - 1)]; }
+function mindReading() { return MIND[Math.min(S.mind.cursor, MIND.length - 1)]; }
 function nextLesson() { return CRAFT_LESSONS.find((l) => !S.craft.done.includes(l.day)) || null; }
 function pillarTitle(p) {
   if (p === 'body') return todaysRoutine().name;
   if (p === 'voice') return 'Topic: ' + todaysTopic().title;
-  if (p === 'mind') return 'Page ' + (Math.min(S.mind.cursor, MIND_PAGES.length - 1) + 1) + ': ' + mindPage().book;
+  if (p === 'mind') { const r = mindReading(); return r.book + ', chapter ' + r.chapter; }
   const l = nextLesson();
   return l ? 'Day ' + l.day + ': ' + l.title : 'All 30 lessons done';
 }
 function pillarMinutes(p) {
   if (p === 'body' || p === 'voice') return '12 min';
-  if (p === 'mind') return '5 min';
+  if (p === 'mind') return mindReading().readMinutes + ' min read';
   const l = nextLesson();
   return l ? l.minutes + ' min' : '30 lessons';
 }
@@ -689,7 +810,15 @@ document.addEventListener('click', (e) => {
   if (cell) { showPopover(cell); return; }
   if (!e.target.closest('#popover')) $('popover').hidden = true;
 });
-window.addEventListener('scroll', () => { $('popover').hidden = true; }, { passive: true });
+let mindScrollSaveT = null;
+window.addEventListener('scroll', () => {
+  $('popover').hidden = true;
+  if (currentTab === 'mind' && mindMode === 'read') {
+    updateMindProgress();
+    clearTimeout(mindScrollSaveT);
+    mindScrollSaveT = setTimeout(() => { mindSaveScroll(); save(); }, 400);
+  }
+}, { passive: true });
 
 /* ---------- today view ---------- */
 function renderToday() {
@@ -725,6 +854,8 @@ function renderToday() {
     + '<div style="margin-top:20px">' + cont + '</div>';
 }
 document.addEventListener('click', (e) => {
+  if (e.target.closest('#welcomeStart')) { closeWelcome(); return; }
+  if (e.target.closest('#btnWelcome')) { showWelcome(); return; }
   const tab = e.target.closest('[data-tab]');
   if (tab) { setTab(tab.dataset.tab); return; }
   const btn = e.target.closest('[data-open]');
@@ -793,11 +924,27 @@ function overlayOpened(focusSel) {
   if (f) f.focus();
 }
 function overlayClosed() {
-  if (!$('pv').hidden || !$('vv').hidden || !$('modal').hidden || !$('pvDone').hidden) return;
+  if (!$('pv').hidden || !$('vv').hidden || !$('modal').hidden || !$('pvDone').hidden || !$('welcome').hidden) return;
   document.querySelector('.wrap').inert = false;
   $('nav').inert = false;
   if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
   lastFocus = null;
+}
+function showWelcome() {
+  $('welcomeName').value = S.settings.name || 'Mahrukh';
+  $('welcome').hidden = false;
+  document.querySelector('.wrap').inert = true;
+  $('nav').inert = true;
+  $('welcomeName').focus();
+}
+function closeWelcome() {
+  S.settings.name = $('welcomeName').value.trim();
+  S.flags.welcomeSeen = true;
+  save();
+  $('welcome').hidden = true;
+  overlayClosed();
+  renderHeader();
+  setTab('today');
 }
 
 /* ---------- body view ---------- */
@@ -816,10 +963,21 @@ function renderBodyView() {
     + '<ul style="margin:12px 0 0 18px;font-size:14px">' + list + '</ul>'
     + '<button class="pill mesh mesh-body" style="margin-top:18px" id="startBody">Start session</button>'
     + '</div>'
-    + '<div class="hint" style="margin:12px 6px 0">Stretch to mild tension, never pain. Stop on sharp pain. If a problem persists, see a physiotherapist.</div>';
+    + '<div class="hint" style="margin:12px 6px 0">Stretch to mild tension, never pain. Stop on sharp pain. If a problem persists, see a physiotherapist.</div>'
+    + '<div class="label">In this routine</div>'
+    + '<div class="figStrip">' + r.moves.map((m) => {
+      const id = window.KZ_BODY.figureFor(m.name);
+      return '<div class="figStripItem">' + (id ? window.KZ_BODY.figureHtml(id) : '') + '<div class="cap">' + esc(m.name) + '</div></div>';
+    }).join('') + '</div>';
 }
 
-const player = { segs: [], idx: 0, running: false, endAt: 0, remain: 0, timer: null, wake: null, routine: null };
+function segFig(s) {
+  const id = window.KZ_BODY.figureFor(s.name);
+  if (!id) return '<div class="sessionHero mesh mesh-body"></div>';
+  return window.KZ_BODY.figureHtml(id, { flip: s.side === 'Right side' });
+}
+
+const player = { segs: [], idx: 0, active: false, phase: 'ready', running: false, endAt: 0, remain: 0, timer: null, readyTimer: null, readyEnd: 0, wake: null, routine: null };
 function buildSegs(r) {
   const segs = [];
   for (const m of r.moves) {
@@ -836,7 +994,7 @@ async function reqWake() {
   try {
     if (!('wakeLock' in navigator)) return;
     const w = await navigator.wakeLock.request('screen');
-    if (player.running) player.wake = w;
+    if (player.active) player.wake = w;
     else w.release();
   } catch (e) { /* not granted */ }
 }
@@ -844,7 +1002,7 @@ function relWake() {
   try { if (player.wake) { player.wake.release(); player.wake = null; } } catch (e) { /* ignore */ }
 }
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible' && player.running) reqWake();
+  if (document.visibilityState === 'visible' && player.active) reqWake();
 });
 function maybeStartBody() {
   if (!S.flags.safetySeen) {
@@ -863,6 +1021,7 @@ function startBodySession() {
   const r = todaysRoutine();
   player.routine = r;
   player.segs = buildSegs(r);
+  player.active = true;
   $('pvRoutine').textContent = r.name;
   $('pv').hidden = false;
   $('pvDone').hidden = true;
@@ -875,14 +1034,50 @@ function startSeg(i) {
   if (i < 0) i = 0;
   player.idx = i;
   const s = player.segs[i];
+  $('pvFig').innerHTML = segFig(s);
   $('pvMove').textContent = s.name;
   $('pvSide').textContent = s.side;
-  $('pvCue').innerHTML = '<b style="color:var(--text)">Cue.</b> ' + esc(s.cue) + '<br><b style="color:var(--text)">Avoid.</b> ' + esc(s.mistake);
   const nxt = player.segs[i + 1];
   $('pvNext').textContent = nxt ? 'Next: ' + nxt.name + (nxt.side ? ', ' + nxt.side.toLowerCase() : '') : 'Last one';
+  formCheck(s);
+}
+function drawReadyRing(frac, num) {
+  const r = 23, c = 2 * Math.PI * r, off = c * (1 - Math.max(0, Math.min(1, frac)));
+  $('pvReadyRing').innerHTML =
+    '<svg viewBox="0 0 54 54"><defs><linearGradient id="rrg" x1="0" y1="0" x2="1" y2="1">'
+    + '<stop offset="0%" stop-color="#7FE7C4"/><stop offset="50%" stop-color="#6EC9F5"/><stop offset="100%" stop-color="#C9B8FF"/></linearGradient></defs>'
+    + '<circle cx="27" cy="27" r="' + r + '" fill="none" stroke="var(--surface-2)" stroke-width="4"/>'
+    + '<circle cx="27" cy="27" r="' + r + '" fill="none" stroke="url(#rrg)" stroke-width="4" stroke-linecap="round" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '"/></svg>'
+    + '<div class="rr-num">' + (num || '') + '</div>';
+}
+function formCheck(s) {
+  player.phase = 'ready';
+  player.running = false;
+  clearInterval(player.timer);
+  $('pvReady').hidden = false;
+  $('pvHold').hidden = true;
+  $('pvReadyCue').innerHTML = '<b>Cue.</b> ' + esc(s.cue) + '<br><b>Avoid.</b> ' + esc(s.mistake);
+  speak(s.say);
+  const dur = 5;
+  player.readyEnd = Date.now() + dur * 1000;
+  drawReadyRing(1, dur);
+  clearInterval(player.readyTimer);
+  player.readyTimer = setInterval(() => {
+    const left = (player.readyEnd - Date.now()) / 1000;
+    drawReadyRing(left / dur, Math.max(0, Math.ceil(left)));
+    if (left <= 0) { clearInterval(player.readyTimer); startHold(); }
+  }, 100);
+}
+function startHold() {
+  clearInterval(player.readyTimer);
+  if (player.phase === 'hold') return;
+  player.phase = 'hold';
+  const s = player.segs[player.idx];
+  $('pvReady').hidden = true;
+  $('pvHold').hidden = false;
+  $('pvCueLine').innerHTML = '<b style="color:var(--text)">Cue.</b> ' + esc(s.cue);
   $('pvPause').innerHTML = ICONS.pause;
   $('pvPause').setAttribute('aria-label', 'Pause');
-  speak(s.say);
   player.endAt = Date.now() + s.secs * 1000;
   player.running = true;
   clearInterval(player.timer);
@@ -916,7 +1111,9 @@ function pausePlayer() {
 }
 function closePlayer() {
   player.running = false;
+  player.active = false;
   clearInterval(player.timer);
+  clearInterval(player.readyTimer);
   relWake();
   if ('speechSynthesis' in window) speechSynthesis.cancel();
   $('pv').hidden = true;
@@ -925,7 +1122,9 @@ function closePlayer() {
 }
 function finishBody() {
   player.running = false;
+  player.active = false;
   clearInterval(player.timer);
+  clearInterval(player.readyTimer);
   relWake();
   speak('Session complete. Nice work.');
   $('pv').hidden = true;
@@ -1093,6 +1292,8 @@ function renderStatsScreen(allText, secs, transcriptBlocks, finishId) {
     + '</div>'
     + '<button class="pill mesh mesh-voice" id="vvCopy">' + ICONS.copy + 'Copy session for AI feedback</button>'
     + '<button class="pill pill-quiet" id="vvGpt" style="margin-top:10px" hidden>Open ChatGPT</button>'
+    + '<button class="pill pill-quiet" id="vvGemini" style="margin-top:10px">Practise live in Gemini</button>'
+    + '<div class="hint" style="text-align:center">Copies the coaching prompt, then opens Gemini. With a Google AI Pro plan you can talk to it out loud for free.</div>'
     + '<button class="pill pill-ghost" id="' + finishId + '" style="margin-top:10px">Finish</button>';
 }
 function finishGuided() {
@@ -1122,19 +1323,61 @@ function closeVoice() {
 /* ---------- live conversation ---------- */
 const lv = { on: false, hist: [], endAt: 0, timer: null, utter: '', silT: null, userWords: '', startedAt: 0, sr: false };
 const LIVE_SYS = 'You are a friendly daily small talk partner for an intermediate to advanced ESL speaker. Ask one question at a time. Keep replies to 2 or 3 sentences. Gently correct at most one mistake per turn, in brackets at the end of your reply. Never lecture.';
+const PROVIDER_MODEL = { anthropic: 'claude-haiku-4-5-20251001', openai: 'gpt-4o-mini', gemini: 'gemini-2.5-flash' };
+const PROVIDER_LABEL = { none: 'Off', anthropic: 'Claude Haiku 4.5', openai: 'OpenAI', gemini: 'Gemini Flash' };
+// USD per million tokens; caching cuts Anthropic input to a tenth on cache reads
+const RATES = {
+  'claude-haiku-4-5-20251001': { in: 1.0, out: 5.0, cacheRead: 0.1, cacheWrite: 1.25 },
+  'gpt-4o-mini': { in: 0.15, out: 0.6 },
+  'gemini-2.5-flash': { in: 0.3, out: 2.5 },
+};
+function monthKey() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); }
+function ensureUsageMonth() {
+  const m = monthKey();
+  if (S.usage.month !== m) { S.usage = { month: m, inTok: 0, outTok: 0, cost: 0, sessions: 0 }; }
+}
+function recordUsage(model, u) {
+  ensureUsageMonth();
+  const rate = RATES[model] || { in: 0, out: 0 };
+  const inTok = u.inTok || 0, outTok = u.outTok || 0, cacheRead = u.cacheRead || 0, cacheWrite = u.cacheWrite || 0;
+  const cost = (inTok * rate.in + outTok * rate.out
+    + cacheRead * (rate.cacheRead || rate.in) + cacheWrite * (rate.cacheWrite || rate.in)) / 1e6;
+  S.usage.inTok += inTok + cacheRead + cacheWrite;
+  S.usage.outTok += outTok;
+  S.usage.cost += cost;
+  save();
+}
+function capReached() {
+  ensureUsageMonth();
+  const cap = Number(S.settings.spendCap) || 0;
+  return cap > 0 && S.usage.cost >= cap;
+}
+function costLine() {
+  ensureUsageMonth();
+  const u = S.usage, tok = u.inTok + u.outTok;
+  if (u.sessions === 0 && tok === 0) return 'No live sessions yet this month.';
+  const tokStr = tok >= 1e6 ? (tok / 1e6).toFixed(1) + 'M' : tok >= 1000 ? Math.round(tok / 1000) + 'k' : String(tok);
+  return 'This month: ' + u.sessions + ' session' + (u.sessions === 1 ? '' : 's') + ', ' + tokStr + ' tokens, about $' + u.cost.toFixed(2) + '.';
+}
+// returns { text, usage:{inTok,outTok,cacheRead,cacheWrite} }
 async function aiReply(msgs) {
   const p = S.settings.provider, k = S.settings.apiKey;
   if (p === 'openai') {
     const r = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + k },
-      body: JSON.stringify({ model: 'gpt-4o-mini', max_tokens: 220, messages: [{ role: 'system', content: LIVE_SYS }].concat(msgs) }),
+      body: JSON.stringify({ model: PROVIDER_MODEL.openai, max_tokens: 220, messages: [{ role: 'system', content: LIVE_SYS }].concat(msgs) }),
     });
-    if (!r.ok) throw new Error('OpenAI replied ' + r.status);
+    if (!r.ok) throw new Error(aiErr('OpenAI', r.status));
     const j = await r.json();
-    return j.choices[0].message.content.trim();
+    const u = j.usage || {};
+    return { text: j.choices[0].message.content.trim(), usage: { inTok: u.prompt_tokens || 0, outTok: u.completion_tokens || 0 } };
   }
   if (p === 'anthropic') {
+    // cache the static system prompt and the running conversation prefix (5 min TTL keeps it warm)
+    const cached = msgs.map((m, i) => i === msgs.length - 1
+      ? { role: m.role, content: [{ type: 'text', text: m.content, cache_control: { type: 'ephemeral' } }] }
+      : m);
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -1143,13 +1386,38 @@ async function aiReply(msgs) {
         'anthropic-version': '2023-06-01',
         'anthropic-dangerous-direct-browser-access': 'true',
       },
-      body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 220, system: LIVE_SYS, messages: msgs }),
+      body: JSON.stringify({
+        model: PROVIDER_MODEL.anthropic, max_tokens: 220,
+        system: [{ type: 'text', text: LIVE_SYS, cache_control: { type: 'ephemeral' } }],
+        messages: cached,
+      }),
     });
-    if (!r.ok) throw new Error('Anthropic replied ' + r.status);
+    if (!r.ok) throw new Error(aiErr('Claude', r.status));
     const j = await r.json();
-    return j.content[0].text.trim();
+    const u = j.usage || {};
+    return { text: j.content[0].text.trim(), usage: { inTok: u.input_tokens || 0, outTok: u.output_tokens || 0, cacheRead: u.cache_read_input_tokens || 0, cacheWrite: u.cache_creation_input_tokens || 0 } };
   }
-  throw new Error('no provider set');
+  if (p === 'gemini') {
+    const contents = msgs.map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] }));
+    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + PROVIDER_MODEL.gemini + ':generateContent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': k },
+      body: JSON.stringify({ contents: contents, systemInstruction: { parts: [{ text: LIVE_SYS }] }, generationConfig: { maxOutputTokens: 220, thinkingConfig: { thinkingBudget: 0 } } }),
+    });
+    if (!r.ok) throw new Error(aiErr('Gemini', r.status));
+    const j = await r.json();
+    const cand = (j.candidates && j.candidates[0]) || null;
+    const text = cand && cand.content && cand.content.parts ? cand.content.parts.map((x) => x.text || '').join('').trim() : '';
+    if (!text) throw new Error('Gemini returned no text. It may have hit a safety filter or the free tier limit.');
+    const u = j.usageMetadata || {};
+    return { text: text, usage: { inTok: u.promptTokenCount || 0, outTok: u.candidatesTokenCount || 0 } };
+  }
+  throw new Error('No provider set. Choose one in Settings.');
+}
+function aiErr(name, status) {
+  if (status === 429) return name + ' is rate limiting right now (429). Wait a moment and try again, or check your plan limits.';
+  if (status === 401 || status === 403) return name + ' rejected the API key (' + status + '). Check the key in Settings.';
+  return name + ' replied ' + status + '.';
 }
 function renderLive() {
   $('vvIn').innerHTML =
@@ -1189,7 +1457,17 @@ function showPending(text) {
 }
 function removePending() { const p = $('lvPending'); if (p) p.remove(); }
 function startLiveSession() {
+  if (capReached()) {
+    openModal('<div class="h2">Monthly limit reached</div>'
+      + '<p>Live conversation is paused because this month\'s spending estimate reached your cap of $' + (Number(S.settings.spendCap) || 0).toFixed(2) + '.</p>'
+      + '<p>You can raise or clear the cap in Settings. Everything else in the app still works, and you can always practise with the free Gemini option after a session.</p>'
+      + '<button class="pill mesh mesh-voice" data-close>Alright</button>');
+    return;
+  }
   vs.topic = todaysTopic();
+  ensureUsageMonth();
+  S.usage.sessions += 1;
+  save();
   lv.on = true;
   lv.hist = [];
   lv.userWords = '';
@@ -1221,15 +1499,17 @@ async function liveAiTurn() {
   const st = $('lvStatus');
   if (st) st.textContent = 'Thinking...';
   try {
-    const reply = await aiReply(lv.hist);
+    const res = await aiReply(lv.hist);
+    recordUsage(PROVIDER_MODEL[S.settings.provider], res.usage || {});
     if (!lv.on) return;
-    lv.hist.push({ role: 'assistant', content: reply });
-    addMsg('ai', reply);
+    lv.hist.push({ role: 'assistant', content: res.text });
+    addMsg('ai', res.text);
     if (st) st.textContent = '';
-    await speakAsync(reply);
+    if (capReached()) { finishLive(); toast('Monthly limit reached. Live mode paused.'); return; }
+    await speakAsync(res.text);
     if (lv.on) liveListen();
   } catch (err) {
-    if (st) st.textContent = 'Could not reach the AI (' + err.message + '). Check the provider and key in Settings, then press Finish.';
+    if (st) st.textContent = err.message + ' Press Finish to see your stats.';
   }
 }
 function liveListen() {
@@ -1281,30 +1561,77 @@ function finishLive() {
 }
 
 /* ---------- mind ---------- */
-let mindView = null;
+let mindView = null;       // current reading index 0..29
+let mindMode = 'read';     // 'read' or 'library'
+function paras(text) { return String(text).split(/\n\n+/).map((p) => '<p>' + esc(p.trim()) + '</p>').join(''); }
+function mindSaveScroll() {
+  if (currentTab === 'mind' && mindMode === 'read' && mindView !== null) {
+    S.mind.scroll[mindView] = Math.round(window.scrollY);
+  }
+}
 function renderMind() {
-  if (mindView === null) mindView = Math.min(S.mind.cursor, MIND_PAGES.length - 1);
-  const pg = MIND_PAGES[mindView];
+  if (mindView === null) mindView = Math.min(S.mind.cursor, MIND.length - 1);
+  if (mindMode === 'library') { renderMindLibrary(); return; }
+  const r = MIND[mindView];
   const rec = todayRec();
-  const pad = String(mindView + 1).padStart(2, '0');
+  const done = S.mind.read.includes(mindView);
+  const sec = (label, body) => '<div class="readSec"><div class="readH">' + label + '</div>' + body + '</div>';
   $('view-mind').innerHTML =
-    '<div class="label">Mind</div>'
-    + '<div class="card card-lg">'
+    '<div class="mindTop">'
+    + '<div class="cap">Book ' + r.bookNumber + ' of 6, chapter ' + r.chapter + ' of 5, ' + r.readMinutes + ' min read</div>'
+    + '<button class="pill-mini" id="mindLibrary" aria-label="Open the library">Library</button>'
+    + '</div>'
+    + '<div class="card card-lg reading">'
     + '<div class="mindbar mesh mesh-mind" aria-hidden="true"></div>'
-    + '<div class="cap">Page ' + pad + ' of ' + MIND_PAGES.length + '</div>'
-    + '<div class="h2" style="margin-top:6px">' + esc(pg.book) + '</div>'
-    + '<div class="cap" style="font-weight:700;color:var(--text-2);margin-top:2px">' + esc(pg.author) + '</div>'
-    + '<div class="readbody"><p>' + esc(pg.idea) + '</p></div>'
-    + '<div class="readbox"><b>Why it lands.</b> ' + esc(pg.why) + '</div>'
-    + '<div class="readbox"><b>Do this today.</b> ' + esc(pg.action) + '</div>'
+    + '<div class="cap" style="margin-top:2px">' + esc(r.book) + ', ' + esc(r.author) + '</div>'
+    + '<div class="h1" style="font-size:26px;margin-top:4px">' + esc(r.chapterTitle) + '</div>'
+    + '<div class="readbody">'
+    + sec('The argument', paras(r.argument))
+    + sec('How it works', paras(r.mechanism))
+    + sec('The evidence', paras(r.evidence))
+    + sec('Where it is weak', paras(r.pushback))
+    + sec('Try this', paras(r.tryThis))
+    + sec('Sit with this', '<ul class="qlist">' + r.questions.map((q) => '<li>' + esc(q) + '</li>').join('') + '</ul>')
+    + '</div>'
+    + '<div class="attrib">This is an original explainer, not the book. If the idea lands, buy the book.</div>'
     + '<div class="mindNav">'
-    + '<button class="iconbtn" id="mindPrev" aria-label="Previous page"' + (mindView === 0 ? ' disabled style="opacity:0.35"' : '') + '>' + ICONS.chevL + '</button>'
-    + (rec.mind
-      ? '<div class="pill pill-ghost" style="flex:1">Read for today</div>'
+    + '<button class="iconbtn" id="mindPrev" aria-label="Previous chapter"' + (mindView === 0 ? ' disabled style="opacity:0.35"' : '') + '>' + ICONS.chevL + '</button>'
+    + (done
+      ? '<div class="pill pill-ghost" style="flex:1">' + (rec.mind ? 'Read for today' : 'Already read') + '</div>'
       : '<button class="pill mesh mesh-mind" style="flex:1" id="mindMark">Mark as read</button>')
-    + '<button class="iconbtn" id="mindNext" aria-label="Next page"' + (mindView === MIND_PAGES.length - 1 ? ' disabled style="opacity:0.35"' : '') + '>' + ICONS.chevR + '</button>'
+    + '<button class="iconbtn" id="mindNext" aria-label="Next chapter"' + (mindView === MIND.length - 1 ? ' disabled style="opacity:0.35"' : '') + '>' + ICONS.chevR + '</button>'
     + '</div>'
     + '</div>';
+  $('mindProgress').hidden = false;
+  // restore reading position, then start tracking scroll for the progress bar
+  const saved = S.mind.scroll[mindView] || 0;
+  requestAnimationFrame(() => { window.scrollTo(0, saved); updateMindProgress(); });
+}
+function renderMindLibrary() {
+  $('mindProgress').hidden = true;
+  const titles = ['Atomic Habits', 'Mindset', 'Deep Work', 'Nonviolent Communication', 'Essentialism', "Man's Search for Meaning"];
+  const cards = MIND_BOOKS.map((chapters, bi) => {
+    const doneN = chapters.filter((c) => S.mind.read.includes(MIND.indexOf(c))).length;
+    const pct = Math.round(100 * doneN / chapters.length);
+    const startIdx = MIND.indexOf(chapters.find((c) => !S.mind.read.includes(MIND.indexOf(c))) || chapters[0]);
+    return '<button class="bookCard" data-book="' + startIdx + '">'
+      + '<div class="bookMesh mesh mesh-mind" style="opacity:' + (0.25 + 0.75 * doneN / chapters.length).toFixed(2) + '"></div>'
+      + '<div class="bookInfo"><div class="bookTitle">' + esc(titles[bi]) + '</div>'
+      + '<div class="cap">' + esc(chapters[0].author) + '</div>'
+      + '<div class="bookProg"><i class="mesh mesh-mind" style="width:' + pct + '%"></i></div>'
+      + '<div class="cap" style="margin-top:5px">' + doneN + ' of ' + chapters.length + ' chapters</div></div>'
+      + '</button>';
+  }).join('');
+  $('view-mind').innerHTML =
+    '<div class="mindTop"><div class="label" style="margin:0">The library</div>'
+    + '<button class="pill-mini" id="mindBackRead">Back to reading</button></div>'
+    + '<div class="bookGrid">' + cards + '</div>';
+}
+function updateMindProgress() {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  const frac = max > 20 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+  const bar = $('mindProgressBar');
+  if (bar) bar.style.width = (frac * 100).toFixed(1) + '%';
 }
 
 /* ---------- craft ---------- */
@@ -1361,10 +1688,21 @@ function renderSettings() {
     + '<div class="label">AI conversation partner</div>'
     + '<div class="card">'
     + '<div class="setrow"><label for="setProvider">Provider</label><select class="input" id="setProvider">'
-    + [['none', 'Off'], ['openai', 'OpenAI'], ['anthropic', 'Anthropic']].map((o) => '<option value="' + o[0] + '"' + (s.provider === o[0] ? ' selected' : '') + '>' + o[1] + '</option>').join('')
-    + '</select></div>'
+    + [['none', 'Off'], ['anthropic', 'Anthropic (Claude Haiku 4.5)'], ['gemini', 'Google Gemini (Flash)'], ['openai', 'OpenAI']].map((o) => '<option value="' + o[0] + '"' + (s.provider === o[0] ? ' selected' : '') + '>' + o[1] + '</option>').join('')
+    + '</select>'
+    + '<div class="tradeList">'
+    + '<div class="trade"><b>Claude Haiku 4.5</b> about $0.09 a session, near $0.02 with caching. Your data is not used for training.</div>'
+    + '<div class="trade"><b>Gemini Flash</b> free tier available. Google may use free tier conversations to improve their models.</div>'
+    + '<div class="trade"><b>OpenAI</b> paid, similar cost to Claude.</div>'
+    + '</div></div>'
     + '<div class="setrow"><label for="setKey">API key</label><input class="input" id="setKey" type="password" value="' + esc(s.apiKey) + '" autocomplete="off">'
-    + '<div class="hint">The key is stored only in localStorage on this device and is sent only to the provider you pick.</div></div>'
+    + '<div class="hint">The key is stored only in localStorage on this device and is sent only to the provider you pick. Anthropic is the default because it does not train on your speech. A Google AI Pro subscription lets you talk to Gemini out loud in its own app for free, but the consumer subscription does not include API access, so it cannot power live mode here.</div></div>'
+    + '</div>'
+    + '<div class="label">Spending</div>'
+    + '<div class="card">'
+    + '<div class="costMeter">' + costLine() + '</div>'
+    + '<div class="setrow" style="margin-top:14px"><label for="setCap">Monthly cap (US dollars)</label><input class="input" id="setCap" type="number" min="0" step="1" value="' + (Number(s.spendCap) || 0) + '"></div>'
+    + '<div class="hint">A running estimate from a built in rate table, not a bill. When the estimate reaches your cap, live mode pauses until you raise it or a new month begins. Set the cap to 0 to turn the limit off.</div>'
     + '</div>'
     + '<div class="label">Daily reminder</div>'
     + '<div class="card">'
@@ -1377,7 +1715,8 @@ function renderSettings() {
     + '<div class="btnrow"><button class="pill pill-quiet" id="btnExport">Export JSON</button><button class="pill pill-quiet" id="btnImport">Import JSON</button></div>'
     + '<button class="pill pill-ghost" style="margin-top:12px" id="btnReset">Reset everything</button>'
     + '<input type="file" id="importFile" accept=".json,application/json" hidden>'
-    + '</div>';
+    + '</div>'
+    + '<button class="linkBtn" id="btnWelcome">Show the welcome again</button>';
   fillVoices();
 }
 function fillVoices() {
@@ -1463,18 +1802,28 @@ document.addEventListener('click', (e) => {
     return;
   }
   if (hit('vvGpt')) { window.open('https://chatgpt.com', '_blank', 'noopener'); return; }
+  if (hit('vvGemini')) {
+    const go = () => window.open('https://gemini.google.com', '_blank', 'noopener');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(lastCopy).then(() => { toast('Copied. Opening Gemini.'); go(); }).catch(go);
+    } else { go(); }
+    return;
+  }
   if (hit('vvFinish')) { markDone('voice'); closeVoice(); return; }
   if (hit('lvEnd')) { closeVoice(); return; }
   if (hit('lvDoneBtn')) { commitUtter(); return; }
   if (hit('lvSend')) { sendTyped(); return; }
   if (hit('lvFinish')) { finishLive(); return; }
-  if (hit('mindPrev')) { if (mindView > 0) { mindView--; renderMind(); } return; }
-  if (hit('mindNext')) { if (mindView < MIND_PAGES.length - 1) { mindView++; renderMind(); } return; }
+  if (hit('mindPrev')) { if (mindView > 0) { mindSaveScroll(); mindView--; renderMind(); } return; }
+  if (hit('mindNext')) { if (mindView < MIND.length - 1) { mindSaveScroll(); mindView++; renderMind(); } return; }
+  if (hit('mindLibrary')) { mindSaveScroll(); mindMode = 'library'; renderMind(); window.scrollTo(0, 0); return; }
+  if (hit('mindBackRead')) { mindMode = 'read'; renderMind(); return; }
+  const bc = e.target.closest('[data-book]');
+  if (bc && currentTab === 'mind') { mindView = +bc.dataset.book; mindMode = 'read'; renderMind(); return; }
   if (hit('mindMark')) {
-    if (mindView === S.mind.cursor && S.mind.cursor < MIND_PAGES.length - 1) S.mind.cursor++;
+    if (!S.mind.read.includes(mindView)) S.mind.read.push(mindView);
+    if (mindView === S.mind.cursor && S.mind.cursor < MIND.length - 1) S.mind.cursor++;
     markDone('mind');
-    const nx = $('mindNext');
-    if (nx) nx.focus();
     return;
   }
   if (hit('btnIcs')) { downloadIcs(); return; }
@@ -1484,7 +1833,7 @@ document.addEventListener('click', (e) => {
     if (confirm('Delete all Kaizen data on this device? Export first if you want a backup.')) {
       localStorage.removeItem(STORE_KEY);
       S = loadState();
-      mindView = null;
+      mindView = null; mindMode = 'read';
       applyTheme();
       setTab('today');
       toast('Fresh start.');
@@ -1527,8 +1876,9 @@ document.addEventListener('change', (e) => {
   if (id === 'setName') { S.settings.name = e.target.value; save(); renderHeader(); }
   if (id === 'setTheme') { S.settings.theme = e.target.value; save(); applyTheme(); }
   if (id === 'setVoice') { S.settings.voiceURI = e.target.value; save(); speak('This is how I sound.'); }
-  if (id === 'setProvider') { S.settings.provider = e.target.value; save(); }
-  if (id === 'setKey') { S.settings.apiKey = e.target.value.trim(); save(); }
+  if (id === 'setProvider') { S.settings.provider = e.target.value; save(); if (currentTab === 'voice') renderVoiceView(); }
+  if (id === 'setKey') { S.settings.apiKey = e.target.value.trim(); save(); if (currentTab === 'voice') renderVoiceView(); }
+  if (id === 'setCap') { S.settings.spendCap = Math.max(0, Number(e.target.value) || 0); save(); const m = document.querySelector('.costMeter'); if (m) m.textContent = costLine(); }
   if (id === 'setTime') {
     S.settings.reminderTime = e.target.value;
     save();
@@ -1544,7 +1894,7 @@ document.addEventListener('change', (e) => {
         if (!parsed || typeof parsed !== 'object') throw new Error('bad');
         S = deepMerge(defaults(), parsed);
         save();
-        mindView = null;
+        mindView = null; mindMode = 'read';
         applyTheme();
         renderAll();
         toast('Imported.');
@@ -1566,6 +1916,7 @@ $('themeBtn').addEventListener('click', () => {
 });
 $('gearBtn').addEventListener('click', () => setTab('settings'));
 $('pvClose').addEventListener('click', closePlayer);
+$('pvReady').addEventListener('click', startHold);
 $('pvPrev').addEventListener('click', () => startSeg(player.idx - 1));
 $('pvPause').addEventListener('click', pausePlayer);
 $('pvSkip').addEventListener('click', () => startSeg(player.idx + 1));
@@ -1595,6 +1946,7 @@ function init() {
   applyTheme();
   renderHeader();
   setTab('today');
+  if (!S.flags.welcomeSeen) showWelcome();
   if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = fillVoices;
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => { /* offline first run */ }));
