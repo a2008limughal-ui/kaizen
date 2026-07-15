@@ -452,7 +452,13 @@ select.input{
 .letterFor{font-size:30px;font-weight:800;letter-spacing:-0.03em;color:var(--text);line-height:1.15}
 .letter{font-size:17px;line-height:1.8;color:var(--text-2)}
 .letter p{margin-top:14px}
-.letterSig{font-size:20px;font-weight:800;color:var(--text);text-align:right;margin-top:22px}
+.letterSig{color:var(--text);text-align:right;margin-top:26px}
+.sigSvg{color:var(--text);clip-path:inset(0 0 0 0)}
+.letterSig .sigSvg{display:inline-block;width:150px;height:auto}
+.noteSig{text-align:right;margin-top:10px}
+.noteSig .sigSvg{display:inline-block;width:90px;height:auto}
+.sigSvg.signing{animation:sigWipe 1s ease-out both}
+@keyframes sigWipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 .letterNameLabel{display:block;font-size:13px;font-weight:500;color:var(--text-3);margin:26px 0 7px}
 .welcomeCard .pill{margin-top:14px}
 
@@ -615,17 +621,18 @@ select.input{
     <div class="wletter">
       <div class="letterFor">For Mahrukh</div>
       <div class="letter">
-        <p>I made you an app.</p>
-        <p>Not because anything about you needs fixing. Because you keep saying there is no time, and I wanted to see if I could carve some out and hand it to you.</p>
-        <p>I built it over the last five days, in the gaps around work, late at night and early in the morning. That is why I was quieter than usual, and why it took longer than it should have. Nothing at work slipped, so please do not carry that. It was only ever my own free time, and I cannot think of a better thing to have spent it on.</p>
-        <p>Here is what is inside. About forty minutes. Twelve to unknot your back. Twelve to talk out loud in English, until it stops feeling like a test. Ten to read something worth reading, in English or in Urdu, whichever you feel like that day. And a little every day toward Power BI, so that in a month you will actually know it.</p>
-        <p>That is all I want from you. Only the things in this app. Nothing else, nothing extra, nothing on top.</p>
-        <p>Some days you will do all four. Most days you will not. The squares fill in either way, and a half filled square is still a day you showed up.</p>
-        <p>If anything in here is wrong, or missing, or annoying, tell me and I will change it. Ask for anything you want added. I will keep building it as long as you keep using it.</p>
-        <p>And keep in mind what this is actually for. Not for me, and not to prove anything to anyone. You are working on our future.</p>
-        <p>I love you. Start whenever you are ready.</p>
+        <p>I made this for you.</p>
+        <p>Not to fix anything. You are already good, just the way you are. I made it because you always say there is no time. So I wanted to find some time for you, and put it in your hands.</p>
+        <p>I worked on it for five days, late at night and early in the morning, in the small gaps around my work. That is why I was so quiet. Please do not worry about my work, nothing was missed. It was only my own free time, and I could not think of a better way to spend it than on you.</p>
+        <p>Here is what is inside. About forty minutes a day. Twelve minutes to stretch your back. Twelve minutes to speak English out loud, slowly and with no fear, until it feels easy. Ten minutes to read something good, in English or in Urdu, whatever you feel like that day. And a little Power BI each day, so that in one month you will know it.</p>
+        <p>That is all I want from you. Just these small things. Nothing more.</p>
+        <p>Some days you will do all four. Most days you will not. That is okay. The little squares fill in either way. Even half a square means you showed up, and that is enough for me.</p>
+        <p>If anything feels wrong, or hard, or missing, just tell me. Ask me for anything you want. I will keep building this for as long as you use it.</p>
+        <p>And please remember what this is really for. Not for me. Not to prove anything to anyone. It is for you, and for us, and for the life we are building together.</p>
+        <p>I am already proud of you. Start whenever you are ready.</p>
+        <p>I love you, always.</p>
       </div>
-      <div class="letterSig">Asfer</div>
+      <div class="letterSig" id="welcomeSig" aria-label="Asfer"></div>
     </div>
     <label for="welcomeName" class="letterNameLabel">Your name</label>
     <input class="input" id="welcomeName" placeholder="Your name" value="Mahrukh" autocomplete="given-name">
@@ -760,6 +767,17 @@ const ICONS = {
   lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>',
   download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5V15M7.5 10.5 12 15l4.5-4.5M4.5 19.5h15"/></svg>',
 };
+// Asfer's signature, hand drawn as one theme-aware stroke set (inherits currentColor)
+const SIG_SVG = '<svg class="sigSvg" viewBox="0 0 300 150" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Asfer">'
+  + '<path d="M24 106 Q 44 40 62 22 Q 80 44 96 106"/>'
+  + '<path d="M40 78 Q 66 69 94 78"/>'
+  + '<path d="M126 68 C 114 60, 102 68, 110 77 C 118 84, 126 90, 117 97 C 111 102, 101 99, 101 92"/>'
+  + '<path d="M154 32 C 142 28, 137 44, 136 64 L 132 118 C 130 134, 119 138, 114 128 C 110 119, 120 116, 126 121"/>'
+  + '<path d="M121 66 L 156 60"/>'
+  + '<path d="M150 93 L 167 90 C 170 80, 154 78, 150 89 C 146 99, 160 105, 170 97"/>'
+  + '<path d="M182 104 C 183 92, 186 80, 188 76 C 191 66, 203 64, 207 74"/>'
+  + '<path d="M14 134 C 70 129, 150 128, 210 131 C 238 132, 262 132, 284 128"/>'
+  + '</svg>';
 
 /* ---------- state ---------- */
 function defaults() {
@@ -963,6 +981,7 @@ function maybeSelectNote(milestoneOnly) {
   N.lastAmbientDate = dkey();
   save();
 }
+function noteBody(text) { return String(text).replace(/\s*Asfer\s*$/, '').trim(); }
 function noteCardHtml() {
   const id = S.notes.pendingId;
   if (!id) return '';
@@ -970,7 +989,8 @@ function noteCardHtml() {
   if (!note) { S.notes.pendingId = null; return ''; }
   return '<div class="noteCard card card-lg"><div class="noteWash mesh mesh-all" aria-hidden="true"></div>'
     + '<div class="noteHead">A note from Asfer</div>'
-    + '<div class="noteText">' + esc(note.text) + '</div>'
+    + '<div class="noteText">' + esc(noteBody(note.text)) + '</div>'
+    + '<div class="noteSig" aria-label="Asfer">' + SIG_SVG + '</div>'
     + '<button class="pill mesh mesh-mind" id="keepNote">Keep</button></div>';
 }
 function keepNote() {
@@ -985,7 +1005,7 @@ function keepNote() {
 function openNotesArchive() {
   const list = S.notes.archive.slice().reverse().map((a) => {
     const pretty = new Date(a.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-    return '<div class="archiveItem"><div class="noteText">' + esc(a.text) + '</div><div class="cap" style="margin-top:6px">' + pretty + '</div></div>';
+    return '<div class="archiveItem"><div class="noteText">' + esc(noteBody(a.text)) + '</div><div class="noteSig" aria-label="Asfer">' + SIG_SVG + '</div><div class="cap" style="margin-top:6px">' + pretty + '</div></div>';
   }).join('');
   openModal('<div class="h2">Notes from Asfer</div>'
     + (list ? '<div class="archiveList">' + list + '</div>' : '<p class="cap" style="margin-top:8px">Notes he leaves you will be kept here.</p>')
@@ -1316,9 +1336,14 @@ function overlayClosed() {
 }
 function showWelcome() {
   $('welcomeName').value = S.settings.name || 'Mahrukh';
+  const sigBox = $('welcomeSig');
+  sigBox.innerHTML = SIG_SVG;
   $('welcome').hidden = false;
   document.querySelector('.wrap').inert = true;
   $('nav').inert = true;
+  // play the signing wipe each time the letter opens (restart the animation)
+  const sig = sigBox.querySelector('.sigSvg');
+  if (sig) { sig.classList.remove('signing'); void sig.offsetWidth; sig.classList.add('signing'); }
   $('welcomeName').focus();
 }
 function closeWelcome() {
