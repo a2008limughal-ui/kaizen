@@ -231,6 +231,21 @@ header{display:flex;align-items:flex-start;justify-content:space-between;gap:12p
   margin-top:12px;min-height:130px;font-size:15px;line-height:1.65;color:var(--text);
 }
 .transcript .interim{color:var(--text-3)}
+/* voice path: stage picker, placement, warm-up */
+.stagePicker{display:flex;gap:6px;background:var(--surface-2);border-radius:999px;padding:4px;margin:0 2px 16px}
+.stagePill{flex:1;border-radius:999px;padding:10px 8px;font-size:13.5px;font-weight:700;color:var(--text-3);display:inline-flex;align-items:center;justify-content:center;gap:5px}
+.stagePill.on{color:#14161C;box-shadow:var(--shadow)}
+.stagePill.locked{color:var(--text-3);opacity:0.6}
+.stagePill svg{width:13px;height:13px}
+.plQ{font-size:19px;font-weight:800;letter-spacing:-0.02em;color:var(--text);line-height:1.3;margin:8px 2px 14px}
+.plChoices{display:flex;flex-direction:column;gap:10px}
+.plChoice{text-align:left;background:var(--surface);border-radius:18px;padding:15px 16px;box-shadow:var(--shadow), var(--card-extra);display:flex;flex-direction:column;gap:4px}
+.plChoice .plEn{color:var(--text);font-weight:600;font-size:15px}
+.plUr{font-family:"Noto Nastaliq Urdu", serif;line-height:1.9;color:var(--text-2);font-size:14.5px}
+.plChoice .plUr{text-align:right}
+.wuKind{font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-3);margin:12px 2px 0}
+.frameEx{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.exChip{background:var(--surface-2);border-radius:999px;padding:7px 14px;font-size:14px;color:var(--text);font-weight:500}
 .transcript textarea{
   width:100%;min-height:130px;border:0;background:var(--surface-2);border-radius:16px;
   padding:14px;font:inherit;color:var(--text);resize:vertical;
@@ -673,6 +688,7 @@ select.input{
 <div id="toast" role="status" hidden></div>
 <script src="./content-body.js"></script>
 <script src="./content-voice.js"></script>
+<script src="./content-voice-beginner.js"></script>
 <script src="./content-mind.js"></script>
 <script src="./content-mind-ur.js"></script>
 <script src="./content-craft.js"></script>
@@ -681,6 +697,7 @@ select.input{
 /* ---------- content banks (loaded from content-*.js) ---------- */
 const BODY_ROUTINES = window.KZ_BODY.routines;
 const VOICE_TOPICS = window.KZ_VOICE;
+const VOICE_WARMUP = window.KZ_VOICE_WARMUP || [];
 const MIND = window.KZ_MIND;
 MIND.forEach((r) => { if (!r.id) r.id = 'b' + r.bookNumber + 'c' + r.chapter; });
 const MIND_UR_BY_ID = {};
@@ -718,6 +735,7 @@ const ICONS = {
   x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
   copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></svg>',
   heart: '<svg viewBox="0 0 24 24"><path d="M12 20.5s-7.2-4.4-9.7-8.7C.6 8.6 2.2 5.4 5.4 5.4c1.9 0 3.4 1.1 4.3 2.4l.3.4.3-.4c.9-1.3 2.4-2.4 4.3-2.4 3.2 0 4.8 3.2 3.1 6.4C19.2 16.1 12 20.5 12 20.5z" fill="currentColor" stroke="none"/></svg>',
+  lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>',
   download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5V15M7.5 10.5 12 15l4.5-4.5M4.5 19.5h15"/></svg>',
 };
 
@@ -730,6 +748,7 @@ function defaults() {
     craft: { done: [] },
     settings: { name: '', theme: 'system', voiceURI: '', provider: 'gemini', apiKey: '', reminderTime: '', spendCap: 5 },
     usage: { month: '', inTok: 0, outTok: 0, cost: 0, sessions: 0 },
+    voicePath: { stage: 'warmup', daysAt: { warmup: 0, session: 0, live: 0 }, lastCounted: { warmup: '', session: '', live: '' }, unlocked: ['warmup'], placement: null },
     flags: { safetySeen: false, reminderFiredOn: '', welcomeSeen: false, installGuideSeen: false, tourSeen: false },
   };
 }
@@ -902,13 +921,20 @@ function mindReading() { return MIND[Math.min(S.mind.cursor, MIND.length - 1)]; 
 function nextLesson() { return CRAFT_LESSONS.find((l) => !S.craft.done.includes(l.day)) || null; }
 function pillarTitle(p) {
   if (p === 'body') return todaysRoutine().name;
-  if (p === 'voice') return 'Topic: ' + todaysTopic().title;
+  if (p === 'voice') {
+    if (vp().placement === null) return 'Find your starting point';
+    const st = vp().stage;
+    if (st === 'warmup') { const t = warmupTheme(); return 'Warm-up: ' + (t ? t.theme.toLowerCase() : 'speaking'); }
+    if (st === 'session') return 'Session: ' + todaysTopic().title.toLowerCase();
+    return 'Live: free conversation';
+  }
   if (p === 'mind') { const r = mindReading(); return r.book + ', chapter ' + r.chapter; }
   const l = nextLesson();
   return l ? 'Day ' + l.day + ': ' + l.title : 'All 30 lessons done';
 }
 function pillarMinutes(p) {
-  if (p === 'body' || p === 'voice') return '12 min';
+  if (p === 'body') return '12 min';
+  if (p === 'voice') return vp().placement === null ? '3 min' : (vp().stage === 'warmup' ? '9 min' : '12 min');
   if (p === 'mind') return mindReading().readMinutes + ' min read';
   const l = nextLesson();
   return l ? l.minutes + ' min' : '30 lessons';
@@ -1191,7 +1217,7 @@ function firstRun() {
 const TOUR_STEPS = [
   { sel: '#view-today .grid2', label: '<b>The stack.</b> Four things, about forty minutes. Body, Voice, Mind, Craft. Tap any tile to begin. You never have to do all four.' },
   { sel: '#view-today [data-open="body"]', label: '<b>Body.</b> Twelve minutes of stretches for your back and neck. Each move shows you how, and a video is one tap away.' },
-  { sel: '#view-today [data-open="voice"]', label: '<b>Voice.</b> Talk out loud in English for twelve minutes. It listens, then gives you feedback. This is the one that changes fastest.' },
+  { sel: '#view-today [data-open="voice"]', label: '<b>Voice.</b> First, a couple of quick questions to find your level. Then you practise speaking a little every day, and the app asks more of you as you grow, until you are having real conversations. No test, no wrong answers.' },
   { sel: '#view-today [data-open="mind"]', label: '<b>Mind.</b> A ten minute read, in English or Urdu, your choice each day. Real ideas about habits, people, and life.' },
   { sel: '#view-today [data-open="craft"]', label: '<b>Craft.</b> One Power BI lesson a day. In a month, you will actually know it.' },
   { sel: '.mosaic', label: '<b>The mosaic.</b> Every day becomes a square. Do one thing or all four, the square still fills. This is your month, at a glance.' },
@@ -1459,27 +1485,261 @@ function finishBody() {
 }
 
 /* ---------- voice view ---------- */
+/* ---------- voice path: warm-up, session, live ---------- */
+const STAGE_LABEL = { warmup: 'Warm-up', session: 'Session', live: 'Live' };
+const STAGE_ORDER = { warmup: 0, session: 1, live: 2 };
+function vp() { return S.voicePath; }
+function stageUnlocked(s) { return vp().unlocked.includes(s); }
+function warmupTheme() { return VOICE_WARMUP.length ? VOICE_WARMUP[doy() % VOICE_WARMUP.length] : null; }
+let voiceViewStage = null;   // which stage the Voice tab is currently showing
+let voiceActiveStage = null; // the stage of the session running in the overlay
+function countVoiceDay(stage) {
+  const k = dkey(), v = vp();
+  if (v.lastCounted[stage] === k) { save(); return; }
+  v.lastCounted[stage] = k;
+  v.daysAt[stage] = (v.daysAt[stage] || 0) + 1;
+  if (stage === 'warmup' && v.daysAt.warmup >= 4 && !v.unlocked.includes('session')) {
+    v.unlocked.push('session');
+    if (v.stage === 'warmup') v.stage = 'session';
+    toast('The full session is open now.');
+  } else if (stage === 'session' && v.daysAt.session >= 4 && !v.unlocked.includes('live')) {
+    v.unlocked.push('live');
+    toast('Live conversation is open now.');
+  }
+  save();
+}
+
+/* neutral, no-red-marks mic shared by warm-up and placement samples */
+let micBuf = '';
+function micCb(fin, intr) {
+  micBuf += fin;
+  const el = $('vMicText');
+  if (el) el.innerHTML = (micBuf ? esc(micBuf) : '') + ' <span class="interim">' + esc(intr) + '</span>';
+}
+function beginListen(sayText) {
+  micBuf = '';
+  if (SRC && !recog.active) startRec(micCb);
+  recog.cb = null; // mute while the prompt is spoken so it is not transcribed
+  const resume = () => {
+    if (!SRC) return;
+    recog.cb = micCb;
+    const e = $('vMicText');
+    if (e && !micBuf) e.innerHTML = '<span class="cap">Your words appear here as you speak. Nothing is marked wrong.</span>';
+  };
+  if (sayText && 'speechSynthesis' in window) speakAsync(sayText).then(resume); else resume();
+}
+function micCardHtml() {
+  return '<div class="card transcript" style="margin-top:12px">'
+    + (SRC ? '<div id="vMicText"><span class="cap">Getting the mic ready...</span></div>'
+      : '<div class="cap">Just say it out loud. Speech recognition is off in this browser, so nothing is captured, and that is fine.</div>')
+    + '</div>';
+}
+
+/* ---------- placement check (first Voice open) ---------- */
+const PL_COMFORT = [
+  { v: 0, en: 'I know some words but freeze when I speak', ur: 'کچھ الفاظ آتے ہیں مگر بولتے وقت زبان رک جاتی ہے' },
+  { v: 1, en: 'I can have a slow conversation', ur: 'میں دھیرے دھیرے بات کر لیتی ہوں' },
+  { v: 2, en: 'I speak okay and want to get faster', ur: 'ٹھیک بول لیتی ہوں، بس روانی بڑھانی ہے' },
+];
+const PL_UNDERSTAND = [
+  { v: 0, en: 'Just the key words', ur: 'صرف اہم اہم الفاظ' },
+  { v: 1, en: 'About half of it', ur: 'تقریباً آدھی بات' },
+  { v: 2, en: 'Most of what they say', ur: 'زیادہ تر بات سمجھ آ جاتی ہے' },
+];
+const PL_SAMPLES = [
+  { en: 'Tell me, in one sentence, what you did this morning.', ur: 'ایک جملے میں بتائیں کہ آج صبح آپ نے کیا کیا۔' },
+  { en: 'Tell me one thing you would like to do this weekend.', ur: 'ایک بات بتائیں جو آپ اس ویک اینڈ کرنا چاہیں گی۔' },
+];
+const pl = { on: false, step: 0, comfort: null, understand: null, samples: [], micFailed: false };
+function startPlacement() {
+  pl.on = true; pl.step = 0; pl.comfort = null; pl.understand = null; pl.samples = []; pl.micFailed = false;
+  $('vv').hidden = false; overlayOpened();
+  renderPlacement();
+}
+function plTop(title) {
+  return '<div class="ovtop"><button class="iconbtn" id="vvClose" aria-label="Close">' + ICONS.x + '</button>'
+    + '<div class="ovtitle">' + title + '</div><span style="width:42px" aria-hidden="true"></span></div>';
+}
+function plChoices(opts, name) {
+  return '<div class="plChoices">' + opts.map((o) =>
+    '<button class="plChoice" data-pl-' + name + '="' + o.v + '"><span class="plEn">' + esc(o.en) + '</span><span class="plUr" dir="rtl" lang="ur">' + esc(o.ur) + '</span></button>').join('') + '</div>';
+}
+function renderPlacement() {
+  const s = pl.step;
+  let body;
+  if (s === 0) {
+    body = '<div class="sessionHero mesh mesh-voice" style="min-height:120px"><div class="heroName" style="font-size:26px">Let\'s find your starting point</div></div>'
+      + '<div class="card" style="margin-top:14px"><p style="color:var(--text-2);line-height:1.6">A few quick questions so the app begins in the right place. There are no wrong answers, and you can change it any time.</p></div>'
+      + '<button class="pill mesh mesh-voice" id="plBegin" style="margin-top:16px">Begin</button>';
+  } else if (s === 1) {
+    body = '<div class="plQ">How do you feel about speaking English?</div>' + plChoices(PL_COMFORT, 'comfort');
+  } else if (s === 2) {
+    body = '<div class="plQ">When someone speaks English to you, how much do you understand?</div>' + plChoices(PL_UNDERSTAND, 'understand');
+  } else if (s === 3 || s === 4) {
+    const smp = PL_SAMPLES[s - 3];
+    body = '<div class="plQ">' + esc(smp.en) + '</div>'
+      + '<div class="cap plUr" dir="rtl" lang="ur" style="margin:2px 2px 0">' + esc(smp.ur) + '</div>'
+      + micCardHtml()
+      + '<button class="pill mesh mesh-voice" id="plSampleNext" style="margin-top:14px">Done, next</button>'
+      + '<div class="hint" style="text-align:center">Just a sentence or two. This is not graded.</div>';
+  } else {
+    // outcome: average only the samples that actually captured speech; null when the mic gave no signal
+    const got = pl.samples.filter((x) => x != null);
+    const sampleAvg = got.length ? got.reduce((a, b) => a + b, 0) / got.length : null;
+    const result = decidePlacement(pl.comfort, pl.understand, sampleAvg);
+    applyPlacement(pl.comfort, pl.understand, sampleAvg, result);
+    const startStage = result === 'warmup' ? 'Warm-up' : 'Session';
+    const extra = result === 'sessionLive' ? ' Live conversation is open too, whenever you want it.' : '';
+    body = '<div class="sessionHero mesh mesh-voice" style="min-height:120px"><div class="heroName" style="font-size:24px">You\'re starting at ' + startStage + '</div></div>'
+      + '<div class="card" style="margin-top:14px"><p style="color:var(--text-2);line-height:1.6">Based on your answers, this is a good fit.' + extra + ' If it feels too easy or too hard, you can move any time from the level picker.</p></div>'
+      + '<button class="pill mesh mesh-voice" id="plStart" style="margin-top:16px">Start ' + startStage + '</button>';
+  }
+  $('vvIn').innerHTML = plTop('Your starting point') + body;
+  if (s === 3 || s === 4) {
+    pl.micFailed = false;
+    recog.onFail = () => { pl.micFailed = true; };
+    beginListen(PL_SAMPLES[s - 3].en);
+  }
+}
+function wordCount(t) { return (String(t).trim().match(/[A-Za-z']+/g) || []).length; }
+function sampleLevel(t) { const n = wordCount(t); return n < 3 ? 0 : n < 8 ? 1 : 2; }
+function decidePlacement(comfort, understand, sampleAvg) {
+  if (sampleAvg == null) {
+    if (comfort === 0) return 'warmup';
+    if (comfort === 2 && understand >= 1) return 'sessionLive';
+    return 'session';
+  }
+  if (comfort === 0 || sampleAvg < 0.75) return 'warmup';
+  if (comfort === 2 && sampleAvg >= 1.5) return 'sessionLive';
+  return 'session';
+}
+function applyPlacement(comfort, understand, sampleAvg, result) {
+  const v = vp();
+  v.placement = { comfort: comfort, understand: understand, sampleAvg: sampleAvg == null ? null : Math.round(sampleAvg * 100) / 100, result: result, at: dkey() };
+  const want = result === 'warmup' ? ['warmup'] : result === 'session' ? ['warmup', 'session'] : ['warmup', 'session', 'live'];
+  want.forEach((st) => { if (!v.unlocked.includes(st)) v.unlocked.push(st); });
+  const startStage = result === 'warmup' ? 'warmup' : 'session';
+  if (STAGE_ORDER[startStage] > STAGE_ORDER[v.stage]) v.stage = startStage;
+  else if (v.placement && v.stage === 'warmup' && startStage === 'session') v.stage = 'session';
+  if (result !== 'warmup') v.daysAt.warmup = Math.max(v.daysAt.warmup, 4);
+  if (result === 'sessionLive') v.daysAt.session = Math.max(v.daysAt.session, 4);
+  save();
+}
+
+/* ---------- warm-up session ---------- */
+const wu = { on: false, items: [], idx: 0, theme: null };
+function buildWarmupItems(theme) {
+  const items = [];
+  (theme.echo || []).forEach((e) => items.push({ kind: 'echo', en: e.en, ur: e.ur }));
+  (theme.frames || []).forEach((f) => items.push({ kind: 'frame', en: f.en, ur: f.ur, examples: f.examples || [] }));
+  (theme.answers || []).forEach((a) => items.push({ kind: 'answer', en: a.en, ur: a.ur }));
+  return items;
+}
+function startWarmup() {
+  const theme = warmupTheme();
+  if (!theme) { toast('Warm-up content is still loading.'); return; }
+  wu.on = true; wu.theme = theme; wu.items = buildWarmupItems(theme); wu.idx = 0;
+  voiceActiveStage = 'warmup';
+  $('vv').hidden = false; overlayOpened();
+  renderWarmup();
+}
+const WU_HEAD = { echo: 'Listen, then say it back', frame: 'Say it with the words', answer: 'Answer in one line' };
+function renderWarmup() {
+  if (wu.idx >= wu.items.length) { finishWarmup(); return; }
+  const it = wu.items[wu.idx];
+  let extra = '';
+  if (it.kind === 'frame') {
+    extra = '<div class="frameEx">' + it.examples.map((x) =>
+      '<span class="exChip">' + esc(x.en) + '</span>').join('') + '</div>';
+  }
+  $('vvIn').innerHTML =
+    '<div class="ovtop"><button class="iconbtn" id="vvClose" aria-label="Close">' + ICONS.x + '</button>'
+    + '<div class="ovtitle">Warm-up: ' + esc(wu.theme.theme) + '</div><span style="width:42px" aria-hidden="true"></span></div>'
+    + '<div class="phaseDots" aria-hidden="true">' + wu.items.map((_, i) => '<i class="' + (i <= wu.idx ? 'mesh mesh-voice' : '') + '"></i>').join('') + '</div>'
+    + '<div class="wuKind">' + WU_HEAD[it.kind] + '</div>'
+    + '<div class="card promptCard"><div class="ptxt" style="font-size:19px">' + esc(it.en) + '</div>'
+    + '<div class="plUr" dir="rtl" lang="ur" style="margin-top:8px;color:var(--text-2);font-size:16px">' + esc(it.ur) + '</div>' + extra + '</div>'
+    + micCardHtml()
+    + '<div class="btnrow"><button class="pill pill-ghost" id="wuReplay">Hear it again</button><button class="pill mesh mesh-voice" id="wuNext" style="width:auto;flex:none;padding:13px 24px">' + (wu.idx === wu.items.length - 1 ? 'Finish' : 'Next') + '</button></div>';
+  beginListen(it.en);
+}
+function finishWarmup() {
+  stopRec();
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  countVoiceDay('warmup');
+  markDone('voice');
+  const v = vp();
+  const left = Math.max(0, 4 - v.daysAt.warmup);
+  const note = v.unlocked.includes('session')
+    ? 'The full session is open whenever you feel ready.'
+    : (left === 0 ? 'The full session is open now.' : left + ' more ' + (left === 1 ? 'day' : 'days') + ' opens the full session.');
+  $('vvIn').innerHTML =
+    '<div class="ovtop"><span style="width:42px"></span><div class="ovtitle">Warm-up done</div><button class="iconbtn" id="vvClose" aria-label="Close">' + ICONS.x + '</button></div>'
+    + '<div class="sessionHero mesh mesh-voice" style="min-height:130px"><div class="heroName" style="font-size:26px">Nicely done</div></div>'
+    + '<div class="card" style="margin-top:14px"><p style="color:var(--text-2);line-height:1.6">You spoke out loud today, and that is the whole point. ' + note + '</p></div>'
+    + '<button class="pill mesh mesh-voice" id="wuFinishBtn" style="margin-top:16px">Finish</button>';
+  wu.on = false;
+}
+
 function renderVoiceView() {
-  const t = todaysTopic();
-  const rec = todayRec();
+  const v = vp();
+  // first Voice open: the placement check, before any practice
+  if (v.placement === null) {
+    $('view-voice').innerHTML =
+      '<div class="label">Voice</div>'
+      + '<div class="card card-lg"><div class="mindbar mesh mesh-voice" aria-hidden="true" style="height:6px;border-radius:999px;margin-bottom:16px"></div>'
+      + '<div class="h2">Let\'s find your starting point</div>'
+      + '<p class="cap" style="margin-top:8px;color:var(--text-2);line-height:1.6">A few quick questions so speaking practice begins in the right place. There are no wrong answers, and you can change it any time.</p>'
+      + '<button class="pill mesh mesh-voice" style="margin-top:18px" id="startPlacement">Begin</button></div>';
+    return;
+  }
+  if (!voiceViewStage || !stageUnlocked(voiceViewStage)) voiceViewStage = v.stage;
+  const picker = '<div class="stagePicker">' + ['warmup', 'session', 'live'].map((st) => {
+    const un = stageUnlocked(st), cur = st === voiceViewStage;
+    return '<button class="stagePill' + (cur ? ' on mesh mesh-voice' : '') + (un ? '' : ' locked') + '"' + (un ? ' data-vstage="' + st + '"' : ' disabled') + '>'
+      + STAGE_LABEL[st] + (un ? '' : ' ' + ICONS.lock) + '</button>';
+  }).join('') + '</div>';
+  $('view-voice').innerHTML = '<div class="label">Voice</div>' + picker + voiceStageBody(voiceViewStage);
+}
+function voiceStageBody(stage) {
+  const rec = todayRec(), v = vp();
+  if (stage === 'warmup') {
+    const t = warmupTheme();
+    const left = Math.max(0, 4 - v.daysAt.warmup);
+    const prog = v.unlocked.includes('session')
+      ? 'An easy win any time you want it.'
+      : (t ? 'Do this ' + (left <= 1 ? 'once more' : left + ' more days') + ' and the full session opens.' : '');
+    return '<div class="card card-lg">'
+      + '<div class="h2">' + (t ? esc(t.theme) : 'Warm-up') + '</div>'
+      + '<div class="cap" style="margin-top:4px">About 9 minutes. Listen and echo, say it with the words, answer in one line. Bilingual, with the Urdu meaning under every line.</div>'
+      + (rec.voice ? '<div class="cap" style="margin-top:8px;color:var(--text-2)">Done for today. Doing more never hurts.</div>' : '')
+      + '<button class="pill mesh mesh-voice" style="margin-top:18px" id="startWarmup"' + (t ? '' : ' disabled') + '>Start warm-up</button>'
+      + (prog ? '<div class="hint">' + prog + '</div>' : '')
+      + '</div>';
+  }
+  if (stage === 'session') {
+    const t = todaysTopic();
+    return '<div class="card card-lg">'
+      + '<div class="h2">Topic: ' + esc(t.title) + '</div>'
+      + '<div class="cap" style="margin-top:4px">12 minutes, six timed parts: warm up, describe, opinion, story, rapid fire, recap.</div>'
+      + (rec.voice ? '<div class="cap" style="margin-top:8px;color:var(--text-2)">Done for today.</div>' : '')
+      + '<button class="pill mesh mesh-voice" style="margin-top:18px" id="startVoice">Start session</button>'
+      + '<div class="hint">' + (SRC
+        ? 'Live transcription uses Chrome speech recognition, which needs an internet connection. If it drops, you can type instead.'
+        : 'Speech recognition is not available in this browser, so you type your answers. The timers are the same.')
+      + (v.unlocked.includes('live') ? '' : ' Keep going, and after four days of this, live conversation opens.') + '</div>'
+      + '</div>';
+  }
+  // live
   const live = S.settings.provider !== 'none' && S.settings.apiKey;
-  $('view-voice').innerHTML =
-    '<div class="label">Voice</div>'
-    + '<div class="card card-lg">'
-    + '<div class="h2">Topic: ' + esc(t.title) + '</div>'
-    + '<div class="cap" style="margin-top:4px">12 minutes, six timed parts: warm up, describe, opinion, story, rapid fire, recap.</div>'
-    + (rec.voice ? '<div class="cap" style="margin-top:8px;color:var(--text-2)">Done for today.</div>' : '')
-    + '<button class="pill mesh mesh-voice" style="margin-top:18px" id="startVoice">Start session</button>'
-    + '<div class="hint">' + (SRC
-      ? 'Live transcription uses Chrome speech recognition, which needs an internet connection. If it drops, you can type instead.'
-      : 'Speech recognition is not available in this browser, so you type your answers. The timers are the same.') + '</div>'
-    + '</div>'
-    + '<div class="card" style="margin-top:16px">'
-    + '<div class="tname" style="font-weight:800;color:var(--text)">Live conversation partner</div>'
+  return '<div class="card card-lg">'
+    + '<div class="h2">Live conversation</div>'
     + (live
-      ? '<div class="hint" style="margin-top:6px">A real back and forth with your AI provider, spoken out loud, for 12 minutes. Your API key lives only in localStorage on this device.</div>'
-        + '<button class="pill pill-quiet" style="margin-top:14px" id="startLive">Start live conversation</button>'
-      : '<div class="hint" style="margin-top:6px">Add an AI provider and API key in Settings to unlock a spoken back and forth partner. The key stays on this device.</div>')
+      ? '<div class="cap" style="margin-top:4px">A real back and forth with your AI partner, spoken out loud, for 12 minutes. It keeps things simple and gentle.</div>'
+        + '<button class="pill mesh mesh-voice" style="margin-top:18px" id="startLive">Start live conversation</button>'
+        + '<div class="hint">Your API key lives only in localStorage on this device.</div>'
+      : '<div class="cap" style="margin-top:4px">A real spoken back and forth with an AI partner.</div>'
+        + '<div class="hint" style="margin-top:8px">Add a provider key in Settings, under Live English practice, to switch this on. The key stays on this device. Asfer will help you set it up.</div>')
     + '</div>';
 }
 
@@ -1497,6 +1757,7 @@ function buildPhases(t) {
 }
 function startVoiceSession() {
   const t = todaysTopic();
+  voiceActiveStage = 'session';
   vs.topic = t;
   vs.phases = buildPhases(t);
   vs.texts = ['', '', '', '', '', ''];
@@ -1636,6 +1897,8 @@ function finishGuided() {
 function closeVoice() {
   vs.on = false;
   lv.on = false;
+  wu.on = false;
+  pl.on = false;
   clearInterval(vs.timer);
   clearInterval(lv.timer);
   clearTimeout(lv.silT);
@@ -1797,6 +2060,7 @@ function showPending(text) {
 }
 function removePending() { const p = $('lvPending'); if (p) p.remove(); }
 function startLiveSession() {
+  voiceActiveStage = 'live';
   if (capReached()) {
     openModal('<div class="h2">Monthly limit reached</div>'
       + '<p>Live conversation is paused because this month\'s spending estimate reached your cap of $' + (Number(S.settings.spendCap) || 0).toFixed(2) + '.</p>'
@@ -2067,6 +2331,7 @@ function renderSettings() {
     + '<div class="setrow"><label for="setKey">Paste your key here</label><input class="input" id="setKey" type="password" value="' + esc(s.apiKey) + '" autocomplete="off" placeholder="Your provider key">'
     + '<div class="hint">This key stays only on this phone and is never uploaded anywhere. It is sent straight from your phone to the provider you pick, and to no one else. Gemini is the default because you have a key and its free tier costs nothing.</div>'
     + '<div class="btnrow" style="margin-top:12px;align-items:center"><button class="pill pill-quiet" id="btnTestKey" style="width:auto;flex:none">Test key</button><span id="testKeyResult" class="testResult"></span></div>'
+    + '<button class="linkBtn" id="btnRetakePlacement" style="margin-top:16px">Find my starting point again</button>'
     + '</div>'
     + '<div class="label">Spending</div>'
     + '<div class="card">'
@@ -2157,6 +2422,23 @@ document.addEventListener('click', (e) => {
   if (hit('safetyGo')) { S.flags.safetySeen = true; save(); closeModal(); startBodySession(); return; }
   if (hit('startVoice')) { startVoiceSession(); return; }
   if (hit('startLive')) { startLiveSession(); return; }
+  if (hit('startWarmup')) { startWarmup(); return; }
+  if (hit('startPlacement')) { startPlacement(); return; }
+  if (hit('btnRetakePlacement')) { setTab('voice'); startPlacement(); return; }
+  const vst = e.target.closest('[data-vstage]');
+  if (vst) { voiceViewStage = vst.dataset.vstage; renderVoiceView(); return; }
+  // placement flow
+  if (hit('plBegin')) { pl.step = 1; renderPlacement(); return; }
+  const plc = e.target.closest('[data-pl-comfort]');
+  if (plc) { pl.comfort = +plc.dataset.plComfort; pl.step = 2; renderPlacement(); return; }
+  const plu = e.target.closest('[data-pl-understand]');
+  if (plu) { pl.understand = +plu.dataset.plUnderstand; pl.step = SRC ? 3 : 5; renderPlacement(); return; }
+  if (hit('plSampleNext')) { pl.samples.push((SRC && !pl.micFailed) ? sampleLevel(micBuf) : null); recog.cb = null; pl.step += 1; renderPlacement(); return; }
+  if (hit('plStart')) { pl.on = false; closeVoice(); voiceViewStage = vp().stage; renderVoiceView(); return; }
+  // warm-up flow
+  if (hit('wuReplay')) { if ('speechSynthesis' in window) speak(wu.items[wu.idx].en); return; }
+  if (hit('wuNext')) { recog.cb = null; wu.idx += 1; renderWarmup(); return; }
+  if (hit('wuFinishBtn')) { closeVoice(); return; }
   if (hit('vvClose')) { closeVoice(); return; }
   if (hit('vvSkipPhase')) { startPhase(vs.phase + 1); return; }
   if (hit('vvEnd')) { finishGuided(); return; }
@@ -2181,7 +2463,7 @@ document.addEventListener('click', (e) => {
     } else { go(); }
     return;
   }
-  if (hit('vvFinish')) { markDone('voice'); closeVoice(); return; }
+  if (hit('vvFinish')) { if (voiceActiveStage) countVoiceDay(voiceActiveStage); markDone('voice'); closeVoice(); return; }
   if (hit('lvEnd')) { closeVoice(); return; }
   if (hit('lvDoneBtn')) { commitUtter(); return; }
   if (hit('lvSend')) { sendTyped(); return; }
