@@ -461,6 +461,24 @@ select.input{
 @keyframes sigWipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 .letterNameLabel{display:block;font-size:13px;font-weight:500;color:var(--text-3);margin:26px 0 7px}
 .welcomeCard .pill{margin-top:14px}
+/* the welcome letter as a piece of handmade paper (a physical letter, cream in both themes) */
+.welcomeInner{position:relative;z-index:1;max-width:432px;width:100%;margin:auto}
+.paperLetter{position:relative;padding:36px 30px 32px;color:#4a4235}
+.paperLetter::before{
+  content:"";position:absolute;inset:-4px;z-index:0;
+  background-color:#f6efdf;
+  background-image:radial-gradient(rgba(120,98,60,0.05) 0.5px, transparent 0.6px);
+  background-size:4px 4px;
+  border-radius:5px;
+  filter:url(#paperEdge) drop-shadow(0 6px 16px rgba(45,34,18,0.16)) drop-shadow(0 24px 50px rgba(45,34,18,0.13));
+}
+.paperLetter > *{position:relative;z-index:1}
+.paperLetter .letterFor{color:#2e2920}
+.paperLetter .letter{color:#4a4235}
+.paperLetter .letterSig .sigSvg{color:#2e2920}
+.welcomeActions{margin-top:24px}
+.welcomeActions .pill{margin-top:14px}
+[data-theme="dark"] .paperLetter::before{filter:url(#paperEdge) drop-shadow(0 8px 22px rgba(0,0,0,0.55)) drop-shadow(0 30px 60px rgba(0,0,0,0.45))}
 
 /* install guide */
 .igLead{font-size:15px;color:var(--text-2);line-height:1.6;margin-top:8px}
@@ -547,6 +565,12 @@ select.input{
 </style>
 </head>
 <body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs>
+  <filter id="paperEdge" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.014 0.018" numOctaves="4" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="11" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</defs></svg>
 <div id="haze" aria-hidden="true"></div>
 <div id="mindProgress" hidden aria-hidden="true"><div id="mindProgressBar" class="mesh mesh-mind"></div></div>
 <div class="wrap">
@@ -617,26 +641,30 @@ select.input{
     <div class="wBlob mesh mesh-mind"></div>
     <div class="wBlob mesh mesh-craft"></div>
   </div>
-  <div class="welcomeCard card card-lg" role="dialog" aria-modal="true" aria-label="A welcome letter">
-    <div class="wletter">
-      <div class="letterFor">For Mahrukh</div>
-      <div class="letter">
-        <p>I made this for you.</p>
-        <p>Not to fix anything. You are already good, just the way you are. I made it because you always say there is no time. So I wanted to find some time for you, and put it in your hands.</p>
-        <p>I worked on it for five days, late at night and early in the morning, in the small gaps around my work. That is why I was so quiet. Please do not worry about my work, nothing was missed. It was only my own free time, and I could not think of a better way to spend it than on you.</p>
-        <p>Here is what is inside. About forty minutes a day. Twelve minutes to stretch your back. Twelve minutes to speak English out loud, slowly and with no fear, until it feels easy. Ten minutes to read something good, in English or in Urdu, whatever you feel like that day. And a little Power BI each day, so that in one month you will know it.</p>
-        <p>That is all I want from you. Just these small things. Nothing more.</p>
-        <p>Some days you will do all four. Most days you will not. That is okay. The little squares fill in either way. Even half a square means you showed up, and that is enough for me.</p>
-        <p>If anything feels wrong, or hard, or missing, just tell me. Ask me for anything you want. I will keep building this for as long as you use it.</p>
-        <p>And please remember what this is really for. Not for me. Not to prove anything to anyone. It is for you, and for us, and for the life we are building together.</p>
-        <p>I am already proud of you. Start whenever you are ready.</p>
-        <p>I love you, always.</p>
+  <div class="welcomeInner">
+    <div class="paperLetter" role="dialog" aria-modal="true" aria-label="A welcome letter">
+      <div class="wletter">
+        <div class="letterFor">For Mahrukh</div>
+        <div class="letter">
+          <p>I made this for you.</p>
+          <p>Not to fix anything. You are already good, just the way you are. I made it because you always say there is no time. So I wanted to find some time for you, and put it in your hands.</p>
+          <p>I worked on it for five days, late at night and early in the morning, in the small gaps around my work. That is why I was so quiet. Please do not worry about my work, nothing was missed. It was only my own free time, and I could not think of a better way to spend it than on you.</p>
+          <p>Here is what is inside. About forty minutes a day. Twelve minutes to stretch your back. Twelve minutes to speak English out loud, slowly and with no fear, until it feels easy. Ten minutes to read something good, in English or in Urdu, whatever you feel like that day. And a little Power BI each day, so that in one month you will know it.</p>
+          <p>That is all I want from you. Just these small things. Nothing more.</p>
+          <p>Some days you will do all four. Most days you will not. That is okay. The little squares fill in either way. Even half a square means you showed up, and that is enough for me.</p>
+          <p>If anything feels wrong, or hard, or missing, just tell me. Ask me for anything you want. I will keep building this for as long as you use it.</p>
+          <p>And please remember what this is really for. Not for me. Not to prove anything to anyone. It is for you, and for us, and for the life we are building together.</p>
+          <p>I am already proud of you. Start whenever you are ready.</p>
+          <p>I love you, always.</p>
+        </div>
+        <div class="letterSig" id="welcomeSig" aria-label="Asfer"></div>
       </div>
-      <div class="letterSig" id="welcomeSig" aria-label="Asfer"></div>
     </div>
-    <label for="welcomeName" class="letterNameLabel">Your name</label>
-    <input class="input" id="welcomeName" placeholder="Your name" value="Mahrukh" autocomplete="given-name">
-    <button class="pill mesh mesh-mind" id="welcomeStart">Start</button>
+    <div class="welcomeActions">
+      <label for="welcomeName" class="letterNameLabel">Your name</label>
+      <input class="input" id="welcomeName" placeholder="Your name" value="Mahrukh" autocomplete="given-name">
+      <button class="pill mesh mesh-mind" id="welcomeStart">Start</button>
+    </div>
   </div>
 </div>
 <div id="installGuide" class="welcome" hidden>
