@@ -174,6 +174,7 @@ header{display:flex;align-items:flex-start;justify-content:space-between;gap:12p
   padding:0;min-width:0;
 }
 .cell.bloom{transform:scale(1.14);box-shadow:0 0 12px rgba(164,146,255,0.55);z-index:1}
+.cell.rest::before{content:"";position:absolute;left:50%;top:50%;width:3px;height:3px;margin:-1.5px 0 0 -1.5px;border-radius:999px;background:var(--text-3);opacity:0.55}
 .cell.today::after{
   content:"";position:absolute;inset:-3px;border-radius:9px;
   border:1.5px solid var(--focus);pointer-events:none;
@@ -244,6 +245,13 @@ header{display:flex;align-items:flex-start;justify-content:space-between;gap:12p
 .plUr{font-family:"Noto Nastaliq Urdu", serif;line-height:1.9;color:var(--text-2);font-size:14.5px}
 .plChoice .plUr{text-align:right}
 .wuKind{font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-3);margin:12px 2px 0}
+.clipList{display:flex;flex-direction:column}
+.clipRow{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--hairline)}
+.clipRow:first-child{border-top:0}
+.clipPlay{width:44px;height:44px;border-radius:999px;flex:none;display:grid;place-items:center;color:#14161C;box-shadow:var(--shadow)}
+.clipPlay svg{width:20px;height:20px}
+.clipMeta{min-width:0}
+.clipDate{font-weight:800;color:var(--text);font-size:15px}
 .frameEx{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .exChip{background:var(--surface-2);border-radius:999px;padding:7px 14px;font-size:14px;color:var(--text);font-weight:500}
 .transcript textarea{
@@ -359,9 +367,21 @@ select.input{
 .testResult.good{color:#2FA98A;font-weight:600}
 .testResult.bad{color:#E0708A}
 .testResult svg{width:16px;height:16px}
-.madeBy{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:28px;font-size:13px;color:var(--text-3);font-weight:500}
+.madeBy{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:28px;font-size:13px;color:var(--text-3);font-weight:500;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .madeHeart{display:inline-flex;color:#FF8FA3}
 .madeHeart svg{width:15px;height:15px}
+/* rest intro + note from Asfer */
+.restIntro{margin-top:10px}
+.restIntro p{color:var(--text-2);line-height:1.6}
+.restIntro .pill{margin-top:14px}
+.noteCard{position:relative;overflow:hidden;margin-top:10px}
+.noteWash{position:absolute;inset:0;opacity:0.14;filter:blur(2px)}
+.noteHead{position:relative;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-3)}
+.noteText{position:relative;font-size:17px;line-height:1.7;color:var(--text);margin-top:10px;max-width:62ch}
+.noteCard .pill{position:relative;margin-top:16px}
+.archiveList{display:flex;flex-direction:column;gap:14px;margin-top:12px;max-height:56dvh;overflow-y:auto}
+.archiveItem{background:var(--surface-2);border-radius:16px;padding:14px 16px}
+.archiveItem .noteText{font-size:15.5px;margin-top:0}
 
 /* nav */
 #nav{
@@ -530,6 +550,7 @@ select.input{
       <div id="hdate" class="cap"></div>
     </div>
     <div class="hbtns">
+      <button id="notesBtn" class="iconbtn" aria-label="Notes from Asfer" hidden></button>
       <button id="themeBtn" class="iconbtn" aria-label="Toggle theme"></button>
       <button id="gearBtn" class="iconbtn" aria-label="Settings"></button>
     </div>
@@ -689,6 +710,7 @@ select.input{
 <script src="./content-body.js"></script>
 <script src="./content-voice.js"></script>
 <script src="./content-voice-beginner.js"></script>
+<script src="./content-notes.js"></script>
 <script src="./content-mind.js"></script>
 <script src="./content-mind-ur.js"></script>
 <script src="./content-craft.js"></script>
@@ -746,10 +768,12 @@ function defaults() {
     streak: { count: 0, best: 0, lastDay: null },
     mind: { cursor: 0, read: [], scroll: {}, lang: 'en' },
     craft: { done: [] },
-    settings: { name: '', theme: 'system', voiceURI: '', provider: 'gemini', apiKey: '', reminderTime: '', spendCap: 5 },
+    settings: { name: '', theme: 'system', voiceURI: '', provider: 'gemini', apiKey: '', reminderTime: '', spendCap: 5, restDays: [0, 6] },
     usage: { month: '', inTok: 0, outTok: 0, cost: 0, sessions: 0 },
     voicePath: { stage: 'warmup', daysAt: { warmup: 0, session: 0, live: 0 }, lastCounted: { warmup: '', session: '', live: '' }, unlocked: ['warmup'], placement: null },
-    flags: { safetySeen: false, reminderFiredOn: '', welcomeSeen: false, installGuideSeen: false, tourSeen: false },
+    voiceClips: { enabled: null, lastCaptureWeek: null, index: [] },
+    notes: { delivered: [], archive: [], lastAmbientDate: null, lastShownDate: null, pendingId: null },
+    flags: { safetySeen: false, reminderFiredOn: '', welcomeSeen: false, installGuideSeen: false, tourSeen: false, restIntroSeen: false },
   };
 }
 function deepMerge(base, extra) {
@@ -804,10 +828,22 @@ function doneCountToday() {
   const r = todayRec();
   return PILLARS.filter((p) => r[p]).length;
 }
-function currentStreak() {
-  const t = dkey(), y = dkey(daysAgo(1));
-  return (S.streak.lastDay === t || S.streak.lastDay === y) ? S.streak.count : 0;
+function isRestDay(d) { return (S.settings.restDays || [0, 6]).includes(d.getDay()); }
+function dayComplete(k) { const r = S.days[k]; return !!r && PILLARS.every((p) => r[p]); }
+// walk backward from today: count complete days (rest days count as a bonus when done),
+// skip incomplete rest days, and break only on a missed required day. today never breaks.
+function computeStreak() {
+  let count = 0;
+  for (let i = 0; i < 500; i++) {
+    const d = daysAgo(i), k = dkey(d);
+    if (dayComplete(k)) { count++; continue; }
+    if (i === 0) continue;
+    if (isRestDay(d)) continue;
+    break;
+  }
+  return count;
 }
+function currentStreak() { return computeStreak(); }
 let toastT = null;
 function toast(msg) {
   const el = $('toast');
@@ -844,18 +880,130 @@ function markDone(p) {
   const day = S.days[k] || (S.days[k] = { body: false, voice: false, mind: false, craft: false });
   if (day[p]) { save(); renderAll(); return; }
   day[p] = true;
-  if (PILLARS.every((x) => day[x])) {
-    const y = dkey(daysAgo(1));
-    S.streak.count = (S.streak.lastDay === y) ? S.streak.count + 1 : 1;
+  const perfect = PILLARS.every((x) => day[x]);
+  if (perfect) {
+    const streak = computeStreak();
+    S.streak.count = streak;
     S.streak.lastDay = k;
-    S.streak.best = Math.max(S.streak.best, S.streak.count);
-    toast('Perfect day. All four pillars done.');
+    S.streak.best = Math.max(S.streak.best, streak);
+    toast(isRestDay(new Date()) ? 'A bonus. All four done on a rest day.' : 'Perfect day. All four pillars done.');
   } else {
     toast(META[p].name + ' done for today.');
   }
   save();
+  maybeSelectNote(true);
   renderAll();
 }
+
+/* ---------- notes from Asfer ---------- */
+const NOTE_LOCAL_KEY = 'kaizen.notes.local';
+function localNotes() {
+  try { return JSON.parse(localStorage.getItem(NOTE_LOCAL_KEY) || '[]'); } catch (e) { return []; }
+}
+function addLocalNote(text) {
+  const arr = localNotes();
+  arr.push({ id: 'local-' + Date.now(), trigger: 'ambient', text: text, oncePerLifetime: true });
+  try { localStorage.setItem(NOTE_LOCAL_KEY, JSON.stringify(arr)); } catch (e) { /* storage full */ }
+}
+function allNotes() { return (window.KZ_NOTES || []).concat(localNotes()); }
+function daysBetweenKeys(a, b) { return Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 86400000); }
+function triggerSatisfied(trigger) {
+  if (trigger === 'firstDayComplete') return Object.keys(S.days).some((k) => dayComplete(k));
+  if (trigger.indexOf('streak') === 0) return currentStreak() >= (+trigger.slice(6));
+  if (trigger === 'voiceSession') return vp().unlocked.indexOf('session') >= 0 && vp().placement && vp().placement.result === 'warmup';
+  if (trigger === 'voiceLive') return (vp().daysAt.live || 0) >= 1;
+  if (trigger === 'firstBook') return MIND_BOOKS.some((ch) => ch.every((c) => S.mind.read.indexOf(MIND.indexOf(c)) >= 0));
+  if (trigger === 'craftDone') return S.craft.done.length >= CRAFT_LESSONS.length;
+  if (trigger.indexOf('date:') === 0) return trigger.slice(5) === dkey();
+  return false;
+}
+function notePriority(n) {
+  const t = n.trigger;
+  if (t.indexOf('date:') === 0) return 100;
+  return { streak100: 95, firstDayComplete: 90, streak30: 85, streak7: 70, craftDone: 65, firstBook: 60, streak3: 55, voiceLive: 50, voiceSession: 45 }[t] || 0;
+}
+// milestoneOnly true when called mid-session (on completing an action); ambient is app-open only
+function maybeSelectNote(milestoneOnly) {
+  const N = S.notes;
+  const undelivered = allNotes().filter((n) => N.delivered.indexOf(n.id) < 0);
+  const milestones = undelivered.filter((n) => n.trigger !== 'ambient' && triggerSatisfied(n.trigger))
+    .sort((a, b) => notePriority(b) - notePriority(a));
+  if (milestones.length) {
+    const top = milestones[0];
+    const pending = N.pendingId ? allNotes().find((n) => n.id === N.pendingId) : null;
+    if (pending) {
+      if (pending.id === top.id) return;
+      // a higher milestone (or any milestone over an ambient) replaces a not yet kept pending note; still one shown a day
+      const pendingRank = pending.trigger === 'ambient' ? -1 : notePriority(pending);
+      if (notePriority(top) > pendingRank) {
+        if (pending.trigger === 'ambient' && N.lastAmbientDate === dkey()) N.lastAmbientDate = null;
+        N.pendingId = top.id;
+        save();
+      }
+      return;
+    }
+    if (N.lastShownDate === dkey()) return;  // one note a day (already shown or kept today)
+    N.pendingId = top.id;
+    N.lastShownDate = dkey();
+    save();
+    return;
+  }
+  if (milestoneOnly) return;
+  if (N.pendingId) return;
+  if (N.lastShownDate === dkey()) return;              // at most one note a day
+  // ambient: a rare warm surprise on app open, never a habit, never in place of a milestone
+  if (!S.flags.tourSeen) return;                       // not before onboarding is finished
+  if (Object.keys(S.days).length === 0) return;        // not before she has ever done anything
+  if (N.lastShownDate === dkey(daysAgo(1))) return;    // never two days running
+  if (N.lastAmbientDate && daysBetweenKeys(N.lastAmbientDate, dkey()) < 10) return;
+  const ambients = undelivered.filter((n) => n.trigger === 'ambient');
+  if (!ambients.length) return;
+  N.pendingId = ambients[Math.floor(Math.random() * ambients.length)].id;
+  N.lastShownDate = dkey();
+  N.lastAmbientDate = dkey();
+  save();
+}
+function noteCardHtml() {
+  const id = S.notes.pendingId;
+  if (!id) return '';
+  const note = allNotes().find((n) => n.id === id);
+  if (!note) { S.notes.pendingId = null; return ''; }
+  return '<div class="noteCard card card-lg"><div class="noteWash mesh mesh-all" aria-hidden="true"></div>'
+    + '<div class="noteHead">A note from Asfer</div>'
+    + '<div class="noteText">' + esc(note.text) + '</div>'
+    + '<button class="pill mesh mesh-mind" id="keepNote">Keep</button></div>';
+}
+function keepNote() {
+  const id = S.notes.pendingId;
+  if (!id) return;
+  const note = allNotes().find((n) => n.id === id);
+  if (note) { S.notes.delivered.push(id); S.notes.archive.push({ id: id, text: note.text, date: dkey() }); }
+  S.notes.pendingId = null;
+  save();
+  renderAll();
+}
+function openNotesArchive() {
+  const list = S.notes.archive.slice().reverse().map((a) => {
+    const pretty = new Date(a.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    return '<div class="archiveItem"><div class="noteText">' + esc(a.text) + '</div><div class="cap" style="margin-top:6px">' + pretty + '</div></div>';
+  }).join('');
+  openModal('<div class="h2">Notes from Asfer</div>'
+    + (list ? '<div class="archiveList">' + list + '</div>' : '<p class="cap" style="margin-top:8px">Notes he leaves you will be kept here.</p>')
+    + '<button class="pill pill-quiet" data-close style="margin-top:16px">Close</button>');
+}
+// hidden composer: a long press on the credit line opens it
+function openComposer() {
+  openModal('<div class="h2">A quiet note</div>'
+    + '<p class="cap" style="margin-top:6px">She will see this as a note from you, on a calm day.</p>'
+    + '<textarea class="input" id="composerText" style="min-height:120px;margin-top:12px" placeholder="Write it here"></textarea>'
+    + '<button class="pill mesh mesh-mind" id="composerSave" style="margin-top:12px">Leave this for her</button>');
+}
+let composerTimer = null;
+document.addEventListener('pointerdown', (e) => {
+  if (e.target.closest('.madeBy')) { clearTimeout(composerTimer); composerTimer = setTimeout(openComposer, 1500); }
+});
+['pointerup', 'pointercancel', 'pointerleave'].forEach((ev) => document.addEventListener(ev, () => clearTimeout(composerTimer)));
+document.addEventListener('scroll', () => clearTimeout(composerTimer), { passive: true });
 
 /* ---------- theme ---------- */
 const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -897,6 +1045,8 @@ function renderHeader() {
   $('greet').textContent = greeting(S.settings.name.trim());
   $('hdate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
   $('gearBtn').innerHTML = ICONS.gear;
+  const nb = $('notesBtn');
+  if (S.notes.archive.length > 0) { nb.hidden = false; nb.innerHTML = ICONS.heart; nb.style.color = '#FF8FA3'; } else { nb.hidden = true; }
 }
 function greeting(name) {
   const h = new Date().getHours();
@@ -979,15 +1129,19 @@ function mosaicHtml() {
     const rec = S.days[k];
     const done = rec ? PILLARS.filter((p) => rec[p]) : [];
     let cls = 'cell', style = '';
+    const rest = isRestDay(d);
     if (done.length === 4) {
       cls += ' mesh mesh-all bloom';
     } else if (done.length > 0) {
       const alpha = 0.42 + done.length * 0.14;
       const layers = done.map((p, j) => 'radial-gradient(circle at ' + CORNERS[j] + ', ' + hexA(META[p].colors[1], alpha) + ' 0%, transparent 75%)');
       style = 'background-image:' + layers.join(',');
+    } else if (rest) {
+      cls += ' rest';   // quiet rest day, not a miss
     }
     if (k === t) cls += ' today';
-    cells += '<button class="' + cls + '" data-day="' + k + '"' + (style ? ' style="' + style + '"' : '') + ' aria-label="' + k + ', ' + done.length + ' of 4 done"></button>';
+    const lbl = k + (done.length === 4 ? ', all four done' : rest && done.length === 0 ? ', rest day' : ', ' + done.length + ' of 4 done');
+    cells += '<button class="' + cls + '" data-day="' + k + '"' + (style ? ' style="' + style + '"' : '') + ' aria-label="' + lbl + '"></button>';
   }
   return '<div class="mosaic" id="mosaic">' + cells + '</div>';
 }
@@ -996,8 +1150,9 @@ function showPopover(cellEl) {
   const rec = S.days[k];
   const done = rec ? PILLARS.filter((p) => rec[p]).map((p) => META[p].name) : [];
   const pretty = new Date(k + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  const rest = isRestDay(new Date(k + 'T12:00:00'));
   const pop = $('popover');
-  pop.innerHTML = '<div class="pdate">' + pretty + '</div>' + (done.length ? done.join(', ') + ' done' : 'Nothing done');
+  pop.innerHTML = '<div class="pdate">' + pretty + '</div>' + (done.length ? done.join(', ') + ' done' : rest ? 'Rest day' : 'Nothing done');
   pop.hidden = false;
   const r = cellEl.getBoundingClientRect();
   const pw = Math.min(220, window.innerWidth - 24);
@@ -1041,13 +1196,20 @@ function renderToday() {
   const cont = firstOpen
     ? '<button class="pill mesh mesh-' + firstOpen + '" data-open="' + firstOpen + '">Continue where you left off: ' + META[firstOpen].name + '</button>'
     : '<div class="pill pill-ghost">All four done. See you tomorrow.</div>';
+  const rest = isRestDay(new Date());
+  const ringCap = rest ? 'Rest day. You are free.' : (n + ' of 4 done today');
+  const note = (typeof noteCardHtml === 'function') ? noteCardHtml() : '';
+  const restIntro = (rest && !S.flags.restIntroSeen)
+    ? '<div class="card restIntro"><p>Saturdays and Sundays are rest days. Nothing is expected today. Do something if you feel like it, or simply rest. The streak waits for you.</p><button class="pill pill-quiet" id="dismissRestIntro">Got it</button></div>'
+    : '';
   $('view-today').innerHTML =
-    '<div class="card card-lg hero" style="margin-top:10px">'
+    note + restIntro
+    + '<div class="card card-lg hero" style="margin-top:10px">'
     + '<div><div class="streakNum num">' + streak + '</div><div class="cap">day streak</div>'
     + (S.streak.best > 0 ? '<div class="cap" style="margin-top:6px">best ' + S.streak.best + '</div>' : '')
     + '</div>'
     + '<div><div class="ringWrap">' + ringSvg() + '</div>'
-    + '<div class="cap" style="text-align:center;margin-top:6px">' + n + ' of 4 done today</div></div>'
+    + '<div class="cap" style="text-align:center;margin-top:6px">' + ringCap + '</div></div>'
     + '</div>'
     + '<div class="label">Your stack</div>'
     + '<div class="grid2">' + tiles + '</div>'
@@ -1058,6 +1220,11 @@ function renderToday() {
 document.addEventListener('click', (e) => {
   if (e.target.closest('#welcomeStart')) { closeWelcome(); return; }
   if (e.target.closest('#btnWelcome')) { showWelcome(); return; }
+  if (e.target.closest('#dismissRestIntro')) { S.flags.restIntroSeen = true; save(); renderToday(); return; }
+  if (e.target.closest('#keepNote')) { keepNote(); return; }
+  if (e.target.closest('#notesBtn')) { openNotesArchive(); return; }
+  if (e.target.closest('#btnNotesArchive')) { openNotesArchive(); return; }
+  if (e.target.closest('#composerSave')) { const t = ($('composerText') || {}).value; if (t && t.trim()) addLocalNote(t.trim()); closeModal(); return; }
   if (e.target.closest('#igInstall')) {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
@@ -1220,7 +1387,7 @@ const TOUR_STEPS = [
   { sel: '#view-today [data-open="voice"]', label: '<b>Voice.</b> First, a couple of quick questions to find your level. Then you practise speaking a little every day, and the app asks more of you as you grow, until you are having real conversations. No test, no wrong answers.' },
   { sel: '#view-today [data-open="mind"]', label: '<b>Mind.</b> A ten minute read, in English or Urdu, your choice each day. Real ideas about habits, people, and life.' },
   { sel: '#view-today [data-open="craft"]', label: '<b>Craft.</b> One Power BI lesson a day. In a month, you will actually know it.' },
-  { sel: '.mosaic', label: '<b>The mosaic.</b> Every day becomes a square. Do one thing or all four, the square still fills. This is your month, at a glance.' },
+  { sel: '.mosaic', label: '<b>The mosaic.</b> Every day becomes a square. Do one thing or all four, the square still fills. This is your month, at a glance. Weekends are rest. The streak holds across them.' },
   { sel: '.streakNum', label: '<b>The streak.</b> Do all four in a day and the streak grows. Miss a day, it resets, and that is fine. Showing up is the whole game.' },
   { sel: '#gearBtn', label: '<b>Settings, and the key.</b> Everything lives here. Your name, light or dark, and the one setup step: pasting the key that powers live English practice. Asfer will walk you through that part separately.' },
   { sel: null, label: "<b>That's it.</b> It's yours now. Start whenever you want." },
@@ -1516,15 +1683,17 @@ function micCb(fin, intr) {
   const el = $('vMicText');
   if (el) el.innerHTML = (micBuf ? esc(micBuf) : '') + ' <span class="interim">' + esc(intr) + '</span>';
 }
-function beginListen(sayText) {
+function beginListen(sayText, afterSpeak) {
   micBuf = '';
   if (SRC && !recog.active) startRec(micCb);
   recog.cb = null; // mute while the prompt is spoken so it is not transcribed
   const resume = () => {
-    if (!SRC) return;
-    recog.cb = micCb;
-    const e = $('vMicText');
-    if (e && !micBuf) e.innerHTML = '<span class="cap">Your words appear here as you speak. Nothing is marked wrong.</span>';
+    if (SRC) {
+      recog.cb = micCb;
+      const e = $('vMicText');
+      if (e && !micBuf) e.innerHTML = '<span class="cap">Your words appear here as you speak. Nothing is marked wrong.</span>';
+    }
+    if (afterSpeak) afterSpeak(); // e.g. start the weekly clip only after the prompt has finished speaking
   };
   if (sayText && 'speechSynthesis' in window) speakAsync(sayText).then(resume); else resume();
 }
@@ -1640,6 +1809,7 @@ function startWarmup() {
   if (!theme) { toast('Warm-up content is still loading.'); return; }
   wu.on = true; wu.theme = theme; wu.items = buildWarmupItems(theme); wu.idx = 0;
   voiceActiveStage = 'warmup';
+  clipCapturedThisSession = false;
   $('vv').hidden = false; overlayOpened();
   renderWarmup();
 }
@@ -1661,10 +1831,11 @@ function renderWarmup() {
     + '<div class="plUr" dir="rtl" lang="ur" style="margin-top:8px;color:var(--text-2);font-size:16px">' + esc(it.ur) + '</div>' + extra + '</div>'
     + micCardHtml()
     + '<div class="btnrow"><button class="pill pill-ghost" id="wuReplay">Hear it again</button><button class="pill mesh mesh-voice" id="wuNext" style="width:auto;flex:none;padding:13px 24px">' + (wu.idx === wu.items.length - 1 ? 'Finish' : 'Next') + '</button></div>';
-  beginListen(it.en);
+  beginListen(it.en, it.kind === 'answer' ? () => maybeStartCapture(it.en) : null);
 }
 function finishWarmup() {
   stopRec();
+  stopClipRecording();
   if ('speechSynthesis' in window) speechSynthesis.cancel();
   countVoiceDay('warmup');
   markDone('voice');
@@ -1679,6 +1850,130 @@ function finishWarmup() {
     + '<div class="card" style="margin-top:14px"><p style="color:var(--text-2);line-height:1.6">You spoke out loud today, and that is the whole point. ' + note + '</p></div>'
     + '<button class="pill mesh mesh-voice" id="wuFinishBtn" style="margin-top:16px">Finish</button>';
   wu.on = false;
+}
+
+/* ---------- hear yourself grow: weekly audio clips ---------- */
+const IDB = (function () {
+  let dbp = null;
+  function open() {
+    if (!('indexedDB' in window)) return Promise.reject(new Error('no idb'));
+    if (dbp) return dbp;
+    dbp = new Promise((res, rej) => {
+      const req = indexedDB.open('kaizen', 1);
+      req.onupgradeneeded = () => { const db = req.result; if (!db.objectStoreNames.contains('audio')) db.createObjectStore('audio'); };
+      req.onsuccess = () => res(req.result);
+      req.onerror = () => rej(req.error);
+    });
+    return dbp;
+  }
+  function tx(mode, fn) {
+    return open().then((db) => new Promise((res, rej) => {
+      const t = db.transaction('audio', mode);
+      const req = fn(t.objectStore('audio'));
+      t.oncomplete = () => res(req ? req.result : undefined);
+      t.onerror = () => rej(t.error);
+      t.onabort = () => rej(t.error);
+    }));
+  }
+  return {
+    saveClip: (id, blob) => tx('readwrite', (s) => s.put(blob, id)),
+    getClip: (id) => tx('readonly', (s) => s.get(id)),
+    listClipIds: () => tx('readonly', (s) => s.getAllKeys()),
+    deleteClip: (id) => tx('readwrite', (s) => s.delete(id)),
+  };
+})();
+function weekKey(d) {
+  const t = new Date(d || Date.now()); t.setHours(0, 0, 0, 0);
+  t.setDate(t.getDate() + 3 - ((t.getDay() + 6) % 7));
+  const week1 = new Date(t.getFullYear(), 0, 4);
+  const wk = 1 + Math.round(((t - week1) / 86400000 - 3 + ((week1.getDay() + 6) % 7)) / 7);
+  return t.getFullYear() + '-W' + String(wk).padStart(2, '0');
+}
+function weekLabel(d) {
+  const m = new Date(d || Date.now()); m.setDate(m.getDate() - ((m.getDay() + 6) % 7));
+  return 'Week of ' + m.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+function clipMime() {
+  const opts = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4'];
+  for (const o of opts) { if (window.MediaRecorder && MediaRecorder.isTypeSupported(o)) return { mimeType: o }; }
+  return {};
+}
+let clipRec = null;
+let clipCancel = false;
+let clipCapturedThisSession = false;
+function maybeStartCapture(promptText) {
+  const vc = S.voiceClips;
+  if (vc.enabled === false) return;
+  if (clipCapturedThisSession) return;
+  if (vc.lastCaptureWeek === weekKey()) return;
+  if (vc.enabled === null) { clipCapturedThisSession = true; askClipConsent(); return; }
+  if (!navigator.mediaDevices || !window.MediaRecorder) return;
+  clipCapturedThisSession = true;
+  clipCancel = false;
+  navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+    // the session may have ended while the mic permission was resolving; do not leave the mic hot
+    if (clipCancel || (!vs.on && !wu.on)) { stream.getTracks().forEach((t) => t.stop()); return; }
+    const rec = new MediaRecorder(stream, clipMime());
+    const chunks = [];
+    rec.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+    rec.onstop = () => {
+      stream.getTracks().forEach((t) => t.stop());
+      saveClipRecording(new Blob(chunks, { type: rec.mimeType || 'audio/webm' }), promptText);
+    };
+    clipRec = { rec: rec, timer: setTimeout(() => stopClipRecording(), 30000) };
+    rec.start();
+  }).catch(() => { /* mic busy or denied: skip quietly */ });
+}
+function stopClipRecording() {
+  clipCancel = true;
+  if (clipRec) { clearTimeout(clipRec.timer); try { clipRec.rec.stop(); } catch (e) { /* already stopped */ } clipRec = null; }
+}
+function saveClipRecording(blob, promptText) {
+  if (!blob || blob.size < 1200) return;   // too short or empty
+  const vc = S.voiceClips, id = 'clip-' + weekKey();
+  IDB.saveClip(id, blob).then(() => {
+    vc.index = vc.index.filter((c) => c.id !== id);
+    vc.index.push({ id: id, date: dkey(), weekLabel: weekLabel(), prompt: promptText });
+    vc.lastCaptureWeek = weekKey();
+    while (vc.index.length > 16) { const old = vc.index.shift(); IDB.deleteClip(old.id); }
+    save();
+    if (currentTab === 'voice') renderVoiceView();
+  }).catch(() => { /* storage failed, skip */ });
+}
+function askClipConsent() {
+  openModal('<div class="h2">Hear yourself grow</div>'
+    + '<p style="margin-top:8px;line-height:1.6;color:var(--text-2)">Once a week, the app can save one of your answers, just for you, so later you can hear how far you have come. It stays on this phone and no one else ever hears it.</p>'
+    + '<p style="margin-top:12px;font-weight:700;color:var(--text)">Save my weekly answer?</p>'
+    + '<div class="btnrow"><button class="pill mesh mesh-voice" id="clipYes">Yes</button><button class="pill pill-quiet" id="clipNo">Not for me</button></div>');
+}
+function playClip(id) {
+  IDB.getClip(id).then((blob) => {
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = new Audio(url);
+    a.onended = () => URL.revokeObjectURL(url);
+    a.play().catch(() => {});
+  }).catch(() => {});
+}
+function clearRecordings() {
+  const ids = S.voiceClips.index.map((c) => c.id);
+  ids.forEach((id) => IDB.deleteClip(id));
+  S.voiceClips.index = [];
+  S.voiceClips.lastCaptureWeek = null;
+  save();
+}
+function clipsSectionHtml() {
+  const vc = S.voiceClips;
+  if (vc.enabled !== true || !vc.index.length) return '';
+  const rows = vc.index.slice().reverse().map((c) => {
+    const pretty = new Date(c.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return '<div class="clipRow"><button class="clipPlay mesh mesh-voice" data-clip="' + c.id + '" aria-label="Play your answer from ' + pretty + '">' + ICONS.play + '</button>'
+      + '<div class="clipMeta"><div class="clipDate">' + pretty + '</div><div class="cap">' + esc(c.prompt || 'Your answer') + '</div></div></div>';
+  }).join('');
+  return '<div class="label">Hear yourself grow</div>'
+    + '<div class="card">'
+    + (vc.index.length >= 2 ? '<div class="hint" style="margin-top:0;margin-bottom:12px">Play your first one, then your latest. Listen for the difference.</div>' : '')
+    + '<div class="clipList">' + rows + '</div></div>';
 }
 
 function renderVoiceView() {
@@ -1699,7 +1994,7 @@ function renderVoiceView() {
     return '<button class="stagePill' + (cur ? ' on mesh mesh-voice' : '') + (un ? '' : ' locked') + '"' + (un ? ' data-vstage="' + st + '"' : ' disabled') + '>'
       + STAGE_LABEL[st] + (un ? '' : ' ' + ICONS.lock) + '</button>';
   }).join('') + '</div>';
-  $('view-voice').innerHTML = '<div class="label">Voice</div>' + picker + voiceStageBody(voiceViewStage);
+  $('view-voice').innerHTML = '<div class="label">Voice</div>' + picker + voiceStageBody(voiceViewStage) + clipsSectionHtml();
 }
 function voiceStageBody(stage) {
   const rec = todayRec(), v = vp();
@@ -1758,6 +2053,7 @@ function buildPhases(t) {
 function startVoiceSession() {
   const t = todaysTopic();
   voiceActiveStage = 'session';
+  clipCapturedThisSession = false;
   vs.topic = t;
   vs.phases = buildPhases(t);
   vs.texts = ['', '', '', '', '', ''];
@@ -1803,13 +2099,17 @@ function stashTyped() {
 }
 function startPhase(i) {
   stashTyped();
+  stopClipRecording(); // end any capture from the previous phase
   if (i >= vs.phases.length) { finishGuided(); return; }
   vs.phase = i;
   renderVoicePhase();
   const ph = vs.phases[i];
   recog.cb = null; // mute capture so the spoken prompt does not land in the transcript
   speakAsync(ph.k + '. ' + ph.text + (ph.list ? ' First question: ' + ph.list.join(' Next question: ') : ''))
-    .then(() => { if (vs.on && vs.sr) recog.cb = vs.recCb; });
+    .then(() => {
+      if (vs.on && vs.sr) recog.cb = vs.recCb;
+      if (vs.on && ph.k === 'Describe') maybeStartCapture(ph.text); // save her Describe answer, once a week
+    });
   vs.endAt = Date.now() + ph.secs * 1000;
   clearInterval(vs.timer);
   vs.timer = setInterval(() => {
@@ -1903,6 +2203,7 @@ function closeVoice() {
   clearInterval(lv.timer);
   clearTimeout(lv.silT);
   stopRec();
+  stopClipRecording();
   if ('speechSynthesis' in window) speechSynthesis.cancel();
   $('vv').hidden = true;
   overlayClosed();
@@ -2332,6 +2633,7 @@ function renderSettings() {
     + '<div class="hint">This key stays only on this phone and is never uploaded anywhere. It is sent straight from your phone to the provider you pick, and to no one else. Gemini is the default because you have a key and its free tier costs nothing.</div>'
     + '<div class="btnrow" style="margin-top:12px;align-items:center"><button class="pill pill-quiet" id="btnTestKey" style="width:auto;flex:none">Test key</button><span id="testKeyResult" class="testResult"></span></div>'
     + '<button class="linkBtn" id="btnRetakePlacement" style="margin-top:16px">Find my starting point again</button>'
+    + (S.voiceClips.index.length ? '<button class="linkBtn" id="btnClearClips" style="margin-top:8px">Clear my recordings</button>' : '')
     + '</div>'
     + '<div class="label">Spending</div>'
     + '<div class="card">'
@@ -2352,6 +2654,7 @@ function renderSettings() {
     + '<input type="file" id="importFile" accept=".json,application/json" hidden>'
     + '</div>'
     + '<button class="linkBtn" id="btnWelcome">Show the welcome again</button>'
+    + (S.notes.archive.length ? '<button class="linkBtn" id="btnNotesArchive" style="margin-top:8px">Notes from Asfer</button>' : '')
     + '<button class="linkBtn" id="btnReplayTour" style="margin-top:8px">Replay the tour</button>'
     + '<div class="madeBy"><span class="madeHeart">' + ICONS.heart + '</span>Built with love by Asfer</div>';
   fillVoices();
@@ -2437,7 +2740,15 @@ document.addEventListener('click', (e) => {
   if (hit('plStart')) { pl.on = false; closeVoice(); voiceViewStage = vp().stage; renderVoiceView(); return; }
   // warm-up flow
   if (hit('wuReplay')) { if ('speechSynthesis' in window) speak(wu.items[wu.idx].en); return; }
-  if (hit('wuNext')) { recog.cb = null; wu.idx += 1; renderWarmup(); return; }
+  if (hit('wuNext')) { stopClipRecording(); recog.cb = null; wu.idx += 1; renderWarmup(); return; }
+  if (hit('clipYes')) { S.voiceClips.enabled = true; save(); closeModal(); return; }
+  if (hit('clipNo')) { S.voiceClips.enabled = false; save(); closeModal(); return; }
+  const clipBtn = e.target.closest('[data-clip]');
+  if (clipBtn) { playClip(clipBtn.dataset.clip); return; }
+  if (hit('btnClearClips')) {
+    if (confirm('Delete all your saved recordings? This cannot be undone.')) { clearRecordings(); if (currentTab === 'settings') renderSettings(); else if (currentTab === 'voice') renderVoiceView(); }
+    return;
+  }
   if (hit('wuFinishBtn')) { closeVoice(); return; }
   if (hit('vvClose')) { closeVoice(); return; }
   if (hit('vvSkipPhase')) { startPhase(vs.phase + 1); return; }
@@ -2613,6 +2924,7 @@ function init() {
   $('pvPause').innerHTML = ICONS.pause;
   $('pvSkip').innerHTML = ICONS.next;
   applyTheme();
+  maybeSelectNote();
   renderHeader();
   setTab('today');
   firstRun();
