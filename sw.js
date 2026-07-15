@@ -1,4 +1,4 @@
-const CACHE = 'kaizen-v4';
+const CACHE = 'kaizen-v5';
 const FONT_CSS = [
   'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap',
   'https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap',
