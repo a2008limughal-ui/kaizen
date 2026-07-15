@@ -340,6 +340,10 @@ select.input{
 .trade b{color:var(--text-2);font-weight:700}
 .costMeter{font-size:15px;color:var(--text);font-weight:500;line-height:1.5}
 .linkBtn{display:block;margin:18px auto 0;font-size:13.5px;color:var(--text-3);text-decoration:underline;text-underline-offset:3px}
+.testResult{font-size:13.5px;color:var(--text-3);display:inline-flex;align-items:center;gap:6px}
+.testResult.good{color:#2FA98A;font-weight:600}
+.testResult.bad{color:#E0708A}
+.testResult svg{width:16px;height:16px}
 
 /* nav */
 #nav{
@@ -413,11 +417,61 @@ select.input{
 .letterSig{font-size:20px;font-weight:800;color:var(--text);text-align:right;margin-top:22px}
 .letterNameLabel{display:block;font-size:13px;font-weight:500;color:var(--text-3);margin:26px 0 7px}
 .welcomeCard .pill{margin-top:14px}
-#welcomeUr.urdu{text-align:right}
-#welcomeUr .letterFor{line-height:1.85}
-#welcomeUr .letter{font-size:18px;line-height:2.3}
-#welcomeUr .letter p{margin-top:16px}
-#welcomeUr .letterSig{text-align:left;line-height:1.9}
+
+/* install guide */
+.igLead{font-size:15px;color:var(--text-2);line-height:1.6;margin-top:8px}
+.igDiagram{display:flex;justify-content:center;margin:18px 0 6px}
+.igSvg{width:150px;height:auto;color:var(--text)}
+.igDrop{transform-origin:130px 44px}
+.igHi{opacity:0}
+@keyframes igReveal{0%,8%{opacity:0;transform:translateY(-8px)}22%,72%{opacity:1;transform:translateY(0)}92%,100%{opacity:0;transform:translateY(-8px)}}
+@keyframes igPulse{0%,26%{opacity:0}40%,66%{opacity:0.9}80%,100%{opacity:0}}
+.igDrop{animation:igReveal 4.5s ease-in-out infinite}
+.igHi{animation:igPulse 4.5s ease-in-out infinite}
+.igSteps{margin-top:8px;display:flex;flex-direction:column;gap:12px}
+.igStep{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:var(--text-2);line-height:1.5}
+.igStep b{color:var(--text)}
+.igIco{flex:none;width:32px;height:32px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;color:var(--text-2)}
+.igIco svg{width:18px;height:18px}
+.igIos{display:flex;gap:10px;align-items:center;font-size:12.5px;color:var(--text-3);line-height:1.5;margin-top:16px;padding-top:14px;border-top:1px solid var(--hairline)}
+.igIos .igIco{width:26px;height:26px;border-radius:8px}
+.igIos .igIco svg{width:15px;height:15px}
+.igDemote > summary{list-style:none;display:none;font-size:13px;color:var(--text-3);text-decoration:underline;text-underline-offset:3px;cursor:pointer;margin-bottom:6px}
+.igDemote.collapsible{margin-top:14px}
+.igDemote.collapsible > summary{display:block}
+.igDemote > summary::-webkit-details-marker{display:none}
+
+/* entrance animation */
+.entrance{position:fixed;inset:0;z-index:110;background:var(--bg);overflow:hidden;display:grid;place-items:center}
+.entBlob{position:absolute;width:44vw;max-width:260px;aspect-ratio:1/1;border-radius:50%;filter:blur(46px);opacity:0;top:50%;left:50%}
+.entWord{position:relative;z-index:1;text-align:center;opacity:0;transform:translateY(6px);animation:entWord 900ms ease 1600ms forwards}
+.entMark{font-size:40px;font-weight:800;letter-spacing:-0.03em;color:var(--text)}
+.entTag{font-size:13px;color:var(--text-3);margin-top:8px;opacity:0;animation:entTag 700ms ease 2200ms forwards}
+@keyframes entWord{to{opacity:1;transform:none}}
+@keyframes entTag{to{opacity:1}}
+@keyframes entBloom{0%{opacity:0;transform:translate(-50%,-50%) scale(0.2)}30%{opacity:0.42}100%{opacity:0.3;transform:translate(var(--tx),var(--ty)) scale(1)}}
+.entBlob{animation:entBloom 1900ms cubic-bezier(0.22,0.61,0.36,1) forwards}
+.entBlob:nth-child(1){--tx:-95%;--ty:-150%}
+.entBlob:nth-child(2){--tx:-5%;--ty:-150%}
+.entBlob:nth-child(3){--tx:-95%;--ty:50%}
+.entBlob:nth-child(4){--tx:-5%;--ty:50%}
+.entrance.leaving{opacity:0;transition:opacity 500ms ease}
+
+/* feature tour */
+#tour{position:fixed;inset:0;z-index:115}
+#tourHi{position:fixed;border-radius:20px;box-shadow:0 0 0 9999px rgba(8,11,18,0.66);transition:all 260ms cubic-bezier(0.22,0.61,0.36,1);pointer-events:none}
+.tourCard{position:fixed;z-index:1;width:min(300px,calc(100vw - 40px));padding:18px 20px}
+.tourCard .tourLabel{font-size:15px;color:var(--text);line-height:1.5;font-weight:500}
+.tourCard .tourLabel b{font-weight:800}
+.tourDots{display:flex;gap:6px;margin:14px 0 2px}
+.tourDots i{width:6px;height:6px;border-radius:999px;background:var(--surface-2)}
+.tourDots i.on{background:var(--text-3);transform:scale(1.3)}
+.tourBtns{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.tourCard::after{content:"";position:absolute;width:16px;height:16px;background:var(--surface);transform:rotate(45deg);box-shadow:var(--shadow)}
+.tourCard.below::after{top:-7px;left:var(--ptr,32px);box-shadow:-2px -2px 6px rgba(24,39,75,0.05)}
+.tourCard.above::after{bottom:-7px;left:var(--ptr,32px);box-shadow:2px 2px 6px rgba(24,39,75,0.05)}
+.tourCard.center::after{display:none}
+[data-theme="dark"] .tourCard::after{box-shadow:none}
 
 /* motion */
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -433,6 +487,12 @@ select.input{
   button:active{transform:none}
   .figFrame{opacity:0}
   .figFrame.figLast{opacity:1}
+  /* first run: show the settled end state, no motion */
+  .entBlob{opacity:0.28;transform:translate(calc(-50% + var(--tx,0)),calc(-50% + var(--ty,0))) scale(1)}
+  .entWord{opacity:1;transform:none}
+  .entTag{opacity:1}
+  .igDrop{opacity:1;transform:none}
+  .igHi{opacity:0.9}
 }
 @media (max-width:374px){
   .streakNum{font-size:42px}
@@ -513,11 +573,7 @@ select.input{
     <div class="wBlob mesh mesh-craft"></div>
   </div>
   <div class="welcomeCard card card-lg" role="dialog" aria-modal="true" aria-label="A welcome letter">
-    <div class="langToggle" role="group" aria-label="Letter language">
-      <button data-wlang="en" class="on">English</button>
-      <button data-wlang="ur" class="urnav">اردو</button>
-    </div>
-    <div id="welcomeEn" class="wletter">
+    <div class="wletter">
       <div class="letterFor">For Mahrukh</div>
       <div class="letter">
         <p>I made you an app.</p>
@@ -532,24 +588,81 @@ select.input{
       </div>
       <div class="letterSig">Asfer</div>
     </div>
-    <div id="welcomeUr" class="wletter urdu" dir="rtl" lang="ur" hidden>
-      <div class="letterFor">ماہ رخ کے نام</div>
-      <div class="letter">
-        <p>میں نے تمہارے لیے ایک ایپ بنائی ہے۔</p>
-        <p>اس لیے نہیں کہ تم میں کوئی کمی ہے جسے ٹھیک کرنا ہو۔ بلکہ اس لیے کہ تم اکثر کہتی ہو کہ وقت نہیں ملتا، اور میں دیکھنا چاہتا تھا کہ کیا میں تھوڑا سا وقت نکال کر تمہارے ہاتھ میں رکھ سکتا ہوں۔</p>
-        <p>یہ میں نے پچھلے پانچ دنوں میں بنائی ہے، کام کے بیچ کے وقفوں میں، رات دیر تک اور صبح سویرے۔ اسی لیے میں معمول سے کچھ خاموش رہا، اور اسی لیے اس میں وقت بھی زیادہ لگ گیا۔ کام کا کوئی حرج نہیں ہوا، اس لیے یہ بوجھ دل پر مت لینا۔ یہ صرف میرا اپنا فارغ وقت تھا، اور مجھے اس سے بہتر کوئی کام سوجھتا ہی نہیں کہ اسے کہاں لگاتا۔</p>
-        <p>اس میں کیا ہے، سن لو۔ تقریباً چالیس منٹ۔ بارہ منٹ کمر کی اکڑن کھولنے کے لیے۔ بارہ منٹ انگریزی میں بول کر بات کرنے کے لیے، یہاں تک کہ وہ امتحان جیسی لگنا چھوڑ دے۔ دس منٹ کچھ ایسا پڑھنے کے لیے جو پڑھنے کے قابل ہو، انگریزی میں یا اردو میں، جس دن جس میں دل کرے۔ اور ہر دن تھوڑا تھوڑا Power BI کی طرف، تاکہ ایک مہینے میں تم واقعی اسے سیکھ جاؤ۔</p>
-        <p>بس اتنا ہی چاہتا ہوں تم سے۔ صرف وہی جو اس ایپ میں ہے۔ اس کے علاوہ کچھ نہیں، کوئی اضافی چیز نہیں، اوپر سے کچھ نہیں۔</p>
-        <p>کچھ دن تم چاروں کام کر لو گی۔ زیادہ تر دن نہیں کر پاؤ گی۔ خانے دونوں صورتوں میں بھرتے جائیں گے، اور آدھا بھرا خانہ بھی اُس دن کی نشانی ہے جب تم نے قدم بڑھایا۔</p>
-        <p>اگر اس میں کچھ غلط لگے، یا کوئی چیز کم ہو، یا کچھ کھٹکے، تو مجھے بتا دینا، میں بدل دوں گا۔ جو چیز شامل کروانا چاہو، بس مانگ لینا۔ جب تک تم اسے استعمال کرتی رہو گی، میں اسے بناتا رہوں گا۔</p>
-        <p>اور یہ یاد رکھنا کہ یہ اصل میں کس لیے ہے۔ میرے لیے نہیں، اور کسی کو کچھ ثابت کرنے کے لیے نہیں۔ تم ہمارے مستقبل کے لیے محنت کر رہی ہو۔</p>
-        <p>مجھے تم سے محبت ہے۔ جب تمہارا دل چاہے، شروع کر دینا۔</p>
-      </div>
-      <div class="letterSig">آصفر</div>
-    </div>
     <label for="welcomeName" class="letterNameLabel">Your name</label>
     <input class="input" id="welcomeName" placeholder="Your name" value="Mahrukh" autocomplete="given-name">
     <button class="pill mesh mesh-mind" id="welcomeStart">Start</button>
+  </div>
+</div>
+<div id="installGuide" class="welcome" hidden>
+  <div class="welcomeBg" aria-hidden="true">
+    <div class="wBlob mesh mesh-body"></div>
+    <div class="wBlob mesh mesh-voice"></div>
+    <div class="wBlob mesh mesh-mind"></div>
+    <div class="wBlob mesh mesh-craft"></div>
+  </div>
+  <div class="welcomeCard card card-lg" role="dialog" aria-modal="true" aria-label="Install guide">
+    <div class="h2">Let's put this on your home screen</div>
+    <p class="igLead">It works best as an app. Takes ten seconds, then it opens on its own, even offline.</p>
+    <div class="igDiagram" aria-hidden="true">
+      <svg viewBox="0 0 240 220" class="igSvg" role="img" aria-label="How to add to home screen">
+        <rect x="74" y="14" width="92" height="192" rx="16" fill="var(--surface)" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="74" y="14" width="92" height="26" rx="12" fill="var(--surface-2)"/>
+        <rect x="84" y="24" width="52" height="7" rx="3.5" fill="var(--text-3)" opacity="0.5"/>
+        <circle cx="150" cy="24" r="1.8" fill="currentColor"/><circle cx="150" cy="28.5" r="1.8" fill="currentColor"/><circle cx="150" cy="33" r="1.8" fill="currentColor"/>
+        <g class="igDrop">
+          <rect x="96" y="44" width="66" height="66" rx="10" fill="var(--surface)" stroke="var(--hairline)" stroke-width="1.5" filter="drop-shadow(0 6px 14px rgba(24,39,75,0.18))"/>
+          <rect x="104" y="52" width="40" height="6" rx="3" fill="var(--text-3)" opacity="0.4"/>
+          <g class="igRow">
+            <rect x="99" y="66" width="60" height="20" rx="6" class="igHi mesh mesh-body"/>
+            <path d="M108 76 h10 M113 71 v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <rect x="124" y="73" width="30" height="6" rx="3" fill="currentColor" opacity="0.85"/>
+          </g>
+          <rect x="104" y="96" width="46" height="6" rx="3" fill="var(--text-3)" opacity="0.4"/>
+        </g>
+      </svg>
+    </div>
+    <button id="igInstall" class="pill mesh mesh-body" hidden>Add to home screen</button>
+    <details id="igManual" open class="igDemote">
+    <summary>Prefer to do it yourself?</summary>
+    <div id="igSteps" class="igSteps">
+      <div class="igStep"><span class="igIco">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="5" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="19" r="1.4" fill="currentColor"/></svg>
+      </span><span>Tap the menu, the three dots, top right in Chrome.</span></div>
+      <div class="igStep"><span class="igIco">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8.5v7M8.5 12h7"/></svg>
+      </span><span>Tap <b>Add to Home screen</b>.</span></div>
+      <div class="igStep"><span class="igIco">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l5 5 9-11"/></svg>
+      </span><span>Tap <b>Add</b>, then open Kaizen from your home screen.</span></div>
+    </div>
+    <div class="igIos">
+      <span class="igIco"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8.5 7.5 12 4l3.5 3.5M6 11v8.5A1.5 1.5 0 0 0 7.5 21h9a1.5 1.5 0 0 0 1.5-1.5V11"/></svg></span>
+      On an iPhone, tap the Share button, then Add to Home Screen.
+    </div>
+    </details>
+    <button class="pill pill-quiet" id="igDone" style="margin-top:16px">I've installed it, open the app</button>
+    <div id="igNote" class="hint" style="text-align:center" hidden>Now open Kaizen from your home screen, that is where it lives.</div>
+  </div>
+</div>
+<div id="entrance" class="entrance" hidden aria-hidden="true">
+  <div class="entBlob mesh mesh-body"></div>
+  <div class="entBlob mesh mesh-voice"></div>
+  <div class="entBlob mesh mesh-mind"></div>
+  <div class="entBlob mesh mesh-craft"></div>
+  <div class="entWord">
+    <div class="entMark">Kaizen</div>
+    <div class="entTag">改善 &nbsp;&middot;&nbsp; a little better, every day</div>
+  </div>
+</div>
+<div id="tour" hidden>
+  <div id="tourHi"></div>
+  <div id="tourCard" class="tourCard card card-lg" role="dialog" aria-modal="true">
+    <div id="tourLabel" class="tourLabel"></div>
+    <div class="tourDots" id="tourDots" aria-hidden="true"></div>
+    <div class="tourBtns">
+      <button id="tourSkip" class="linkBtn" style="margin:0">Skip tour</button>
+      <button id="tourNext" class="pill mesh mesh-mind" style="width:auto;flex:none;padding:11px 22px">Next</button>
+    </div>
   </div>
 </div>
 <div id="modal" class="modalwrap" hidden><div class="modal card card-lg" id="modalCard" role="dialog" aria-modal="true" tabindex="-1"></div></div>
@@ -613,7 +726,7 @@ function defaults() {
     craft: { done: [] },
     settings: { name: '', theme: 'system', voiceURI: '', provider: 'gemini', apiKey: '', reminderTime: '', spendCap: 5 },
     usage: { month: '', inTok: 0, outTok: 0, cost: 0, sessions: 0 },
-    flags: { safetySeen: false, reminderFiredOn: '', welcomeSeen: false },
+    flags: { safetySeen: false, reminderFiredOn: '', welcomeSeen: false, installGuideSeen: false, tourSeen: false },
   };
 }
 function deepMerge(base, extra) {
@@ -915,14 +1028,21 @@ function renderToday() {
 document.addEventListener('click', (e) => {
   if (e.target.closest('#welcomeStart')) { closeWelcome(); return; }
   if (e.target.closest('#btnWelcome')) { showWelcome(); return; }
-  const wl = e.target.closest('[data-wlang]');
-  if (wl) {
-    const ur = wl.dataset.wlang === 'ur';
-    $('welcomeEn').hidden = ur;
-    $('welcomeUr').hidden = !ur;
-    document.querySelectorAll('#welcome .langToggle button').forEach((x) => x.classList.toggle('on', (x.dataset.wlang === 'ur') === ur));
+  if (e.target.closest('#igInstall')) {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((res) => {
+      deferredPrompt = null;
+      $('igInstall').hidden = true;
+      if (res && res.outcome === 'accepted') finishInstallGuide();
+    });
     return;
   }
+  if (e.target.closest('#igDone')) { finishInstallGuide(); return; }
+  if (e.target.closest('#tourNext')) { tourNext(); return; }
+  if (e.target.closest('#tourSkip')) { endTour(); return; }
+  if (e.target.closest('#btnReplayTour')) { setTab('today'); $('tour').hidden = false; tourIdx = 0; renderTourStep(); return; }
+  if (e.target.closest('#btnTestKey')) { testKey(); return; }
   const tab = e.target.closest('[data-tab]');
   if (tab) { setTab(tab.dataset.tab); return; }
   const btn = e.target.closest('[data-open]');
@@ -1012,6 +1132,117 @@ function closeWelcome() {
   overlayClosed();
   renderHeader();
   setTab('today');
+  if (!S.flags.tourSeen) startTour();
+}
+
+/* ---------- first run: install guide, entrance, tour ---------- */
+function isStandalone() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!$('installGuide').hidden) revealNativeInstall();
+});
+function revealNativeInstall() {
+  $('igInstall').hidden = false;
+  const d = $('igManual');
+  if (d) { d.open = false; d.classList.add('collapsible'); }
+}
+function showInstallGuide() {
+  $('installGuide').hidden = false;
+  document.querySelector('.wrap').inert = true;
+  $('nav').inert = true;
+  if (deferredPrompt) revealNativeInstall();
+}
+function finishInstallGuide() {
+  S.flags.installGuideSeen = true;
+  save();
+  if (isStandalone()) {
+    $('installGuide').hidden = true;
+    overlayClosed();
+    firstRun();
+  } else {
+    $('igNote').hidden = false; // she must now open from the home screen icon
+  }
+}
+function playEntrance(cb) {
+  const el = $('entrance');
+  el.hidden = false;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  setTimeout(() => {
+    el.classList.add('leaving');
+    setTimeout(() => { el.hidden = true; el.classList.remove('leaving'); cb(); }, reduce ? 0 : 500);
+  }, reduce ? 700 : 3300);
+}
+// decide the first-run screen; order per spec
+function firstRun() {
+  if (!S.flags.installGuideSeen && !isStandalone()) { showInstallGuide(); return; }
+  if (!S.flags.welcomeSeen) { playEntrance(showWelcome); return; }
+  if (!S.flags.tourSeen) { startTour(); return; }
+}
+
+/* feature tour (coach marks over the real Today screen) */
+const TOUR_STEPS = [
+  { sel: '#view-today .grid2', label: '<b>The stack.</b> Four things, about forty minutes. Body, Voice, Mind, Craft. Tap any tile to begin. You never have to do all four.' },
+  { sel: '#view-today [data-open="body"]', label: '<b>Body.</b> Twelve minutes of stretches for your back and neck. Each move shows you how, and a video is one tap away.' },
+  { sel: '#view-today [data-open="voice"]', label: '<b>Voice.</b> Talk out loud in English for twelve minutes. It listens, then gives you feedback. This is the one that changes fastest.' },
+  { sel: '#view-today [data-open="mind"]', label: '<b>Mind.</b> A ten minute read, in English or Urdu, your choice each day. Real ideas about habits, people, and life.' },
+  { sel: '#view-today [data-open="craft"]', label: '<b>Craft.</b> One Power BI lesson a day. In a month, you will actually know it.' },
+  { sel: '.mosaic', label: '<b>The mosaic.</b> Every day becomes a square. Do one thing or all four, the square still fills. This is your month, at a glance.' },
+  { sel: '.streakNum', label: '<b>The streak.</b> Do all four in a day and the streak grows. Miss a day, it resets, and that is fine. Showing up is the whole game.' },
+  { sel: '#gearBtn', label: '<b>Settings, and the key.</b> Everything lives here. Your name, light or dark, and the one setup step: pasting the key that powers live English practice. Asfer will walk you through that part separately.' },
+  { sel: null, label: "<b>That's it.</b> It's yours now. Start whenever you want." },
+];
+let tourIdx = 0;
+function startTour() {
+  if (currentTab !== 'today') setTab('today');
+  tourIdx = 0;
+  $('tour').hidden = false;
+  renderTourStep();
+}
+function renderTourStep() {
+  const step = TOUR_STEPS[tourIdx];
+  const hi = $('tourHi'), card = $('tourCard');
+  $('tourLabel').innerHTML = step.label;
+  $('tourNext').textContent = tourIdx === TOUR_STEPS.length - 1 ? 'Start day one' : 'Next';
+  $('tourDots').innerHTML = TOUR_STEPS.map((_, i) => '<i class="' + (i === tourIdx ? 'on' : '') + '"></i>').join('');
+  card.classList.remove('above', 'below', 'center');
+  const target = step.sel ? document.querySelector(step.sel) : null;
+  if (!target) {
+    hi.style.display = 'none';
+    card.classList.add('center');
+    card.style.left = '50%'; card.style.top = '50%'; card.style.transform = 'translate(-50%,-50%)';
+    return;
+  }
+  card.style.transform = '';
+  target.scrollIntoView({ block: 'center' });
+  requestAnimationFrame(() => {
+    const r = target.getBoundingClientRect();
+    const pad = 8;
+    hi.style.display = 'block';
+    hi.style.left = (r.left - pad) + 'px';
+    hi.style.top = (r.top - pad) + 'px';
+    hi.style.width = (r.width + pad * 2) + 'px';
+    hi.style.height = (r.height + pad * 2) + 'px';
+    const cardW = Math.min(300, window.innerWidth - 40);
+    let left = r.left + r.width / 2 - cardW / 2;
+    left = Math.max(16, Math.min(left, window.innerWidth - cardW - 16));
+    card.style.left = left + 'px';
+    card.style.width = cardW + 'px';
+    card.style.setProperty('--ptr', Math.max(16, Math.min(r.left + r.width / 2 - left - 8, cardW - 32)) + 'px');
+    const below = r.top < window.innerHeight * 0.5;
+    const ch = card.offsetHeight;
+    if (below) { card.classList.add('below'); card.style.top = (r.bottom + pad + 12) + 'px'; }
+    else { card.classList.add('above'); card.style.top = Math.max(12, r.top - pad - 12 - ch) + 'px'; }
+  });
+}
+function tourNext() { if (tourIdx < TOUR_STEPS.length - 1) { tourIdx++; renderTourStep(); } else endTour(); }
+function endTour() {
+  S.flags.tourSeen = true;
+  save();
+  $('tour').hidden = true;
 }
 
 /* ---------- body view ---------- */
@@ -1441,6 +1672,22 @@ function capReached() {
   const cap = Number(S.settings.spendCap) || 0;
   return cap > 0 && S.usage.cost >= cap;
 }
+async function testKey() {
+  const el = $('testKeyResult');
+  if (S.settings.provider === 'none') { el.className = 'testResult bad'; el.textContent = 'Pick a provider first.'; return; }
+  if (!S.settings.apiKey) { el.className = 'testResult bad'; el.textContent = 'Paste a key first.'; return; }
+  el.className = 'testResult';
+  el.textContent = 'Checking...';
+  try {
+    const res = await aiReply([{ role: 'user', content: 'Reply with the single word: ok' }]);
+    recordUsage(PROVIDER_MODEL[S.settings.provider], res.usage || {});
+    el.className = 'testResult good';
+    el.innerHTML = ICONS.check + ' Key works';
+  } catch (err) {
+    el.className = 'testResult bad';
+    el.textContent = err.message;
+  }
+}
 function costLine() {
   ensureUsageMonth();
   const u = S.usage, tok = u.inTok + u.outTok;
@@ -1802,18 +2049,20 @@ function renderSettings() {
     + '<div class="setrow"><label for="setVoice">Spoken voice</label><select class="input" id="setVoice"></select>'
     + '<div class="hint">Used for cues and prompts. Voices come from your device, English first.</div></div>'
     + '</div>'
-    + '<div class="label">AI conversation partner</div>'
+    + '<div class="label">Live English practice</div>'
     + '<div class="card">'
+    + '<div class="hint" style="margin-top:0;margin-bottom:12px">Optional. Add a key once and the Voice pillar becomes a real back and forth partner that talks with you. Without it, Voice still works and you can practise with the free options after a session.</div>'
     + '<div class="setrow"><label for="setProvider">Provider</label><select class="input" id="setProvider">'
-    + [['none', 'Off'], ['anthropic', 'Anthropic (Claude Haiku 4.5)'], ['gemini', 'Google Gemini (Flash)'], ['openai', 'OpenAI']].map((o) => '<option value="' + o[0] + '"' + (s.provider === o[0] ? ' selected' : '') + '>' + o[1] + '</option>').join('')
+    + [['none', 'Off'], ['gemini', 'Google Gemini (Flash)'], ['anthropic', 'Anthropic (Claude Haiku 4.5)'], ['openai', 'OpenAI']].map((o) => '<option value="' + o[0] + '"' + (s.provider === o[0] ? ' selected' : '') + '>' + o[1] + '</option>').join('')
     + '</select>'
     + '<div class="tradeList">'
-    + '<div class="trade"><b>Claude Haiku 4.5</b> about $0.09 a session, near $0.02 with caching. Your data is not used for training.</div>'
     + '<div class="trade"><b>Gemini Flash</b> free tier available. Google may use free tier conversations to improve their models.</div>'
+    + '<div class="trade"><b>Claude Haiku 4.5</b> about $0.09 a session, near $0.02 with caching. Your data is not used for training.</div>'
     + '<div class="trade"><b>OpenAI</b> paid, similar cost to Claude.</div>'
     + '</div></div>'
-    + '<div class="setrow"><label for="setKey">API key</label><input class="input" id="setKey" type="password" value="' + esc(s.apiKey) + '" autocomplete="off">'
-    + '<div class="hint">The key is stored only in localStorage on this device and is sent only to the provider you pick. Gemini is the default because you have a key and its free tier costs nothing. Switch to Claude if you would rather your speech never be used for training. A Google AI Pro subscription also lets you talk to Gemini out loud in its own app for free, but the consumer subscription does not include API access, so it cannot power live mode here.</div></div>'
+    + '<div class="setrow"><label for="setKey">Paste your key here</label><input class="input" id="setKey" type="password" value="' + esc(s.apiKey) + '" autocomplete="off" placeholder="Your provider key">'
+    + '<div class="hint">This key stays only on this phone and is never uploaded anywhere. It is sent straight from your phone to the provider you pick, and to no one else. Gemini is the default because you have a key and its free tier costs nothing.</div>'
+    + '<div class="btnrow" style="margin-top:12px;align-items:center"><button class="pill pill-quiet" id="btnTestKey" style="width:auto;flex:none">Test key</button><span id="testKeyResult" class="testResult"></span></div>'
     + '</div>'
     + '<div class="label">Spending</div>'
     + '<div class="card">'
@@ -1833,7 +2082,8 @@ function renderSettings() {
     + '<button class="pill pill-ghost" style="margin-top:12px" id="btnReset">Reset everything</button>'
     + '<input type="file" id="importFile" accept=".json,application/json" hidden>'
     + '</div>'
-    + '<button class="linkBtn" id="btnWelcome">Show the welcome again</button>';
+    + '<button class="linkBtn" id="btnWelcome">Show the welcome again</button>'
+    + '<button class="linkBtn" id="btnReplayTour" style="margin-top:8px">Replay the tour</button>';
   fillVoices();
 }
 function fillVoices() {
@@ -2078,7 +2328,7 @@ function init() {
   applyTheme();
   renderHeader();
   setTab('today');
-  if (!S.flags.welcomeSeen) showWelcome();
+  firstRun();
   if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = fillVoices;
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => { /* offline first run */ }));
