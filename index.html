@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#F2F6FB;
@@ -260,6 +261,24 @@ header{display:flex;align-items:flex-start;justify-content:space-between;gap:12p
 .qlist{margin:8px 0 0 18px}
 .qlist li{margin-top:8px;color:var(--text)}
 .attrib{font-size:13px;color:var(--text-3);line-height:1.5;margin-top:22px;padding-top:16px;border-top:1px solid var(--hairline)}
+.langToggle{display:inline-flex;gap:2px;background:var(--surface-2);border-radius:999px;padding:3px;margin:0 2px 12px}
+.langToggle button{border-radius:999px;padding:7px 16px;font-size:13px;font-weight:700;color:var(--text-3)}
+.langToggle button.on{background:var(--surface);color:var(--text);box-shadow:var(--shadow), var(--card-extra)}
+.langToggle button.urnav{font-size:15px}
+.introCard{padding:16px 18px;margin-bottom:14px}
+.introCard .readH{margin-bottom:2px}
+.introCard p{font-size:15px;line-height:1.6;color:var(--text-2)}
+/* Urdu: Nastaliq needs room to breathe */
+.urdu{direction:rtl;text-align:right;font-family:"Noto Nastaliq Urdu", serif}
+.urdu .readbody{font-size:19px;line-height:2.2;max-width:none}
+.urdu .readbody p{margin-top:18px}
+.urdu .readSec{margin-top:26px}
+.urdu .readH{letter-spacing:0;font-size:13px}
+.urdu .qlist{margin:10px 18px 0 0;padding:0}
+.urdu .qlist li{margin-top:12px;line-height:2}
+.urdu.introCard p{font-size:17px;line-height:2}
+.urdu .h1{line-height:1.9}
+.urdu .attrib{line-height:1.9}
 .bookGrid{display:flex;flex-direction:column;gap:14px}
 .bookCard{position:relative;display:flex;gap:16px;align-items:center;text-align:left;background:var(--surface);border-radius:22px;padding:16px;box-shadow:var(--shadow), var(--card-extra);width:100%}
 .bookMesh{width:58px;height:58px;border-radius:18px;flex:none}
@@ -358,15 +377,19 @@ select.input{
 .figure{position:relative;width:100%;aspect-ratio:1/1;max-width:260px;margin:0 auto}
 .figBlob{position:absolute;inset:12%;border-radius:46% 54% 52% 48%/50% 46% 54% 50%;filter:blur(22px);opacity:0.3}
 .figSvg{position:relative;width:100%;height:100%;display:block;color:var(--text);overflow:visible}
-.figPose path{fill:none;stroke:currentColor;stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.figFrame path{fill:none;stroke:currentColor;stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
 .figProp{fill:none;stroke:var(--text-3);stroke-width:4;stroke-linecap:round;opacity:0.4}
 .figProp rect{fill:var(--text-3);stroke:none;opacity:0.4}
 .figArc{fill:none;stroke:var(--text-3);stroke-width:3;stroke-dasharray:2 8;stroke-linecap:round;opacity:0.8}
 .figSvg #kzArrow path{fill:none;stroke:var(--text-3)}
-.figA{animation:kzFadeA var(--fade,3s) ease-in-out infinite alternate}
-.figB{animation:kzFadeB var(--fade,3s) ease-in-out infinite alternate}
-@keyframes kzFadeA{from{opacity:1}to{opacity:0}}
-@keyframes kzFadeB{from{opacity:0}to{opacity:1}}
+.figFrame{opacity:0}
+.figFrame.figScrub{animation:none !important}
+@keyframes kzf6{0%{opacity:1}11%{opacity:0}89%{opacity:0}100%{opacity:1}}
+@keyframes kzf3{0%{opacity:1}22%{opacity:0}78%{opacity:0}100%{opacity:1}}
+.scrubber{display:flex;gap:8px;justify-content:center;margin:12px 0 2px}
+.scrubber button{width:9px;height:9px;border-radius:999px;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--hairline);padding:0}
+.scrubber button.on{background:var(--text-3);box-shadow:none;transform:scale(1.25)}
+.pvVideo{display:block;margin:2px auto 0;font-size:13px;font-weight:600;color:var(--text-3);text-decoration:underline;text-underline-offset:3px}
 .figStrip{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 8px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
 .figStripItem{flex:0 0 128px;scroll-snap-align:start;text-align:center}
 .figStripItem .figure{max-width:128px}
@@ -390,6 +413,11 @@ select.input{
 .letterSig{font-size:20px;font-weight:800;color:var(--text);text-align:right;margin-top:22px}
 .letterNameLabel{display:block;font-size:13px;font-weight:500;color:var(--text-3);margin:26px 0 7px}
 .welcomeCard .pill{margin-top:14px}
+#welcomeUr.urdu{text-align:right}
+#welcomeUr .letterFor{line-height:1.85}
+#welcomeUr .letter{font-size:18px;line-height:2.3}
+#welcomeUr .letter p{margin-top:16px}
+#welcomeUr .letterSig{text-align:left;line-height:1.9}
 
 /* motion */
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -403,8 +431,8 @@ select.input{
 @media (prefers-reduced-motion: reduce){
   *, *::before, *::after{animation:none !important;transition:none !important}
   button:active{transform:none}
-  .figA{opacity:0}
-  .figB{opacity:1}
+  .figFrame{opacity:0}
+  .figFrame.figLast{opacity:1}
 }
 @media (max-width:374px){
   .streakNum{font-size:42px}
@@ -446,6 +474,8 @@ select.input{
       <span style="width:42px" aria-hidden="true"></span>
     </div>
     <div id="pvFig" class="pvFig"></div>
+    <div class="scrubber" id="pvScrub"></div>
+    <button id="pvVideo" class="pvVideo">Watch a video</button>
     <div id="pvSide" class="pvSide"></div>
     <div id="pvMove" class="pvMoveName"></div>
     <button id="pvReady" class="card pvReady" aria-label="Start this move now">
@@ -483,15 +513,40 @@ select.input{
     <div class="wBlob mesh mesh-craft"></div>
   </div>
   <div class="welcomeCard card card-lg" role="dialog" aria-modal="true" aria-label="A welcome letter">
-    <div class="letterFor">For Mahrukh</div>
-    <div class="letter">
-      <p>I made you an app.</p>
-      <p>Not because anything about you needs fixing. Because you keep saying there is no time, and I wanted to see if I could carve some out and hand it to you.</p>
-      <p>It is forty minutes. Twelve to unknot your back. Twelve to talk, out loud, in English, until it stops feeling like a test. Ten to read something worth reading. And a little every day toward Power BI, so that in a month you will know it.</p>
-      <p>Some days you will do all four. Most days you will not. The squares below fill in either way, and a half filled square is still a day you showed up.</p>
-      <p>Start whenever you want. I am proud of you already.</p>
+    <div class="langToggle" role="group" aria-label="Letter language">
+      <button data-wlang="en" class="on">English</button>
+      <button data-wlang="ur" class="urnav">اردو</button>
     </div>
-    <div class="letterSig">Asfer</div>
+    <div id="welcomeEn" class="wletter">
+      <div class="letterFor">For Mahrukh</div>
+      <div class="letter">
+        <p>I made you an app.</p>
+        <p>Not because anything about you needs fixing. Because you keep saying there is no time, and I wanted to see if I could carve some out and hand it to you.</p>
+        <p>I built it over the last five days, in the gaps around work, late at night and early in the morning. That is why I was quieter than usual, and why it took longer than it should have. Nothing at work slipped, so please do not carry that. It was only ever my own free time, and I cannot think of a better thing to have spent it on.</p>
+        <p>Here is what is inside. About forty minutes. Twelve to unknot your back. Twelve to talk out loud in English, until it stops feeling like a test. Ten to read something worth reading, in English or in Urdu, whichever you feel like that day. And a little every day toward Power BI, so that in a month you will actually know it.</p>
+        <p>That is all I want from you. Only the things in this app. Nothing else, nothing extra, nothing on top.</p>
+        <p>Some days you will do all four. Most days you will not. The squares fill in either way, and a half filled square is still a day you showed up.</p>
+        <p>If anything in here is wrong, or missing, or annoying, tell me and I will change it. Ask for anything you want added. I will keep building it as long as you keep using it.</p>
+        <p>And keep in mind what this is actually for. Not for me, and not to prove anything to anyone. You are working on our future.</p>
+        <p>I love you. Start whenever you are ready.</p>
+      </div>
+      <div class="letterSig">Asfer</div>
+    </div>
+    <div id="welcomeUr" class="wletter urdu" dir="rtl" lang="ur" hidden>
+      <div class="letterFor">ماہ رخ کے نام</div>
+      <div class="letter">
+        <p>میں نے تمہارے لیے ایک ایپ بنائی ہے۔</p>
+        <p>اس لیے نہیں کہ تم میں کوئی کمی ہے جسے ٹھیک کرنا ہو۔ بلکہ اس لیے کہ تم اکثر کہتی ہو کہ وقت نہیں ملتا، اور میں دیکھنا چاہتا تھا کہ کیا میں تھوڑا سا وقت نکال کر تمہارے ہاتھ میں رکھ سکتا ہوں۔</p>
+        <p>یہ میں نے پچھلے پانچ دنوں میں بنائی ہے، کام کے بیچ کے وقفوں میں، رات دیر تک اور صبح سویرے۔ اسی لیے میں معمول سے کچھ خاموش رہا، اور اسی لیے اس میں وقت بھی زیادہ لگ گیا۔ کام کا کوئی حرج نہیں ہوا، اس لیے یہ بوجھ دل پر مت لینا۔ یہ صرف میرا اپنا فارغ وقت تھا، اور مجھے اس سے بہتر کوئی کام سوجھتا ہی نہیں کہ اسے کہاں لگاتا۔</p>
+        <p>اس میں کیا ہے، سن لو۔ تقریباً چالیس منٹ۔ بارہ منٹ کمر کی اکڑن کھولنے کے لیے۔ بارہ منٹ انگریزی میں بول کر بات کرنے کے لیے، یہاں تک کہ وہ امتحان جیسی لگنا چھوڑ دے۔ دس منٹ کچھ ایسا پڑھنے کے لیے جو پڑھنے کے قابل ہو، انگریزی میں یا اردو میں، جس دن جس میں دل کرے۔ اور ہر دن تھوڑا تھوڑا Power BI کی طرف، تاکہ ایک مہینے میں تم واقعی اسے سیکھ جاؤ۔</p>
+        <p>بس اتنا ہی چاہتا ہوں تم سے۔ صرف وہی جو اس ایپ میں ہے۔ اس کے علاوہ کچھ نہیں، کوئی اضافی چیز نہیں، اوپر سے کچھ نہیں۔</p>
+        <p>کچھ دن تم چاروں کام کر لو گی۔ زیادہ تر دن نہیں کر پاؤ گی۔ خانے دونوں صورتوں میں بھرتے جائیں گے، اور آدھا بھرا خانہ بھی اُس دن کی نشانی ہے جب تم نے قدم بڑھایا۔</p>
+        <p>اگر اس میں کچھ غلط لگے، یا کوئی چیز کم ہو، یا کچھ کھٹکے، تو مجھے بتا دینا، میں بدل دوں گا۔ جو چیز شامل کروانا چاہو، بس مانگ لینا۔ جب تک تم اسے استعمال کرتی رہو گی، میں اسے بناتا رہوں گا۔</p>
+        <p>اور یہ یاد رکھنا کہ یہ اصل میں کس لیے ہے۔ میرے لیے نہیں، اور کسی کو کچھ ثابت کرنے کے لیے نہیں۔ تم ہمارے مستقبل کے لیے محنت کر رہی ہو۔</p>
+        <p>مجھے تم سے محبت ہے۔ جب تمہارا دل چاہے، شروع کر دینا۔</p>
+      </div>
+      <div class="letterSig">آصفر</div>
+    </div>
     <label for="welcomeName" class="letterNameLabel">Your name</label>
     <input class="input" id="welcomeName" placeholder="Your name" value="Mahrukh" autocomplete="given-name">
     <button class="pill mesh mesh-mind" id="welcomeStart">Start</button>
@@ -503,6 +558,7 @@ select.input{
 <script src="./content-body.js"></script>
 <script src="./content-voice.js"></script>
 <script src="./content-mind.js"></script>
+<script src="./content-mind-ur.js"></script>
 <script src="./content-craft.js"></script>
 <script>
 'use strict';
@@ -510,6 +566,9 @@ select.input{
 const BODY_ROUTINES = window.KZ_BODY.routines;
 const VOICE_TOPICS = window.KZ_VOICE;
 const MIND = window.KZ_MIND;
+MIND.forEach((r) => { if (!r.id) r.id = 'b' + r.bookNumber + 'c' + r.chapter; });
+const MIND_UR_BY_ID = {};
+(window.KZ_MIND_UR || []).forEach((r) => { if (r && r.id) MIND_UR_BY_ID[r.id] = r; });
 const MIND_BOOKS = [1, 2, 3, 4, 5, 6].map((n) => MIND.filter((r) => r.bookNumber === n));
 const CRAFT_LESSONS = window.KZ_CRAFT;
 
@@ -550,9 +609,9 @@ function defaults() {
   return {
     days: {},
     streak: { count: 0, best: 0, lastDay: null },
-    mind: { cursor: 0, read: [], scroll: {} },
+    mind: { cursor: 0, read: [], scroll: {}, lang: 'en' },
     craft: { done: [] },
-    settings: { name: '', theme: 'system', voiceURI: '', provider: 'anthropic', apiKey: '', reminderTime: '', spendCap: 5 },
+    settings: { name: '', theme: 'system', voiceURI: '', provider: 'gemini', apiKey: '', reminderTime: '', spendCap: 5 },
     usage: { month: '', inTok: 0, outTok: 0, cost: 0, sessions: 0 },
     flags: { safetySeen: false, reminderFiredOn: '', welcomeSeen: false },
   };
@@ -856,6 +915,14 @@ function renderToday() {
 document.addEventListener('click', (e) => {
   if (e.target.closest('#welcomeStart')) { closeWelcome(); return; }
   if (e.target.closest('#btnWelcome')) { showWelcome(); return; }
+  const wl = e.target.closest('[data-wlang]');
+  if (wl) {
+    const ur = wl.dataset.wlang === 'ur';
+    $('welcomeEn').hidden = ur;
+    $('welcomeUr').hidden = !ur;
+    document.querySelectorAll('#welcome .langToggle button').forEach((x) => x.classList.toggle('on', (x.dataset.wlang === 'ur') === ur));
+    return;
+  }
   const tab = e.target.closest('[data-tab]');
   if (tab) { setTab(tab.dataset.tab); return; }
   const btn = e.target.closest('[data-open]');
@@ -1034,12 +1101,35 @@ function startSeg(i) {
   if (i < 0) i = 0;
   player.idx = i;
   const s = player.segs[i];
+  player.moveName = s.name;
   $('pvFig').innerHTML = segFig(s);
+  renderScrubber(s);
   $('pvMove').textContent = s.name;
   $('pvSide').textContent = s.side;
   const nxt = player.segs[i + 1];
   $('pvNext').textContent = nxt ? 'Next: ' + nxt.name + (nxt.side ? ', ' + nxt.side.toLowerCase() : '') : 'Last one';
   formCheck(s);
+}
+function renderScrubber(s) {
+  const id = window.KZ_BODY.figureFor(s.name);
+  const n = id ? window.KZ_BODY.figureInfo(id).frames : 0;
+  player.scrub = null;
+  $('pvScrub').innerHTML = n > 1
+    ? Array.from({ length: n }, (_, i) => '<button data-scrub="' + i + '" aria-label="Freeze on frame ' + (i + 1) + '"></button>').join('')
+    : '';
+}
+function scrubTo(k) {
+  const frames = $('pvFig').querySelectorAll('.figFrame');
+  if (!frames.length) return;
+  if (player.scrub === k) { scrubResume(); return; }
+  player.scrub = k;
+  frames.forEach((g, i) => { g.classList.add('figScrub'); g.style.opacity = i === k ? '1' : '0'; });
+  Array.from($('pvScrub').children).forEach((d, i) => d.classList.toggle('on', i === k));
+}
+function scrubResume() {
+  player.scrub = null;
+  $('pvFig').querySelectorAll('.figFrame').forEach((g) => { g.classList.remove('figScrub'); g.style.opacity = ''; });
+  Array.from($('pvScrub').children).forEach((d) => d.classList.remove('on'));
 }
 function drawReadyRing(frac, num) {
   const r = 23, c = 2 * Math.PI * r, off = c * (1 - Math.max(0, Math.min(1, frac)));
@@ -1324,7 +1414,6 @@ function closeVoice() {
 const lv = { on: false, hist: [], endAt: 0, timer: null, utter: '', silT: null, userWords: '', startedAt: 0, sr: false };
 const LIVE_SYS = 'You are a friendly daily small talk partner for an intermediate to advanced ESL speaker. Ask one question at a time. Keep replies to 2 or 3 sentences. Gently correct at most one mistake per turn, in brackets at the end of your reply. Never lecture.';
 const PROVIDER_MODEL = { anthropic: 'claude-haiku-4-5-20251001', openai: 'gpt-4o-mini', gemini: 'gemini-2.5-flash' };
-const PROVIDER_LABEL = { none: 'Off', anthropic: 'Claude Haiku 4.5', openai: 'OpenAI', gemini: 'Gemini Flash' };
 // USD per million tokens; caching cuts Anthropic input to a tenth on cache reads
 const RATES = {
   'claude-haiku-4-5-20251001': { in: 1.0, out: 5.0, cacheRead: 0.1, cacheWrite: 1.25 },
@@ -1402,7 +1491,7 @@ async function aiReply(msgs) {
     const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + PROVIDER_MODEL.gemini + ':generateContent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': k },
-      body: JSON.stringify({ contents: contents, systemInstruction: { parts: [{ text: LIVE_SYS }] }, generationConfig: { maxOutputTokens: 220, thinkingConfig: { thinkingBudget: 0 } } }),
+      body: JSON.stringify({ contents: contents, systemInstruction: { parts: [{ text: LIVE_SYS }] }, generationConfig: { maxOutputTokens: 200, thinkingConfig: { thinkingBudget: 0 } } }),
     });
     if (!r.ok) throw new Error(aiErr('Gemini', r.status));
     const j = await r.json();
@@ -1563,6 +1652,7 @@ function finishLive() {
 /* ---------- mind ---------- */
 let mindView = null;       // current reading index 0..29
 let mindMode = 'read';     // 'read' or 'library'
+let mindPendingFrac = null; // set when toggling language, to keep scroll position
 function paras(text) { return String(text).split(/\n\n+/).map((p) => '<p>' + esc(p.trim()) + '</p>').join(''); }
 function mindSaveScroll() {
   if (currentTab === 'mind' && mindMode === 'read' && mindView !== null) {
@@ -1573,50 +1663,77 @@ function renderMind() {
   if (mindView === null) mindView = Math.min(S.mind.cursor, MIND.length - 1);
   if (mindMode === 'library') { renderMindLibrary(); return; }
   const r = MIND[mindView];
+  const ur = MIND_UR_BY_ID[r.id];
+  const isUr = S.mind.lang === 'ur' && !!ur;
+  const t = isUr ? ur : r;                 // active-language text source
+  const L = isUr ? UR_LABELS : EN_LABELS;
   const rec = todayRec();
   const done = S.mind.read.includes(mindView);
   const sec = (label, body) => '<div class="readSec"><div class="readH">' + label + '</div>' + body + '</div>';
+  const langToggle = ur
+    ? '<div class="langToggle" role="group" aria-label="Reading language">'
+      + '<button data-lang="en" class="' + (isUr ? '' : 'on') + '">English</button>'
+      + '<button data-lang="ur" class="urnav ' + (isUr ? 'on' : '') + '">' + 'اردو' + '</button></div>'
+    : '';
+  const intro = (t.whatAbout || t.whyWorth)
+    ? '<div class="card introCard' + (isUr ? ' urdu' : '') + '"' + (isUr ? ' dir="rtl" lang="ur"' : '') + '>'
+      + (t.whatAbout ? '<div class="readH">' + L.whatAbout + '</div><p>' + esc(t.whatAbout) + '</p>' : '')
+      + (t.whyWorth ? '<div class="readH" style="margin-top:12px">' + L.whyWorth + '</div><p>' + esc(t.whyWorth) + '</p>' : '')
+      + '</div>'
+    : '';
   $('view-mind').innerHTML =
     '<div class="mindTop">'
     + '<div class="cap">Book ' + r.bookNumber + ' of 6, chapter ' + r.chapter + ' of 5, ' + r.readMinutes + ' min read</div>'
     + '<button class="pill-mini" id="mindLibrary" aria-label="Open the library">Library</button>'
     + '</div>'
-    + '<div class="card card-lg reading">'
+    + langToggle
+    + intro
+    + '<div class="card card-lg reading' + (isUr ? ' urdu' : '') + '"' + (isUr ? ' dir="rtl" lang="ur"' : '') + '>'
     + '<div class="mindbar mesh mesh-mind" aria-hidden="true"></div>'
     + '<div class="cap" style="margin-top:2px">' + esc(r.book) + ', ' + esc(r.author) + '</div>'
-    + '<div class="h1" style="font-size:26px;margin-top:4px">' + esc(r.chapterTitle) + '</div>'
+    + '<div class="h1" style="font-size:26px;margin-top:4px">' + esc(t.chapterTitle) + '</div>'
     + '<div class="readbody">'
-    + sec('The argument', paras(r.argument))
-    + sec('How it works', paras(r.mechanism))
-    + sec('The evidence', paras(r.evidence))
-    + sec('Where it is weak', paras(r.pushback))
-    + sec('Try this', paras(r.tryThis))
-    + sec('Sit with this', '<ul class="qlist">' + r.questions.map((q) => '<li>' + esc(q) + '</li>').join('') + '</ul>')
+    + sec(L.argument, paras(t.argument))
+    + sec(L.mechanism, paras(t.mechanism))
+    + sec(L.evidence, paras(t.evidence))
+    + sec(L.pushback, paras(t.pushback))
+    + sec(L.tryThis, paras(t.tryThis))
+    + sec(L.questions, '<ul class="qlist">' + t.questions.map((q) => '<li>' + esc(q) + '</li>').join('') + '</ul>')
     + '</div>'
-    + '<div class="attrib">This is an original explainer, not the book. If the idea lands, buy the book.</div>'
+    + '<div class="attrib">' + L.attrib + '</div>'
+    + '</div>'
     + '<div class="mindNav">'
     + '<button class="iconbtn" id="mindPrev" aria-label="Previous chapter"' + (mindView === 0 ? ' disabled style="opacity:0.35"' : '') + '>' + ICONS.chevL + '</button>'
     + (done
       ? '<div class="pill pill-ghost" style="flex:1">' + (rec.mind ? 'Read for today' : 'Already read') + '</div>'
       : '<button class="pill mesh mesh-mind" style="flex:1" id="mindMark">Mark as read</button>')
     + '<button class="iconbtn" id="mindNext" aria-label="Next chapter"' + (mindView === MIND.length - 1 ? ' disabled style="opacity:0.35"' : '') + '>' + ICONS.chevR + '</button>'
-    + '</div>'
     + '</div>';
   $('mindProgress').hidden = false;
-  // restore reading position, then start tracking scroll for the progress bar
+  // restore reading position (or the scroll fraction when switching language), then track scroll
   const saved = S.mind.scroll[mindView] || 0;
-  requestAnimationFrame(() => { window.scrollTo(0, saved); updateMindProgress(); });
+  const targetFrac = mindPendingFrac;
+  mindPendingFrac = null;
+  const apply = () => {
+    const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    window.scrollTo(0, targetFrac != null ? Math.round(targetFrac * max) : saved);
+    updateMindProgress();
+  };
+  requestAnimationFrame(apply);
+  // Nastaliq loads late and changes the page height, so reapply once fonts are ready
+  if (isUr && document.fonts && document.fonts.ready) document.fonts.ready.then(() => requestAnimationFrame(apply));
 }
+const EN_LABELS = { whatAbout: 'What this is about', whyWorth: 'Why it is worth ten minutes', argument: 'The argument', mechanism: 'How it works', evidence: 'The evidence', pushback: 'Where it is weak', tryThis: 'Try this', questions: 'Sit with this', attrib: 'This is an original explainer, not the book. If the idea lands, buy the book.' };
+const UR_LABELS = { whatAbout: 'یہ کس بارے میں ہے', whyWorth: 'دس منٹ کیوں', argument: 'بنیادی بات', mechanism: 'یہ کیسے کام کرتا ہے', evidence: 'ثبوت اور مثالیں', pushback: 'کمزوری کہاں ہے', tryThis: 'آج یہ کرکے دیکھیں', questions: 'اس پر غور کریں', attrib: 'یہ اصل کتاب نہیں، اس کے خیال کی اپنی تشریح ہے۔ اگر دل کو لگے تو کتاب ضرور خریدیں۔' };
 function renderMindLibrary() {
   $('mindProgress').hidden = true;
-  const titles = ['Atomic Habits', 'Mindset', 'Deep Work', 'Nonviolent Communication', 'Essentialism', "Man's Search for Meaning"];
-  const cards = MIND_BOOKS.map((chapters, bi) => {
+  const cards = MIND_BOOKS.map((chapters) => {
     const doneN = chapters.filter((c) => S.mind.read.includes(MIND.indexOf(c))).length;
     const pct = Math.round(100 * doneN / chapters.length);
     const startIdx = MIND.indexOf(chapters.find((c) => !S.mind.read.includes(MIND.indexOf(c))) || chapters[0]);
     return '<button class="bookCard" data-book="' + startIdx + '">'
       + '<div class="bookMesh mesh mesh-mind" style="opacity:' + (0.25 + 0.75 * doneN / chapters.length).toFixed(2) + '"></div>'
-      + '<div class="bookInfo"><div class="bookTitle">' + esc(titles[bi]) + '</div>'
+      + '<div class="bookInfo"><div class="bookTitle">' + esc(chapters[0].book) + '</div>'
       + '<div class="cap">' + esc(chapters[0].author) + '</div>'
       + '<div class="bookProg"><i class="mesh mesh-mind" style="width:' + pct + '%"></i></div>'
       + '<div class="cap" style="margin-top:5px">' + doneN + ' of ' + chapters.length + ' chapters</div></div>'
@@ -1696,7 +1813,7 @@ function renderSettings() {
     + '<div class="trade"><b>OpenAI</b> paid, similar cost to Claude.</div>'
     + '</div></div>'
     + '<div class="setrow"><label for="setKey">API key</label><input class="input" id="setKey" type="password" value="' + esc(s.apiKey) + '" autocomplete="off">'
-    + '<div class="hint">The key is stored only in localStorage on this device and is sent only to the provider you pick. Anthropic is the default because it does not train on your speech. A Google AI Pro subscription lets you talk to Gemini out loud in its own app for free, but the consumer subscription does not include API access, so it cannot power live mode here.</div></div>'
+    + '<div class="hint">The key is stored only in localStorage on this device and is sent only to the provider you pick. Gemini is the default because you have a key and its free tier costs nothing. Switch to Claude if you would rather your speech never be used for training. A Google AI Pro subscription also lets you talk to Gemini out loud in its own app for free, but the consumer subscription does not include API access, so it cannot power live mode here.</div></div>'
     + '</div>'
     + '<div class="label">Spending</div>'
     + '<div class="card">'
@@ -1818,6 +1935,17 @@ document.addEventListener('click', (e) => {
   if (hit('mindNext')) { if (mindView < MIND.length - 1) { mindSaveScroll(); mindView++; renderMind(); } return; }
   if (hit('mindLibrary')) { mindSaveScroll(); mindMode = 'library'; renderMind(); window.scrollTo(0, 0); return; }
   if (hit('mindBackRead')) { mindMode = 'read'; renderMind(); return; }
+  const lb = e.target.closest('[data-lang]');
+  if (lb && currentTab === 'mind') {
+    const lang = lb.dataset.lang;
+    if (lang !== S.mind.lang) {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      mindPendingFrac = max > 0 ? window.scrollY / max : 0;
+      S.mind.lang = lang; save();
+      renderMind();
+    }
+    return;
+  }
   const bc = e.target.closest('[data-book]');
   if (bc && currentTab === 'mind') { mindView = +bc.dataset.book; mindMode = 'read'; renderMind(); return; }
   if (hit('mindMark')) {
@@ -1917,6 +2045,10 @@ $('themeBtn').addEventListener('click', () => {
 $('gearBtn').addEventListener('click', () => setTab('settings'));
 $('pvClose').addEventListener('click', closePlayer);
 $('pvReady').addEventListener('click', startHold);
+$('pvScrub').addEventListener('click', (e) => { const b = e.target.closest('[data-scrub]'); if (b) scrubTo(+b.dataset.scrub); });
+$('pvVideo').addEventListener('click', () => {
+  if (player.moveName) window.open('https://www.youtube.com/results?search_query=' + encodeURIComponent(player.moveName + ' stretch proper form'), '_blank', 'noopener');
+});
 $('pvPrev').addEventListener('click', () => startSeg(player.idx - 1));
 $('pvPause').addEventListener('click', pausePlayer);
 $('pvSkip').addEventListener('click', () => startSeg(player.idx + 1));

@@ -65,21 +65,40 @@ window.KZ_BODY = { routines: [{"name":"Desk Reset","focus":"Neck, shoulders, upp
     + '<path d="M0 0 L10 5 L0 10" fill="none" stroke-width="2.2"/></marker>'
     + '</defs>';
 
-  // returns the inner <svg> for a figure id, optionally horizontally mirrored
+  // interpolate the two hand-authored endpoints into flipbook frames
+  function lerpPt(a, b, t) { return [Math.round((a[0] + (b[0] - a[0]) * t) * 10) / 10, Math.round((a[1] + (b[1] - a[1]) * t) * 10) / 10]; }
+  function lerpLimb(a, b, t) { return (a && b) ? a.map(function (p, i) { return lerpPt(p, b[i], t); }) : (a || b); }
+  function lerpPose(a, b, t) {
+    var o = {};
+    ['head', 'shoulder', 'hip'].forEach(function (k) { if (a[k] && b[k]) o[k] = lerpPt(a[k], b[k], t); else if (a[k]) o[k] = a[k]; });
+    ['armA', 'armB', 'legA', 'legB'].forEach(function (k) { if (a[k] && b[k]) o[k] = lerpLimb(a[k], b[k], t); else if (a[k]) o[k] = a[k]; });
+    return o;
+  }
+  // static holds ease in on 3 frames; dynamic moves travel out and back on 6
+  var DYNAMIC = { chinTuck: 1, wallAngel: 1, scapSqueeze: 1, neckRotation: 1, shoulderRoll: 1, catCow: 1, threadNeedle: 1, openBook: 1, gluteBridge: 1, deadBug: 1, birdDog: 1 };
+  function frameTimes(kind) { return kind === 'static' ? [0, 0.6, 1] : [0, 0.34, 0.67, 1, 0.67, 0.34]; }
+  B.figureInfo = function (id) {
+    var kind = DYNAMIC[id] ? 'dynamic' : 'static';
+    return { kind: kind, frames: frameTimes(kind).length, cycle: kind === 'static' ? 5 : 3.6 };
+  };
+
+  // returns the inner <svg> for a figure id, optionally mirrored; a flipbook of theme-aware frames
   B.figureSvg = function (id, opts) {
     opts = opts || {};
     var f = B.figures[id];
     if (!f) return '';
-    var fade = (f.fade || 3);
+    var info = B.figureInfo(id);
+    var times = frameTimes(info.kind);
+    var kf = info.frames === 3 ? 'kzf3' : 'kzf6';
     var flip = opts.flip ? ' transform="translate(240,0) scale(-1,1)"' : '';
-    var poses = '<g class="figPoses" style="--fade:' + fade + 's">'
-      + '<g class="figPose figA">' + skeleton(f.a) + '</g>'
-      + '<g class="figPose figB">' + skeleton(f.b) + '</g>'
-      + '</g>';
-    var inner = DEFS
-      + propSvg(f.prop)
-      + glowSvg(f.glow)
-      + '<g' + flip + '>' + poses + arcSvg(f.arc) + '</g>';
+    var frames = times.map(function (t, i) {
+      var pose = t <= 0 ? f.a : (t >= 1 ? f.b : lerpPose(f.a, f.b, t));
+      var last = i === times.length - 1 ? ' figLast' : '';
+      var style = 'animation:' + kf + ' ' + info.cycle + 's ease-in-out infinite;animation-delay:' + (info.cycle * i / times.length).toFixed(2) + 's';
+      return '<g class="figFrame' + last + '" data-frame="' + (i + 1) + '" style="' + style + '">' + skeleton(pose) + '</g>';
+    }).join('');
+    var inner = DEFS + propSvg(f.prop) + glowSvg(f.glow)
+      + '<g' + flip + '><g class="figFrames">' + frames + '</g>' + arcSvg(f.arc) + '</g>';
     return '<svg xmlns="http://www.w3.org/2000/svg" class="figSvg" viewBox="0 0 240 240" preserveAspectRatio="xMidYMid meet" role="img" aria-label="' + (f.label || id) + '">' + inner + '</svg>';
   };
 
