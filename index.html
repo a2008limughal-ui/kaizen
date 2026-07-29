@@ -561,17 +561,20 @@ select.input{
   padding-bottom:env(safe-area-inset-bottom);
 }
 #nav button{
-  flex:1;min-height:78px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+  flex:1;min-height:78px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
   padding:14px 4px;color:var(--ink-faint);
 }
-#nav button svg{display:none}
-#nav button .navDye{width:10px;height:10px;border-radius:2px;background:none;box-shadow:inset 0 0 0 1px var(--hollow)}
+#nav button svg{display:block;width:22px;height:22px;flex:none}
 #nav button .lbl{
   font-family:"IBM Plex Mono", ui-monospace, Menlo, monospace;
-  font-size:10px;line-height:1;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);
+  font-size:10px;line-height:1;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:currentColor;
 }
-#nav button.active .lbl{color:var(--ink)}
-#nav button.active .navDye{box-shadow:none}
+/* the active pillar is lit in its own dye, so the colour still names it */
+#nav button.active{color:var(--ink)}
+#nav button.active[data-tab="body"]{color:var(--body)}
+#nav button.active[data-tab="voice"]{color:var(--voice)}
+#nav button.active[data-tab="mind"]{color:var(--mind)}
+#nav button.active[data-tab="craft"]{color:var(--craft)}
 
 /* modal + toast */
 .modalwrap{
@@ -1249,8 +1252,9 @@ function isLateNight() { const h = new Date().getHours(); return h >= 23 || h < 
 function applyTheme() {
   const t = S.settings.theme;
   const late = isLateNight();
-  // night is the primary mode. day applies only when asked for, and never late at night
-  const day = !late && (t === 'light' || (t === 'system' && !darkQuery.matches));
+  // night is the primary mode, and the late hours steer the automatic setting toward it.
+  // an explicit choice always wins though, or the switch would feel broken at midnight
+  const day = t === 'light' || (t === 'system' && !late && !darkQuery.matches);
   document.documentElement.dataset.theme = day ? 'light' : 'dark';
   document.documentElement.dataset.night = (!day && late) ? 'true' : 'false';
   $('metaTheme').setAttribute('content', day ? '#FBF5EA' : '#17130F');
@@ -1267,9 +1271,8 @@ function renderNav() {
   $('nav').innerHTML = TABS.map((t) => {
     const active = t === currentTab;
     const name = t === 'today' ? 'Today' : META[t].name;
-    const dye = active ? ' mesh mesh-' + (t === 'today' ? 'all' : t) : '';
     return '<button data-tab="' + t + '" class="' + (active ? 'active' : '') + '" aria-label="' + name + '"' + (active ? ' aria-current="page"' : '') + '>'
-      + '<span class="navDye' + dye + '" aria-hidden="true"></span>'
+      + ICONS[t]
       + '<span class="lbl">' + name + '</span></button>';
   }).join('');
 }
@@ -3016,10 +3019,10 @@ function renderSettings() {
     '<div class="label">Settings</div>'
     + '<div class="card">'
     + '<div class="setrow"><label for="setName">Your name</label><input class="input" id="setName" value="' + esc(s.name) + '" autocomplete="given-name"></div>'
-    + '<div class="setrow"><label for="setTheme">Light</label><select class="input" id="setTheme">'
+    + '<div class="setrow"><label for="setTheme">Light and dark</label><select class="input" id="setTheme">'
     + [['system', 'Follow the phone'], ['light', 'Day'], ['dark', 'Night']].map(([t, lbl]) =>
       '<option value="' + t + '"' + (s.theme === t ? ' selected' : '') + '>' + lbl + '</option>').join('')
-    + '</select><div class="hint">It stays on night between eleven at night and five in the morning, whatever this says.</div></div>'
+    + '</select><div class="hint">On follow the phone, it stays dark between eleven at night and five in the morning. Pick Day or Night and it stays there.</div></div>'
     + '<div class="setrow"><label for="setVoice">Spoken voice</label><select class="input" id="setVoice"></select>'
     + '<div class="hint">Used for cues and prompts. Voices come from your device, English first.</div></div>'
     + '</div>'

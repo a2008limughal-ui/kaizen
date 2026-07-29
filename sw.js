@@ -1,4 +1,4 @@
-const CACHE = 'kaizen-v12';
+const CACHE = 'kaizen-v13';
 // Literata for text, Nastaliq for Urdu, Plex Mono for the logbook labels, Caveat for his hand
 const FONT_CSS = [
   'https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,300;7..72,400;7..72,500;7..72,600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@400;600&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap',
