@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#F2F6FB;
@@ -473,8 +474,9 @@ select.input{
   filter:url(#paperEdge) drop-shadow(0 6px 16px rgba(45,34,18,0.16)) drop-shadow(0 24px 50px rgba(45,34,18,0.13));
 }
 .paperLetter > *{position:relative;z-index:1}
-.paperLetter .letterFor{color:#2e2920}
-.paperLetter .letter{color:#4a4235}
+.paperLetter .letterFor{color:#2e2920;font-family:"Dancing Script", cursive;font-weight:600;font-size:38px;letter-spacing:0}
+.paperLetter .letter{color:#3f3930;font-family:"Dancing Script", cursive;font-weight:500;font-size:21px;line-height:1.75}
+.paperLetter .letter p{margin-top:16px}
 .paperLetter .letterSig .sigSvg{color:#2e2920}
 .welcomeActions{margin-top:24px}
 .welcomeActions .pill{margin-top:14px}
@@ -1310,7 +1312,26 @@ function speakAsync(text) {
   });
 }
 const SRC = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recog = { inst: null, active: false, cb: null };
+const recog = { inst: null, active: false, cb: null, muted: false, segs: [], drop: 0 };
+/* Android Chrome re-delivers one growing utterance as repeated final results
+   ("I", "I add", "I add my"), so plain concatenation stutters. Keep the raw
+   segments and fold away any that a neighbour already contains. */
+function foldFinals(segs) {
+  const out = [];
+  for (const raw of segs) {
+    const seg = String(raw).trim();
+    if (!seg) continue;
+    const prev = out[out.length - 1];
+    if (prev && seg.toLowerCase().startsWith(prev.toLowerCase())) { out[out.length - 1] = seg; continue; }
+    if (prev && prev.toLowerCase().startsWith(seg.toLowerCase())) continue;
+    out.push(seg);
+  }
+  // a short early segment often reappears inside a later, fuller one
+  return out.filter((s, i) =>
+    !out.some((o, j) => j > i && o.toLowerCase().includes(s.toLowerCase()))).join(' ');
+}
+function recText() { return foldFinals(recog.segs.slice(recog.drop)); }
+function recMark() { recog.drop = recog.segs.length; } // forget everything heard so far
 function startRec(cb) {
   if (!SRC) return false;
   recog.cb = cb;
@@ -1320,13 +1341,14 @@ function startRec(cb) {
   r.interimResults = true;
   r.lang = 'en-US';
   r.onresult = (e) => {
-    let fin = '', intr = '';
+    let intr = '';
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const res = e.results[i];
-      if (res.isFinal) fin += res[0].transcript + ' ';
+      if (res.isFinal) recog.segs.push(res[0].transcript);
       else intr += res[0].transcript;
     }
-    if (recog.cb) recog.cb(fin, intr);
+    if (recog.muted || !recog.cb) return;
+    recog.cb(recText(), intr); // full text so far, not a delta
   };
   r.onend = () => { if (recog.active && recog.inst === r) { try { r.start(); } catch (e) { /* already running */ } } };
   r.onerror = (e) => {
@@ -1343,6 +1365,9 @@ function startRec(cb) {
 function stopRec() {
   recog.active = false;
   recog.cb = null;
+  recog.muted = false;
+  recog.segs = [];
+  recog.drop = 0;
   if (recog.inst) { try { recog.inst.stop(); } catch (e) { /* not running */ } }
 }
 
@@ -1731,17 +1756,19 @@ function countVoiceDay(stage) {
 
 /* neutral, no-red-marks mic shared by warm-up and placement samples */
 let micBuf = '';
-function micCb(fin, intr) {
-  micBuf += fin;
+function micCb(full, intr) {
+  micBuf = full;
   const el = $('vMicText');
   if (el) el.innerHTML = (micBuf ? esc(micBuf) : '') + ' <span class="interim">' + esc(intr) + '</span>';
 }
 function beginListen(sayText, afterSpeak) {
   micBuf = '';
   if (SRC && !recog.active) startRec(micCb);
-  recog.cb = null; // mute while the prompt is spoken so it is not transcribed
+  recog.muted = true; // mute while the prompt is spoken so it is not transcribed
   const resume = () => {
     if (SRC) {
+      recMark(); // drop anything heard during the prompt, including the prompt itself
+      recog.muted = false;
       recog.cb = micCb;
       const e = $('vMicText');
       if (e && !micBuf) e.innerHTML = '<span class="cap">Your words appear here as you speak. Nothing is marked wrong.</span>';
@@ -2118,8 +2145,8 @@ function startVoiceSession() {
   vs.sr = !!SRC;
   if (vs.sr) {
     recog.onFail = () => { vs.sr = false; renderVoicePhase(); toast('Speech recognition needs internet. Type instead.'); };
-    vs.recCb = (fin, intr) => {
-      vs.texts[vs.phase] += fin;
+    vs.recCb = (full, intr) => {
+      vs.texts[vs.phase] = full;
       const tr = $('vvTr');
       if (tr) tr.innerHTML = esc(vs.texts[vs.phase]) + ' <span class="interim">' + esc(intr) + '</span>';
     };
@@ -2157,10 +2184,10 @@ function startPhase(i) {
   vs.phase = i;
   renderVoicePhase();
   const ph = vs.phases[i];
-  recog.cb = null; // mute capture so the spoken prompt does not land in the transcript
+  recog.muted = true; // mute capture so the spoken prompt does not land in the transcript
   speakAsync(ph.k + '. ' + ph.text + (ph.list ? ' First question: ' + ph.list.join(' Next question: ') : ''))
     .then(() => {
-      if (vs.on && vs.sr) recog.cb = vs.recCb;
+      if (vs.on && vs.sr) { recMark(); recog.muted = false; recog.cb = vs.recCb; }
       if (vs.on && ph.k === 'Describe') maybeStartCapture(ph.text); // save her Describe answer, once a week
     });
   vs.endAt = Date.now() + ph.secs * 1000;
@@ -2476,12 +2503,13 @@ function liveListen() {
   const st = $('lvStatus');
   if (!lv.sr) { if (st) st.textContent = 'Type your reply.'; const inp = $('lvInput'); if (inp) inp.focus(); return; }
   if (st) st.textContent = 'Listening... pause for a moment or tap Done talking to send.';
-  startRec((fin, intr) => {
-    lv.utter += fin;
-    showPending((lv.utter + intr).trim());
+  startRec((full, intr) => {
+    lv.utter = full;
+    showPending((lv.utter + ' ' + intr).trim());
     clearTimeout(lv.silT);
     if ((lv.utter + intr).trim()) lv.silT = setTimeout(commitUtter, 3000);
   });
+  recMark(); // this reply starts fresh
 }
 function commitUtter() {
   if (!lv.on) return;
