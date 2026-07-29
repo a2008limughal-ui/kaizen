@@ -1,8 +1,7 @@
-const CACHE = 'kaizen-v11';
+const CACHE = 'kaizen-v12';
+// Literata for text, Nastaliq for Urdu, Plex Mono for the logbook labels, Caveat for his hand
 const FONT_CSS = [
-  'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap',
-  'https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap',
-  'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600&display=swap',
+  'https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,300;7..72,400;7..72,500;7..72,600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@400;600&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap',
 ];
 const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png',
   './content-body.js', './content-voice.js', './content-voice-beginner.js', './content-mind.js', './content-mind-ur.js', './content-craft.js', './content-notes.js'];
